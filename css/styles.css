@@ -1,4 +1,8 @@
-*, *::before, *::after {
+@charset "utf-8";
+
+*, 
+*::before, 
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -696,7 +700,6 @@ footer {
         min-width: 3rem;
     }
 
-    /* bioquímica has 2 extra rows + 1 extra group — tighten only its spacing */
     #bioquim-panel .field-group {
         margin-bottom: 0.2rem;
     }
@@ -715,7 +718,6 @@ footer {
 }
 
 @media (max-width: 1100px) {
-    /* Header: logo + actions on top row, patient bar below */
     header {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -742,7 +744,6 @@ footer {
         grid-area: patientbar;
     }
 
-    /* Compact action buttons */
     .header-actions .btn {
         padding: 0.375rem 0.75rem;
         font-size: var(--fs-sm);
@@ -752,7 +753,6 @@ footer {
         display: none;
     }
 
-    /* Footer: contains bottom nav on tablet/mobile */
     footer {
         padding: 0;
     }
@@ -761,7 +761,6 @@ footer {
         display: none;
     }
 
-    /* Bottom nav visible */
     .bottom-nav {
         display: flex;
         height: 3.5rem;
@@ -769,7 +768,6 @@ footer {
         border-top: none;
     }
 
-    /* Main: single-section panel view */
     main {
         display: flex;
         flex-direction: column;
@@ -788,7 +786,6 @@ footer {
         min-height: 0;
     }
 
-    /* Results panel: reset desktop-only styles */
     #results-panel {
         border-left: none;
         border-top: none;
@@ -796,7 +793,6 @@ footer {
         min-height: unset;
     }
 
-    /* Workflow: vertical steps layout */
     .workflow-body {
         align-items: flex-start;
         overflow-y: auto;
@@ -832,7 +828,6 @@ footer {
         font-size: var(--fs-sm);
     }
 
-    /* Clinical: let textarea grow */
     .clinical-section textarea {
         flex: 1;
         min-height: 0;
