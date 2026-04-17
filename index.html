@@ -9,7 +9,7 @@
 <body>
 
 <!-- HEADER -->
-<header id="header">
+<header>
     <h1 id="logo">MORPHOS</h1>
     <div class="patient-bar">
         <label for="pt-especie">Especie:</label>
@@ -29,10 +29,15 @@
             <option>Hembra</option>
         </select>
     </div>
+    <div class="header-actions">
+        <button class="btn btn-clear" type="button">Borrar todo</button>
+        <button class="btn btn-export" type="button" disabled>Exportar</button>
+        <button class="btn btn-analyze" type="button">Analizar</button>
+    </div>
 </header>
 
 <!-- GRID -->
-<main id="main">
+<main>
 
     <!-- HEMATOLOGÍA -->
     <section class="panel" id="hema-panel">
@@ -115,28 +120,6 @@
                     <label for="hema-plt">Plaquetas</label>
                     <input id="hema-plt" name="plt" type="number" placeholder="—">
                     <span class="unit">x10³/μL</span>
-                </div>
-            </div>
-
-            <div class="field-group">
-                <h3 class="field-group-title">Histogramas</h3>
-                <div class="histogram-row">
-
-                    <div class="histogram-item">
-                        <div class="histogram-chart"></div>
-                        <div class="histogram-name">RBC <span>50 - 110 fL</span></div>
-                    </div>
-
-                    <div class="histogram-item">
-                        <div class="histogram-chart"></div>
-                        <div class="histogram-name">WBC <span>Linf · Mono · Gran</span></div>
-                    </div>
-
-                    <div class="histogram-item">
-                        <div class="histogram-chart"></div>
-                        <div class="histogram-name">PLT <span>2 - 30 fL</span></div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -242,7 +225,7 @@
     </section>
 
     <!-- WORKFLOW -->
-    <section class="panel workflow-panel">
+    <section class="panel workflow-panel active" id="workflow-panel">
         <h2 class="panel-header">Flujo de trabajo</h2>
         <div class="panel-body workflow-body">
             <ol class="workflow-steps">
@@ -325,7 +308,7 @@
 
     <!-- SIGNOS CLÍNICOS -->
     <section class="panel clinical-section" id="clinical-panel">
-        <h2 class="panel-header">Signos clínicos del paciente <span class="clinical-optional">(opcional)</span></h2>
+        <h2 class="panel-header">Signos clínicos del paciente <span class="clinical-optional"> (opcional) </span></h2>
         <div class="clinical-body">
             <label class="clinical-label" for="clinical-signs">Escribe un resumen de los signos clínicos para enviar información adicional al modelo de IA</label>
             <textarea id="clinical-signs" name="clinical-signs" placeholder="ej. Poliuria, polidipsia, pérdida de peso…"></textarea>
@@ -367,16 +350,61 @@
 </main>
 
 <!-- FOOTER -->
-<footer id="footer">
+<footer>
     <div id="disclaimer">
         <strong>Aviso:</strong> La información proporcionada por Morphos y medGemma es orientativa y no sustituye el criterio de un profesional, herramienta exclusivamente para apoyo diagnóstico.
     </div>
-    <div class="footer-actions">
-        <button class="btn btn-clear" type="button">Borrar todo</button>
-        <button class="btn btn-analyze" type="button">Analizar</button>
-        <button class="btn btn-export" type="button" disabled>Exportar</button>
-    </div>
 </footer>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" id="bottom-nav" aria-label="Secciones">
+    <button class="nav-tab active" data-target="workflow-panel" aria-selected="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="5" cy="6" r="2"/><line x1="8" y1="6" x2="20" y2="6"/>
+            <circle cx="5" cy="12" r="2"/><line x1="8" y1="12" x2="20" y2="12"/>
+            <circle cx="5" cy="18" r="2"/><line x1="8" y1="18" x2="20" y2="18"/>
+        </svg>
+        <span>Flujo</span>
+    </button>
+    <button class="nav-tab" data-target="hema-panel" aria-selected="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 3C8.5 8 6 11.5 6 14a6 6 0 0 0 12 0c0-2.5-2.5-6-6-11z"/>
+        </svg>
+        <span>Hemato.</span>
+    </button>
+    <button class="nav-tab" data-target="bioquim-panel" aria-selected="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9 3h6M10 3v7L5.5 17A2 2 0 0 0 7.3 20h9.4a2 2 0 0 0 1.8-3L14 10V3"/>
+        </svg>
+        <span>Bioquím.</span>
+    </button>
+    <button class="nav-tab" data-target="images-panel" aria-selected="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <span>Imágenes</span>
+    </button>
+    <button class="nav-tab" data-target="clinical-panel" aria-selected="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <line x1="9" y1="12" x2="15" y2="12"/>
+            <line x1="9" y1="16" x2="12" y2="16"/>
+        </svg>
+        <span>Signos</span>
+    </button>
+    <button class="nav-tab" data-target="results-panel" aria-selected="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+            <line x1="2" y1="20" x2="22" y2="20"/>
+        </svg>
+        <span>Resultados</span>
+    </button>
+</nav>
 
 <script type="module" src="js/main.js"></script>
 
