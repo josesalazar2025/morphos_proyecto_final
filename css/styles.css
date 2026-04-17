@@ -752,8 +752,12 @@ footer {
         display: none;
     }
 
-    /* Footer: hide on mobile — bottom nav replaces it */
+    /* Footer: contains bottom nav on tablet/mobile */
     footer {
+        padding: 0;
+    }
+
+    #disclaimer {
         display: none;
     }
 
@@ -761,6 +765,8 @@ footer {
     .bottom-nav {
         display: flex;
         height: 3.5rem;
+        width: 100%;
+        border-top: none;
     }
 
     /* Main: single-section panel view */
