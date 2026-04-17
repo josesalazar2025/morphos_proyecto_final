@@ -41,6 +41,8 @@ button {
 }
 
 html, body {
+    height: 100%;
+    overflow: hidden;
     background: var(--bg-deep);
     color: var(--text-main);
     font-family: var(--font);
@@ -124,14 +126,13 @@ main {
     grid-template-columns: 1fr 1fr 1fr 20rem;
     grid-template-rows: 1fr auto;
     grid-template-areas:
-        "workflow"
-        "hema"
-        "bioquim"
-        "imagenes"
-        "clinico"
-        "resultados";
+        "hema bioquim imagenes resultados"
+        "workflow workflow clinico resultados";
     gap: 1px;
     background: var(--border);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 #hema-panel {
@@ -409,6 +410,9 @@ main {
 }
 
 /* ── PANEL DE RESULTADOS ── */
+#results-panel {
+    border-left: 2px solid var(--border);
+}
 
 .result-section {
     margin-bottom: 1.25rem;
