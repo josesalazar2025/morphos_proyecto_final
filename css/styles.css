@@ -1,4 +1,8 @@
-*, *::before, *::after {
+@charset "utf-8";
+
+*, 
+*::before, 
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -80,6 +84,10 @@ header {
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+}
+
+.patient-bar-header {
+    display: none;
 }
 
 .patient-bar label {
@@ -696,7 +704,6 @@ footer {
         min-width: 3rem;
     }
 
-    /* bioquímica has 2 extra rows + 1 extra group — tighten only its spacing */
     #bioquim-panel .field-group {
         margin-bottom: 0.2rem;
     }
@@ -715,7 +722,6 @@ footer {
 }
 
 @media (max-width: 1100px) {
-    /* Header: logo + actions on top row, patient bar below */
     header {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -742,7 +748,24 @@ footer {
         grid-area: patientbar;
     }
 
-    /* Compact action buttons */
+    .patient-bar-header {
+        display: flex;
+        height: 2.5rem;
+        align-items: center;
+        padding: 0 1rem;
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-label);
+        border-bottom: 1px solid var(--border);
+        border-top: 1px solid var(--border);
+        background: var(--bg-card);
+        flex-shrink: 0;
+        margin: 1.5rem -1rem 0.5rem -1rem;
+        width: calc(100% + 2rem);
+    }
+
     .header-actions .btn {
         padding: 0.375rem 0.75rem;
         font-size: var(--fs-sm);
@@ -752,18 +775,21 @@ footer {
         display: none;
     }
 
-    /* Footer: hide on mobile — bottom nav replaces it */
     footer {
+        padding: 0;
+    }
+
+    #disclaimer {
         display: none;
     }
 
-    /* Bottom nav visible */
     .bottom-nav {
         display: flex;
         height: 3.5rem;
+        width: 100%;
+        border-top: none;
     }
 
-    /* Main: single-section panel view */
     main {
         display: flex;
         flex-direction: column;
@@ -782,7 +808,6 @@ footer {
         min-height: 0;
     }
 
-    /* Results panel: reset desktop-only styles */
     #results-panel {
         border-left: none;
         border-top: none;
@@ -790,7 +815,6 @@ footer {
         min-height: unset;
     }
 
-    /* Workflow: vertical steps layout */
     .workflow-body {
         align-items: flex-start;
         overflow-y: auto;
@@ -826,7 +850,6 @@ footer {
         font-size: var(--fs-sm);
     }
 
-    /* Clinical: let textarea grow */
     .clinical-section textarea {
         flex: 1;
         min-height: 0;

@@ -12,6 +12,7 @@
 <header>
     <h1 id="logo">MORPHOS</h1>
     <div class="patient-bar">
+        <h2 class="patient-bar-header">Datos del paciente</h2>
         <label for="pt-especie">Especie:</label>
         <select id="pt-especie" name="especie">
             <option>— seleccionar —</option>
@@ -354,10 +355,9 @@
     <div id="disclaimer">
         <strong>Aviso:</strong> La información proporcionada por Morphos y medGemma es orientativa y no sustituye el criterio de un profesional, herramienta exclusivamente para apoyo diagnóstico.
     </div>
-</footer>
 
-<!-- BOTTOM NAVIGATION -->
-<nav class="bottom-nav" id="bottom-nav" aria-label="Secciones">
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Secciones">
     <button class="nav-tab active" data-target="workflow-panel" aria-selected="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <circle cx="5" cy="6" r="2"/><line x1="8" y1="6" x2="20" y2="6"/>
@@ -404,7 +404,8 @@
         </svg>
         <span>Resultados</span>
     </button>
-</nav>
+    </nav>
+</footer>
 
 <script type="module" src="js/main.js"></script>
 
