@@ -2,17 +2,17 @@ import { analizarResultados } from './analisis.js';
 
 let referencias = [];
 
-const tabs = document.querySelectorAll('.nav-tab');
+const tabs = document.querySelectorAll('.pestanya-nav');
 const paneles = document.querySelectorAll('main > .panel');
 
 function activateTab(targetId) {
     tabs.forEach(tab => {
         const isActive = tab.dataset.target === targetId;
-        tab.classList.toggle('active', isActive);
+        tab.classList.toggle('activo',isActive);
         tab.setAttribute('aria-selected', isActive);
     });
     paneles.forEach(panel => {
-        panel.classList.toggle('active', panel.id === targetId);
+        panel.classList.toggle('activo',panel.id === targetId);
     });
 }
 
@@ -98,7 +98,7 @@ const renderizarHallazgos = (hallazgos) => {
     contenedor.innerHTML = hallazgos.length === 0
         ? '<p class="sin-hallazgos">Sin valores fuera de rango.</p>'
         : hallazgos.map(h => `
-            <div class="finding-badge ${h.direccion}">
+            <div class="insignia-hallazgo ${h.direccion}">
                 <span>${h.nombre}</span>
                 <span>${h.valor} ${h.unidad}</span>
                 <span>${ETIQUETA_DIRECCION[h.direccion]} · ${ETIQUETA_GRAVEDAD[h.gravedad]}</span>
@@ -112,7 +112,7 @@ const renderizarPatrones = (patrones) => {
     contenedor.innerHTML = patrones.length === 0
         ? '<p class="sin-hallazgos">Sin patrones detectados.</p>'
         : patrones.map(p => `
-            <div class="pattern-item gravedad-${p.gravedad}">
+            <div class="elemento-patron gravedad-${p.gravedad}">
                 <strong>${p.nombre}</strong> — ${p.descripcion}
             </div>`).join('');
 };
