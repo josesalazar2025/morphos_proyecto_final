@@ -22,7 +22,11 @@
         <label for="pt-raza">Raza:</label>
         <input id="pt-raza" name="raza" type="text" placeholder="ej. Labrador">
         <label for="pt-edad">Edad:</label>
-        <input id="pt-edad" name="edad" type="text" placeholder="ej. 5 años">
+        <input id="pt-edad" name="edad" type="number" min="0" placeholder="0">
+        <select id="pt-edad-unidad" name="edad-unidad">
+            <option value="anyos">Años</option>
+            <option value="meses">Meses</option>
+        </select>
         <label for="pt-sexo">Sexo:</label>
         <select id="pt-sexo" name="sexo">
             <option>— seleccionar —</option>
@@ -53,32 +57,32 @@
                 <h3 class="field-group-title">Serie Roja</h3>
                 <div class="field-row">
                     <label for="hema-rbc">Eritrocitos (RBC)</label>
-                    <input id="hema-rbc" name="rbc" type="number" placeholder="—">
+                    <input id="hema-rbc" name="rbc" type="number" min="0" placeholder="—">
                     <span class="unit">x10⁶/μL</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-hgb">Hemoglobina (Hgb)</label>
-                    <input id="hema-hgb" name="hgb" type="number" placeholder="—" class="alto">
+                    <input id="hema-hgb" name="hgb" type="number" min="0" placeholder="—" class="alto">
                     <span class="unit">g/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-hct">Hematocrito (Hct)</label>
-                    <input id="hema-hct" name="hct" type="number" placeholder="—">
+                    <input id="hema-hct" name="hct" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-vcm">VCM (MCV)</label>
-                    <input id="hema-vcm" name="vcm" type="number" placeholder="—" class="bajo">
+                    <input id="hema-vcm" name="vcm" type="number" min="0" placeholder="—" class="bajo">
                     <span class="unit">fL</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-hcm">HCM (MCH)</label>
-                    <input id="hema-hcm" name="hcm" type="number" placeholder="—">
+                    <input id="hema-hcm" name="hcm" type="number" min="0" placeholder="—">
                     <span class="unit">pg</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-chcm">CHCM (MCHC)</label>
-                    <input id="hema-chcm" name="chcm" type="number" placeholder="—">
+                    <input id="hema-chcm" name="chcm" type="number" min="0" placeholder="—">
                     <span class="unit">g/dL</span>
                 </div>
             </div>
@@ -86,32 +90,32 @@
                 <h3 class="field-group-title">Serie Blanca</h3>
                 <div class="field-row">
                     <label for="hema-wbc">Leucocitos (WBC)</label>
-                    <input id="hema-wbc" name="wbc" type="number" placeholder="—">
+                    <input id="hema-wbc" name="wbc" type="number" min="0" placeholder="—">
                     <span class="unit">x10³/μL</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-neutro">Neutrófilos</label>
-                    <input id="hema-neutro" name="neutro" type="number" placeholder="—">
+                    <input id="hema-neutro" name="neutro" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-linfo">Linfocitos</label>
-                    <input id="hema-linfo" name="linfo" type="number" placeholder="—">
+                    <input id="hema-linfo" name="linfo" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-mono">Monocitos</label>
-                    <input id="hema-mono" name="mono" type="number" placeholder="—">
+                    <input id="hema-mono" name="mono" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-eosino">Eosinófilos</label>
-                    <input id="hema-eosino" name="eosino" type="number" placeholder="—">
+                    <input id="hema-eosino" name="eosino" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
                 <div class="field-row">
                     <label for="hema-baso">Basófilos</label>
-                    <input id="hema-baso" name="baso" type="number" placeholder="—">
+                    <input id="hema-baso" name="baso" type="number" min="0" placeholder="—">
                     <span class="unit">%</span>
                 </div>
             </div>
@@ -119,7 +123,7 @@
                 <h3 class="field-group-title">Plaquetas</h3>
                 <div class="field-row">
                     <label for="hema-plt">Plaquetas</label>
-                    <input id="hema-plt" name="plt" type="number" placeholder="—">
+                    <input id="hema-plt" name="plt" type="number" min="0" placeholder="—">
                     <span class="unit">x10³/μL</span>
                 </div>
             </div>
@@ -139,22 +143,22 @@
                 <h3 class="field-group-title">Enzimas Hepáticas</h3>
                 <div class="field-row">
                     <label for="bio-alt">ALT (GPT)</label>
-                    <input id="bio-alt" name="alt" type="number" placeholder="—">
+                    <input id="bio-alt" name="alt" type="number" min="0" placeholder="—">
                     <span class="unit">U/L</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-ast">AST (GOT)</label>
-                    <input id="bio-ast" name="ast" type="number" placeholder="—">
+                    <input id="bio-ast" name="ast" type="number" min="0" placeholder="—">
                     <span class="unit">U/L</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-fal">FAL (ALP)</label>
-                    <input id="bio-fal" name="fal" type="number" placeholder="—">
+                    <input id="bio-fal" name="fal" type="number" min="0" placeholder="—">
                     <span class="unit">U/L</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-ggt">GGT</label>
-                    <input id="bio-ggt" name="ggt" type="number" placeholder="—">
+                    <input id="bio-ggt" name="ggt" type="number" min="0" placeholder="—">
                     <span class="unit">U/L</span>
                 </div>
             </div>
@@ -162,12 +166,12 @@
                 <h3 class="field-group-title">Función Renal</h3>
                 <div class="field-row">
                     <label for="bio-bun">BUN / Urea</label>
-                    <input id="bio-bun" name="bun" type="number" placeholder="—">
+                    <input id="bio-bun" name="bun" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-creat">Creatinina</label>
-                    <input id="bio-creat" name="creat" type="number" placeholder="—">
+                    <input id="bio-creat" name="creat" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
             </div>
@@ -175,32 +179,32 @@
                 <h3 class="field-group-title">Metabolitos</h3>
                 <div class="field-row">
                     <label for="bio-gluc">Glucosa</label>
-                    <input id="bio-gluc" name="gluc" type="number" placeholder="—">
+                    <input id="bio-gluc" name="gluc" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-prot">Proteína Total</label>
-                    <input id="bio-prot" name="prot" type="number" placeholder="—">
+                    <input id="bio-prot" name="prot" type="number" min="0" placeholder="—">
                     <span class="unit">g/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-alb">Albúmina</label>
-                    <input id="bio-alb" name="alb" type="number" placeholder="—">
+                    <input id="bio-alb" name="alb" type="number" min="0" placeholder="—">
                     <span class="unit">g/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-bili">Bilirrubina Total</label>
-                    <input id="bio-bili" name="bili" type="number" placeholder="—">
+                    <input id="bio-bili" name="bili" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-fosf">Fósforo</label>
-                    <input id="bio-fosf" name="fosf" type="number" placeholder="—">
+                    <input id="bio-fosf" name="fosf" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-calc">Calcio</label>
-                    <input id="bio-calc" name="calc" type="number" placeholder="—">
+                    <input id="bio-calc" name="calc" type="number" min="0" placeholder="—">
                     <span class="unit">mg/dL</span>
                 </div>
             </div>
@@ -208,17 +212,17 @@
                 <h3 class="field-group-title">Electrolitos</h3>
                 <div class="field-row">
                     <label for="bio-na">Sodio</label>
-                    <input id="bio-na" name="sodio" type="number" placeholder="—">
+                    <input id="bio-na" name="sodio" type="number" min="0" placeholder="—">
                     <span class="unit">mEq/L</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-k">Potasio</label>
-                    <input id="bio-k" name="potasio" type="number" placeholder="—">
+                    <input id="bio-k" name="potasio" type="number" min="0" placeholder="—">
                     <span class="unit">mEq/L</span>
                 </div>
                 <div class="field-row">
                     <label for="bio-cl">Cloro</label>
-                    <input id="bio-cl" name="cloro" type="number" placeholder="—">
+                    <input id="bio-cl" name="cloro" type="number" min="0" placeholder="—">
                     <span class="unit">mEq/L</span>
                 </div>
             </div>
@@ -323,21 +327,12 @@
 
             <div class="result-section">
                 <h3 class="result-section-title">Valores fuera de rango</h3>
-                <div class="finding-badge alto">
-                    <span>Parámetro 2</span>
-                    <span>18.4 u/L</span>
-                    <span>ALTO · Leve</span>
-                </div>
-                <div class="finding-badge bajo">
-                    <span>Parámetro 4</span>
-                    <span>2.1 u/L</span>
-                    <span>BAJO · Moderado</span>
-                </div>
+                <div id="hallazgos-lista"></div>
             </div>
 
             <div class="result-section">
                 <h3 class="result-section-title">Patrones detectados</h3>
-                <div class="pattern-item">Patrón clínico detectado a partir de la combinación de parámetros 2, 4 y 9.</div>
+                <div id="patrones-lista"></div>
             </div>
 
             <div class="result-section">
