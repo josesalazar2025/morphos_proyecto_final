@@ -145,6 +145,7 @@ document.addEventListener('input', e => {
     if (e.target.type !== 'number') return;
     if (e.target.value < 0) e.target.value = 0;
     if (e.target.value.replace('.', '').length > 4) e.target.value = e.target.value.slice(0, 4);
+    e.target.classList.toggle('max-chars', e.target.value.replace('.', '').length >= 4);
     evaluar();
 });
 
