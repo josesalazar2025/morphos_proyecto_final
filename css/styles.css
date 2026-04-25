@@ -32,6 +32,8 @@ button {
     --alto-text:  #e87070;
     --bajo-bg:    rgba(52, 120, 200, 0.18);
     --bajo-text:  #6aacec;
+    --max-chars-text: #e8c84a;
+    --max-chars-bg:   rgba(232, 200, 74, 0.12);
     --font:       'Segoe UI', system-ui, -apple-system, sans-serif;
     --radius:     0.5rem;
     --radius-sm:  0.3125rem;
@@ -331,6 +333,12 @@ main {
 .fila-campo input.bajo:focus {
     border-color: var(--bajo-text);
     background: var(--bajo-bg);
+}
+
+.fila-campo input.max-chars,
+.fila-campo input.max-chars:focus {
+    border-color: var(--max-chars-text);
+    background: var(--max-chars-bg);
 }
 
 
