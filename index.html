@@ -204,6 +204,16 @@
                     <input id="bio-creat" name="creat" type="number" min="0" placeholder="—">
                     <span class="unidad">mg/dL</span>
                 </div>
+                <div class="fila-campo">
+                    <label for="bio-sdma">SDMA</label>
+                    <input id="bio-sdma" name="sdma" type="number" min="0" placeholder="—">
+                    <span class="unidad">μg/dL</span>
+                </div>
+                <div class="fila-campo">
+                    <label for="bio-cistb">Cistatina B</label>
+                    <input id="bio-cistb" name="cistb" type="number" min="0" step="0.01" placeholder="—">
+                    <span class="unidad">mg/L</span>
+                </div>
             </div>
             <div class="grupo-campo">
                 <h3 class="titulo-grupo">Metabolitos</h3>
@@ -261,8 +271,16 @@
 
     <!-- FLUJO DE TRABAJO -->
     <section class="panel panel-flujo activo" id="panel-flujo">
-        <h2 class="panel-cabecera">Flujo de trabajo</h2>
-        <div class="panel-cuerpo cuerpo-flujo">
+        <h2 class="panel-cabecera">
+            Flujo de trabajo
+            <button class="btn-colapsar-flujo" id="btn-colapsar-flujo" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-flujo" aria-label="Colapsar panel">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="panel-cuerpo cuerpo-flujo" id="cuerpo-flujo">
             <ol class="pasos-flujo">
                 <li>
                     <span class="num-paso" aria-hidden="true">1</span>
@@ -310,35 +328,157 @@
         </div>
     </section>
 
-    <!-- IMÁGENES -->
+    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + IMÁGENES -->
     <section class="panel" id="panel-imagenes">
-        <h2 class="panel-cabecera">Imágenes Microscopicas (Citología)</h2>
-        <div class="panel-cuerpo cuerpo-imagenes">
-            <button class="ranura-imagen" type="button">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <span>Adjuntar imagen</span>
-            </button>
-            <button class="ranura-imagen" type="button">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <span>Adjuntar imagen</span>
-            </button>
-            <button class="ranura-imagen" type="button">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <polyline points="21 15 16 10 5 21"/>
-                </svg>
-                <span>Adjuntar imagen</span>
-            </button>
+
+        <!-- URIANÁLISIS -->
+        <h2 class="panel-cabecera">Urianálisis</h2>
+        <div class="subpanel-cuerpo">
+            <div class="fila-campo">
+                <label for="uri-usg">Densidad (USG)</label>
+                <input id="uri-usg" name="usg" type="number" min="1.000" max="1.060" step="0.001" placeholder="—">
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-ph">pH</label>
+                <input id="uri-ph" name="ph" type="number" min="4.5" max="9.0" step="0.5" placeholder="—">
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-prot">Proteínas</label>
+                <select id="uri-prot" name="uri-prot">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-upc">UPC</label>
+                <input id="uri-upc" name="upc" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">ratio</span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-creat">Creatinina</label>
+                <input id="uri-creat" name="uri-creat" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">mg/dL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-gluc">Glucosuria</label>
+                <select id="uri-gluc" name="uri-gluc">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-ceto">Cetonuria</label>
+                <select id="uri-ceto" name="uri-ceto">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-bili">Bilirrubinuria</label>
+                <select id="uri-bili" name="uri-bili">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-hgb">Hemoglobina (HGB)</label>
+                <select id="uri-hgb" name="uri-hgb">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-ubg">Urobilinógeno (UBG)</label>
+                <select id="uri-ubg" name="uri-ubg">
+                    <option value="">—</option>
+                    <option value="normal">Normal</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-leuco">Leucocitos</label>
+                <select id="uri-leuco" name="uri-leuco">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-microalb">Microalbuminuria</label>
+                <input id="uri-microalb" name="microalb" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">mg/L</span>
+            </div>
         </div>
+
+        <!-- PERFIL ENDOCRINO -->
+        <h2 class="panel-cabecera">Perfil Endocrino</h2>
+        <div class="subpanel-cuerpo">
+            <div class="fila-campo">
+                <label for="endo-cort-bas">Cortisol basal</label>
+                <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">μg/dL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-cort-acth">Cortisol post-ACTH</label>
+                <input id="endo-cort-acth" name="cortisol-acth" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">μg/dL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-t4">T4 total</label>
+                <input id="endo-t4" name="t4-total" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">nmol/L</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-ft4">T4 libre (fT4)</label>
+                <input id="endo-ft4" name="ft4" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">pmol/L</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-ctsh">cTSH</label>
+                <input id="endo-ctsh" name="ctsh" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">ng/mL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-fruct">Fructosamina</label>
+                <input id="endo-fruct" name="fructosamina" type="number" min="0" step="1" placeholder="—">
+                <span class="unidad">μmol/L</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-ins">Insulina basal</label>
+                <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">μIU/mL</span>
+            </div>
+        </div>
+
+
     </section>
 
     <!-- SIGNOS CLÍNICOS -->
@@ -372,8 +512,8 @@
 
         </div>
         <div class="panel-pie-acciones">
-            <button class="boton boton-limpiar" type="button">Borrar todo</button>
             <button class="boton boton-exportar" type="button" disabled>Exportar PDF</button>
+            <button class="boton boton-citologia" type="button">Adjuntar citología</button>
             <button class="boton boton-analizar" type="button">Análisis IA</button>
         </div>
     </section>

@@ -178,4 +178,58 @@ document.getElementById('pt-especie').addEventListener('change', evaluar);
 document.getElementById('pt-raza').addEventListener('input', evaluar);
 document.getElementById('pt-edad').addEventListener('input', evaluar);
 document.getElementById('pt-edad-unidad').addEventListener('change', evaluar);
+
+
+// ─── Colapsar panel Flujo de trabajo ─────────────────────────────────────────
+const panelFlujo = document.getElementById('panel-flujo');
+const btnColapsar = document.getElementById('btn-colapsar-flujo');
+const mainEl      = document.querySelector('main');
+
+let collapsedRow = '';
+let expandedRow  = '';
+
+const isDesktopGrid = () => window.innerWidth > 1100;
+
+function initGridRows() {
+    if (!isDesktopGrid()) return;
+    const panelH  = panelFlujo.getBoundingClientRect().height;
+    const headerH = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
+    if (panelH  > 0) expandedRow  = `${panelH}px`;
+    if (headerH > 0) collapsedRow = `${headerH}px`;
+    mainEl.style.gridTemplateRows = `1fr ${expandedRow || 'auto'}`;
+}
+
+function setGridRows(collapsed, animate) {
+    if (!isDesktopGrid()) return;
+    if (!animate) mainEl.style.transition = 'none';
+    mainEl.style.gridTemplateRows = collapsed
+        ? `1fr ${collapsedRow}`
+        : `1fr ${expandedRow}`;
+    if (!animate) {
+        mainEl.offsetHeight; // force reflow before restoring transition
+        mainEl.style.transition = '';
+    }
+}
+
+initGridRows();
+
+const startCollapsed = localStorage.getItem('mx-flujo-collapsed') === '1';
+if (startCollapsed) {
+    panelFlujo.classList.add('collapsed');
+    btnColapsar.setAttribute('aria-expanded', 'false');
+    setGridRows(true, false);
+}
+
+btnColapsar.addEventListener('click', () => {
+    const collapsed = panelFlujo.classList.toggle('collapsed');
+    btnColapsar.setAttribute('aria-expanded', String(!collapsed));
+    setGridRows(collapsed, true);
+    localStorage.setItem('mx-flujo-collapsed', collapsed ? '1' : '0');
+});
+
+window.addEventListener('resize', () => {
+    if (isDesktopGrid() && !panelFlujo.classList.contains('collapsed')) {
+        initGridRows();
+    }
+});
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
