@@ -1,5 +1,15 @@
 import { analizarResultados } from './analisis.js';
 
+// ─── Theme toggle ─────────────────────────────────────────────────────────────
+const btnTema = document.getElementById('btn-tema');
+if (btnTema) {
+    btnTema.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('mx-theme', next);
+    });
+}
+
 let referencias = [];
 
 const tabs = document.querySelectorAll('.pestanya-nav');
@@ -99,9 +109,9 @@ const renderizarHallazgos = (hallazgos) => {
         ? '<p class="sin-hallazgos">Sin valores fuera de rango.</p>'
         : hallazgos.map(h => `
             <div class="insignia-hallazgo ${h.direccion}">
-                <span>${h.nombre}</span>
-                <span>${h.valor} ${h.unidad}</span>
-                <span>${ETIQUETA_DIRECCION[h.direccion]} · ${ETIQUETA_GRAVEDAD[h.gravedad]}</span>
+                <span class="nombre">${h.nombre}</span>
+                <span class="valor">${h.valor} ${h.unidad}</span>
+                <span class="etiqueta">${ETIQUETA_DIRECCION[h.direccion]} · ${ETIQUETA_GRAVEDAD[h.gravedad]}</span>
             </div>`).join('');
 };
 
@@ -113,7 +123,8 @@ const renderizarPatrones = (patrones) => {
         ? '<p class="sin-hallazgos">Sin patrones detectados.</p>'
         : patrones.map(p => `
             <div class="elemento-patron gravedad-${p.gravedad}">
-                <strong>${p.nombre}</strong> — ${p.descripcion}
+                <div class="titulo-patron">${p.nombre}</div>
+                <div class="cuerpo-patron">${p.descripcion}</div>
             </div>`).join('');
 };
 
