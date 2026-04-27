@@ -11,6 +11,7 @@ if (btnTema) {
 }
 
 let referencias = [];
+let alteraciones = {};
 
 const tabs = document.querySelectorAll('.pestanya-nav');
 const paneles = document.querySelectorAll('main > .panel');
@@ -40,7 +41,19 @@ const cargarReferencias = async () => {
         console.error('Error cargando valores de referencia:', error);
     }
 };
+
+const cargarAlteraciones = async () => {
+    try {
+        const response = await fetch('data/alteraciones.json');
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        alteraciones = await response.json();
+    } catch (error) {
+        console.error('Error cargando alteraciones:', error);
+    }
+};
+
 cargarReferencias();
+cargarAlteraciones();
 
 
 // ─── Mapeo de campos ──────────────────────────────────────────────────────────
@@ -54,9 +67,10 @@ const INPUT_A_CLAVE = {
     fosf: 'phosphorus', calc: 'calcium', sodio: 'sodium', potasio: 'potassium', cloro: 'chloride'
 };
 
-const CLAVE_A_INPUT = Object.fromEntries(
-    Object.entries(INPUT_A_CLAVE).map(([nombre, clave]) => [clave, nombre])
-);
+const CLAVE_A_INPUT = Object.entries(INPUT_A_CLAVE).reduce((acc, [nombre, clave]) => {
+    acc[clave] = nombre;
+    return acc;
+}, {});
 
 
 // ─── Recolección de datos del formulario ──────────────────────────────────────
@@ -142,7 +156,7 @@ const evaluar = () => {
     }
 
     const valores = obtenerValoresFormulario();
-    const { hallazgos, patrones } = analizarResultados(valores, paciente, referencias);
+    const { hallazgos, patrones } = analizarResultados(valores, paciente, referencias, alteraciones);
 
     actualizarClasesInputs(hallazgos);
     renderizarHallazgos(hallazgos);

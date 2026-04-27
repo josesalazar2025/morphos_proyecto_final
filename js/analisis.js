@@ -114,26 +114,25 @@ const ajustarReferencias = (refsEspecie, paciente) => {
     const ajRaza = obtenerAjustesRaza(paciente.raza, paciente.especie);
     const ajSexo = AJUSTES_SEXO[paciente.especie]?.[paciente.sexo] ?? {};
 
-    return Object.fromEntries(
-        Object.entries(refsEspecie).map(([clave, ref]) => {
-            const fEdad = ajEdad[clave] ?? {};
-            const fRaza = ajRaza[clave] ?? {};
-            const fSexo = ajSexo[clave] ?? {};
+    return Object.entries(refsEspecie).reduce((acc, [clave, ref]) => {
+        const fEdad = ajEdad[clave] ?? {};
+        const fRaza = ajRaza[clave] ?? {};
+        const fSexo = ajSexo[clave] ?? {};
 
-            return [clave, {
-                ...ref,
-                inferior: ref.inferior * (fEdad.inferior ?? 1) * (fRaza.inferior ?? 1) * (fSexo.inferior ?? 1),
-                superior: ref.superior * (fEdad.superior ?? 1) * (fRaza.superior ?? 1) * (fSexo.superior ?? 1)
-            }];
-        })
-    );
+        acc[clave] = {
+            ...ref,
+            inferior: ref.inferior * (fEdad.inferior ?? 1) * (fRaza.inferior ?? 1) * (fSexo.inferior ?? 1),
+            superior: ref.superior * (fEdad.superior ?? 1) * (fRaza.superior ?? 1) * (fSexo.superior ?? 1)
+        };
+        return acc;
+    }, {});
 };
 
 
 // ─── Detección de patrones clínicos ───────────────────────────────────────────
 
-const detectarPatrones = (hallazgos, especie) => {
-    const mapa = Object.fromEntries(hallazgos.map(h => [h.clave, h]));
+const detectarPatrones = (hallazgos, especie, alt) => {
+    const mapa = hallazgos.reduce((acc, h) => { acc[h.clave] = h; return acc; }, {});
 
     const esAlto = (clave) => mapa[clave]?.direccion === 'alto';
     const esBajo = (clave) => mapa[clave]?.direccion === 'bajo';
@@ -163,22 +162,22 @@ const detectarPatrones = (hallazgos, especie) => {
 
         const morfologia = (tipoPorVcm + tipoPorMchc).trim();
 
-        const etiologia =
-            esBajo('mcv') && esBajo('mchc') ? 'Compatible con déficit de hierro o anemia de enfermedad crónica.' :
-            esAlto('mcv') ? 'Compatible con anemia regenerativa, déficit de B12/folato o mielodisplasia.' :
-            morfologia.includes('normocítica') ? 'Compatible con anemia no regenerativa, hemorragia aguda o hemólisis.' : '';
+        const etKey = esBajo('mcv') && esBajo('mchc') ? 'ferropenia' :
+                      esAlto('mcv') ? 'macrocitica' :
+                      morfologia.includes('normocítica') ? 'normocitica' : null;
+        const etiologia = etKey ? alt.anemia.etiologias[etKey] : '';
 
         agregar({
-            nombre: `Anemia${morfologia ? ` ${morfologia}` : ''}`,
-            descripcion: `Parámetros eritrocitarios disminuidos. ${etiologia}`.trim(),
+            nombre: `${alt.anemia.nombre}${morfologia ? ` ${morfologia}` : ''}`,
+            descripcion: [alt.anemia.prefijo, etiologia].filter(Boolean).join(' '),
             gravedad: gravedadDe('hct', 'hgb', 'rbc'),
             parametros: ['hct', 'hgb', 'rbc', 'mcv', 'mchc'].filter(presente)
         });
     }
 
     if (esAlto('hct') || esAlto('rbc')) agregar({
-        nombre: 'Eritrocitosis',
-        descripcion: 'Aumento de la masa eritrocitaria. Considerar deshidratación, eritrocitosis absoluta (cardiopatía, hipoxia crónica, neoplasia eritropoyética).',
+        nombre: alt.eritrocitosis.nombre,
+        descripcion: alt.eritrocitosis.descripcion,
         gravedad: gravedadDe('hct', 'rbc'),
         parametros: ['hct', 'rbc', 'hgb'].filter(presente)
     });
@@ -192,54 +191,75 @@ const detectarPatrones = (hallazgos, especie) => {
         const eosinofilia = esAlto('eosinophils');
 
         if (neutrofilia) agregar({
-            nombre: 'Leucocitosis neutrofílica',
-            descripcion: 'Compatible con infección bacteriana, inflamación aguda, estrés fisiológico o necrosis tisular.',
+            nombre: alt.leucocitosis_neutrofilica.nombre,
+            descripcion: alt.leucocitosis_neutrofilica.descripcion,
             gravedad: gravedadDe('wbc', 'neutrophils'),
             parametros: ['wbc', 'neutrophils'].filter(presente)
         });
 
         if (linfocitosis) agregar({
-            nombre: 'Leucocitosis linfocítica',
-            descripcion: 'Compatible con estimulación antigénica crónica, linfoma o excitación fisiológica (frecuente en felinos).',
+            nombre: alt.leucocitosis_linfocitica.nombre,
+            descripcion: alt.leucocitosis_linfocitica.descripcion,
             gravedad: gravedadDe('wbc', 'lymphocytes'),
             parametros: ['wbc', 'lymphocytes'].filter(presente)
         });
 
         if (eosinofilia) agregar({
-            nombre: 'Eosinofilia',
-            descripcion: 'Compatible con parasitismo, hipersensibilidad/alergia o síndrome hipereosinofílico.',
+            nombre: alt.eosinofilia.nombre,
+            descripcion: alt.eosinofilia.descripcion,
             gravedad: gravedadDe('eosinophils'),
             parametros: ['eosinophils', 'wbc'].filter(presente)
         });
 
         if (!neutrofilia && !linfocitosis && !eosinofilia) agregar({
-            nombre: 'Leucocitosis',
-            descripcion: 'Aumento del recuento leucocitario. Evaluar diferencial para determinar etiología.',
+            nombre: alt.leucocitosis.nombre,
+            descripcion: alt.leucocitosis.descripcion,
             gravedad: gravedadDe('wbc'),
             parametros: ['wbc']
         });
     }
 
     if (esBajo('wbc')) agregar({
-        nombre: 'Leucopenia',
-        descripcion: 'Compatible con infección viral, sepsis, supresión medular o quimioterapia.',
+        nombre: alt.leucopenia.nombre,
+        descripcion: alt.leucopenia.descripcion,
         gravedad: gravedadDe('wbc'),
         parametros: ['wbc']
+    });
+
+    if (esBajo('neutrophils')) agregar({
+        nombre: alt.neutropenia.nombre,
+        descripcion: alt.neutropenia.descripcion,
+        gravedad: gravedadDe('neutrophils'),
+        parametros: ['neutrophils']
+    });
+
+    if (esBajo('lymphocytes')) agregar({
+        nombre: alt.linfopenia.nombre,
+        descripcion: alt.linfopenia.descripcion,
+        gravedad: gravedadDe('lymphocytes'),
+        parametros: ['lymphocytes']
+    });
+
+    if (esAlto('monocytes')) agregar({
+        nombre: alt.monocitosis.nombre,
+        descripcion: alt.monocitosis.descripcion,
+        gravedad: gravedadDe('monocytes'),
+        parametros: ['monocytes']
     });
 
 
     // ── Plaquetas ─────────────────────────────────────────────────────────────
 
     if (esBajo('platelets')) agregar({
-        nombre: 'Trombocitopenia',
-        descripcion: 'Evaluar trombocitopenia inmunomediada (IMT), enfermedades vectoriales (Ehrlichia, Anaplasma), CID o supresión medular.',
+        nombre: alt.trombocitopenia.nombre,
+        descripcion: alt.trombocitopenia.descripcion,
         gravedad: gravedadDe('platelets'),
         parametros: ['platelets']
     });
 
     if (esAlto('platelets')) agregar({
-        nombre: 'Trombocitosis',
-        descripcion: 'Puede ser reactiva (inflamación, ferropenia, esplenectomía) o primaria (neoplasia mieloproliferativa).',
+        nombre: alt.trombocitosis.nombre,
+        descripcion: alt.trombocitosis.descripcion,
         gravedad: gravedadDe('platelets'),
         parametros: ['platelets']
     });
@@ -248,30 +268,28 @@ const detectarPatrones = (hallazgos, especie) => {
     // ── Hígado ────────────────────────────────────────────────────────────────
 
     if (esAlto('alt') && esAlto('ast')) agregar({
-        nombre: 'Daño hepatocelular',
-        descripcion: 'Elevación de transaminasas compatible con hepatitis, toxicosis, lipidosis hepática (felinos) o necrosis hepatocelular.',
+        nombre: alt.dano_hepatocelular.nombre,
+        descripcion: alt.dano_hepatocelular.descripcion,
         gravedad: gravedadDe('alt', 'ast'),
         parametros: ['alt', 'ast'].filter(presente)
     });
     else if (esAlto('alt')) agregar({
-        nombre: 'Elevación de ALT aislada',
-        descripcion: 'Daño hepatocelular leve o muscular. Recomendable repetir la analítica en 2-4 semanas.',
+        nombre: alt.alt_aislada.nombre,
+        descripcion: alt.alt_aislada.descripcion,
         gravedad: gravedadDe('alt'),
         parametros: ['alt']
     });
 
     if (esAlto('alp') || esAlto('ggt')) agregar({
-        nombre: 'Patrón colestásico',
-        descripcion: especie === 'canino'
-            ? 'Compatible con colestasis, hiperadrenocorticismo, hepatopatía vacuolar o inducción por glucocorticoides.'
-            : 'En felinos la elevación de GGT es más específica de colestasis. Considerar lipidosis hepática, colangitis o colangiohepatitis.',
+        nombre: alt.patron_colestasico.nombre,
+        descripcion: alt.patron_colestasico.descripcion[especie] ?? alt.patron_colestasico.descripcion.canino,
         gravedad: gravedadDe('alp', 'ggt'),
         parametros: ['alp', 'ggt'].filter(presente)
     });
 
     if (esAlto('total_bilirubin')) agregar({
-        nombre: 'Hiperbilirrubinemia',
-        descripcion: 'Posible ictericia prehepática (hemólisis), hepática (hepatopatía) o posthepática (obstrucción biliar). Correlacionar con clínica.',
+        nombre: alt.hiperbilirrubinemia.nombre,
+        descripcion: alt.hiperbilirrubinemia.descripcion,
         gravedad: gravedadDe('total_bilirubin'),
         parametros: ['total_bilirubin']
     });
@@ -280,21 +298,27 @@ const detectarPatrones = (hallazgos, especie) => {
     // ── Riñón ─────────────────────────────────────────────────────────────────
 
     if (esAlto('bun') && esAlto('creatinine')) agregar({
-        nombre: 'Azotemia',
-        descripcion: 'Elevación de BUN y creatinina. Puede ser prerrenal (deshidratación), renal (ERC/IRA) o posrenal (obstrucción). Correlacionar con urianálisis e hidratación.',
+        nombre: alt.azotemia.nombre,
+        descripcion: alt.azotemia.descripcion,
         gravedad: gravedadDe('creatinine', 'bun'),
         parametros: ['bun', 'creatinine'].filter(presente)
     });
     else if (esAlto('bun')) agregar({
-        nombre: 'Hiperuremia aislada (BUN)',
-        descripcion: 'BUN elevado con creatinina normal. Compatible con dieta hiperproteica, deshidratación leve, hemorragia gastrointestinal o catabolismo aumentado.',
+        nombre: alt.hiperuremia_bun.nombre,
+        descripcion: alt.hiperuremia_bun.descripcion,
         gravedad: gravedadDe('bun'),
         parametros: ['bun']
     });
+    else if (esAlto('creatinine')) agregar({
+        nombre: alt.creatinina_aislada.nombre,
+        descripcion: alt.creatinina_aislada.descripcion,
+        gravedad: gravedadDe('creatinine'),
+        parametros: ['creatinine']
+    });
 
     if (esBajo('bun')) agregar({
-        nombre: 'BUN disminuido',
-        descripcion: 'Compatible con insuficiencia hepática grave (shunt portosistémico, cirrosis), malnutrición proteica o poliuria marcada.',
+        nombre: alt.bun_disminuido.nombre,
+        descripcion: alt.bun_disminuido.descripcion,
         gravedad: gravedadDe('bun'),
         parametros: ['bun']
     });
@@ -303,17 +327,15 @@ const detectarPatrones = (hallazgos, especie) => {
     // ── Glucosa ───────────────────────────────────────────────────────────────
 
     if (esAlto('glucose')) agregar({
-        nombre: 'Hiperglucemia',
-        descripcion: especie === 'felino'
-            ? 'En felinos es frecuente la hiperglucemia por estrés. Si persiste > 300 mg/dL, considerar diabetes mellitus. Correlacionar con fructosamina.'
-            : 'Compatible con diabetes mellitus, hiperadrenocorticismo o hiperglucemia por estrés. Evaluar poliuria/polidipsia.',
+        nombre: alt.hiperglucemia.nombre,
+        descripcion: alt.hiperglucemia.descripcion[especie] ?? alt.hiperglucemia.descripcion.canino,
         gravedad: gravedadDe('glucose'),
         parametros: ['glucose']
     });
 
     if (esBajo('glucose')) agregar({
-        nombre: 'Hipoglucemia',
-        descripcion: 'Compatible con insulinoma, sepsis, insuficiencia hepática, neonatos/cachorros o inanición. Requiere evaluación urgente si la gravedad es moderada o grave.',
+        nombre: alt.hipoglucemia.nombre,
+        descripcion: alt.hipoglucemia.descripcion,
         gravedad: gravedadDe('glucose'),
         parametros: ['glucose']
     });
@@ -321,13 +343,19 @@ const detectarPatrones = (hallazgos, especie) => {
 
     // ── Proteínas ─────────────────────────────────────────────────────────────
 
+    if (esAlto('total_protein')) agregar({
+        nombre: alt.hiperproteinemia.nombre,
+        descripcion: alt.hiperproteinemia.descripcion,
+        gravedad: gravedadDe('total_protein'),
+        parametros: ['total_protein']
+    });
+
     if (esBajo('albumin')) {
         const hipoproteinemia = esBajo('total_protein');
+        const altKey = hipoproteinemia ? 'hipoproteinemia_hipoalbuminemia' : 'hipoalbuminemia';
         agregar({
-            nombre: hipoproteinemia ? 'Hipoproteinemia / Hipoalbuminemia' : 'Hipoalbuminemia',
-            descripcion: hipoproteinemia
-                ? 'Compatible con enteropatía o nefropatía con pérdida de proteínas, o malnutrición grave.'
-                : 'Hipoalbuminemia con proteína total normal/alta: compatible con insuficiencia hepática (reducción de síntesis) o distribución al tercer espacio.',
+            nombre: alt[altKey].nombre,
+            descripcion: alt[altKey].descripcion,
             gravedad: gravedadDe('albumin'),
             parametros: ['albumin', ...(hipoproteinemia ? ['total_protein'] : [])].filter(presente)
         });
@@ -343,39 +371,60 @@ const detectarPatrones = (hallazgos, especie) => {
     if (valSodio !== null && valPotasio !== null && valPotasio > 0) {
         const ratioNaK = valSodio / valPotasio;
         if (ratioNaK < 27) agregar({
-            nombre: 'Ratio Na:K reducido — sospecha de hipoadrenocorticismo',
-            descripcion: `Ratio Na:K de ${ratioNaK.toFixed(1)} (referencia > 27). Altamente compatible con hipoadrenocorticismo (enfermedad de Addison). Confirmar con test de estimulación con ACTH.`,
+            nombre: alt.ratio_nak.nombre,
+            descripcion: alt.ratio_nak.descripcion.replace('{ratio}', ratioNaK.toFixed(1)),
             gravedad: ratioNaK < 20 ? 'grave' : ratioNaK < 24 ? 'moderado' : 'leve',
             parametros: ['sodium', 'potassium'].filter(presente)
         });
     }
 
+    if (esAlto('sodium')) agregar({
+        nombre: alt.hipernatremia.nombre,
+        descripcion: alt.hipernatremia.descripcion,
+        gravedad: gravedadDe('sodium'),
+        parametros: ['sodium']
+    });
+
+    if (esBajo('sodium')) agregar({
+        nombre: alt.hiponatremia.nombre,
+        descripcion: alt.hiponatremia.descripcion,
+        gravedad: gravedadDe('sodium'),
+        parametros: ['sodium']
+    });
+
     if (esAlto('calcium')) agregar({
-        nombre: 'Hipercalcemia',
-        descripcion: 'Compatible con hipercalcemia de malignidad (linfoma, adenocarcinoma apocrino), hiperparatiroidismo primario, hipervitaminosis D o granulomatosis.',
+        nombre: alt.hipercalcemia.nombre,
+        descripcion: alt.hipercalcemia.descripcion,
         gravedad: gravedadDe('calcium'),
         parametros: ['calcium']
     });
 
     if (esBajo('calcium')) agregar({
-        nombre: 'Hipocalcemia',
-        descripcion: 'Compatible con hipoparatiroidismo, eclampsia puerperal (hembras lactantes), pancreatitis aguda o hipoalbuminemia (evaluar calcio ionizado).',
+        nombre: alt.hipocalcemia.nombre,
+        descripcion: alt.hipocalcemia.descripcion,
         gravedad: gravedadDe('calcium'),
         parametros: ['calcium']
     });
 
     if (esBajo('potassium')) agregar({
-        nombre: 'Hipopotasemia',
-        descripcion: 'Compatible con pérdidas digestivas (vómito, diarrea), diuresis, alcalosis metabólica o anorexia prolongada. En felinos puede asociarse a miopatía hipopotasémica.',
+        nombre: alt.hipopotasemia.nombre,
+        descripcion: alt.hipopotasemia.descripcion,
         gravedad: gravedadDe('potassium'),
         parametros: ['potassium']
     });
 
     if (esAlto('potassium')) agregar({
-        nombre: 'Hiperpotasemia',
-        descripcion: 'Compatible con insuficiencia renal, hipoadrenocorticismo, acidosis metabólica o pseudohiperpotasemia por hemólisis in vitro.',
+        nombre: alt.hiperpotasemia.nombre,
+        descripcion: alt.hiperpotasemia.descripcion,
         gravedad: gravedadDe('potassium'),
         parametros: ['potassium']
+    });
+
+    if (esAlto('phosphorus')) agregar({
+        nombre: alt.hiperfosforemia.nombre,
+        descripcion: alt.hiperfosforemia.descripcion,
+        gravedad: gravedadDe('phosphorus'),
+        parametros: ['phosphorus']
     });
 
     return patrones;
@@ -384,7 +433,7 @@ const detectarPatrones = (hallazgos, especie) => {
 
 // ─── Exportación principal ────────────────────────────────────────────────────
 
-export const analizarResultados = (valoresInput, paciente, referencias) => {
+export const analizarResultados = (valoresInput, paciente, referencias, alteraciones) => {
     const refsEspecie = referencias[paciente.especie];
     if (!refsEspecie) return { hallazgos: [], patrones: [] };
 
@@ -411,5 +460,5 @@ export const analizarResultados = (valoresInput, paciente, referencias) => {
         }
     }
 
-    return { hallazgos, patrones: detectarPatrones(hallazgos, paciente.especie) };
+    return { hallazgos, patrones: detectarPatrones(hallazgos, paciente.especie, alteraciones) };
 };
