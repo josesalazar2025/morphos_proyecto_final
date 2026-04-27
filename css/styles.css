@@ -8,52 +8,16 @@
     padding: 0;
 }
 
-button {
-    font-family: inherit;
-    font-size: inherit;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-:root {
-    --bg-deep:    #161616;
-    --bg-panel:   #222222;
-    --bg-card:    #2b2b2b;
-    --bg-input:   #1e1e1e;
-    --border:     #3a3a3a;
-    --text-main:  #e8e8e8;
-    --text-muted: #969696;
-    --text-label: #aaaaaa;
-    --accent:     #4db8a0;
-    --accent-dim: #357a6e;
-    --danger:     #c0392b;
-    --alto-bg:    rgba(192, 57, 43, 0.18);
-    --alto-text:  #e87070;
-    --bajo-bg:    rgba(52, 120, 200, 0.18);
-    --bajo-text:  #6aacec;
-    --max-chars-text: #e8c84a;
-    --max-chars-bg:   rgba(232, 200, 74, 0.12);
-    --font:       'Segoe UI', system-ui, -apple-system, sans-serif;
-    --radius:     0.5rem;
-    --radius-sm:  0.3125rem;
-    --shadow:     0 0.125rem 0.5rem rgba(0,0,0,0.4);
-
-    --fs-xs:   clamp(0.625rem, 0.607rem + 0.089vw, 0.6875rem);
-    --fs-sm:   clamp(0.75rem,  0.732rem + 0.089vw, 0.8125rem);
-    --fs-ui:   clamp(0.8125rem, 0.795rem + 0.089vw, 0.875rem);
-    --fs-base: clamp(1rem,     0.964rem + 0.179vw, 1.125rem);
-    --fs-lg:   clamp(1.375rem, 1.339rem + 0.179vw, 1.5rem);
-}
-
 html, body {
     height: 100%;
     overflow: hidden;
-    background: var(--bg-deep);
-    color: var(--text-main);
-    font-family: var(--font);
+    background: var(--surface-page);
+    color: var(--text-1);
+    font-family: var(--font-sans);
     font-size: var(--fs-base);
-    line-height: 1.5;
+    line-height: var(--lh-normal);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color var(--dur-base), color var(--dur-base);
 }
 
 body {
@@ -66,19 +30,20 @@ header {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    padding: 0.75rem 1.25rem;
-    background: var(--bg-panel);
-    border-bottom: 1px solid var(--border);
+    padding: var(--space-3) var(--space-6) var(--space-3) var(--space-4);
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border-1);
     flex-wrap: wrap;
     flex-shrink: 0;
 }
 
 #logo {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-xl);
     font-weight: 300;
-    letter-spacing: 0.25em;
-    color: var(--text-main);
+    letter-spacing: var(--tracking-widest);
+    color: var(--text-1);
     margin-right: auto;
+    text-transform: uppercase;
 }
 
 .barra-paciente {
@@ -93,29 +58,46 @@ header {
 }
 
 .barra-paciente label {
-    color: var(--text-label);
+    color: var(--text-3);
     font-size: var(--fs-sm);
+    font-weight: 500;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .barra-paciente select,
 .barra-paciente input {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
+    background: var(--surface-input);
+    border: 1px solid var(--border-1);
     border-radius: var(--radius-sm);
-    color: var(--text-main);
-    padding: 0.3125rem 0.625rem;
+    color: var(--text-1);
+    padding: 5px var(--space-2);
     font-size: var(--fs-ui);
+    font-family: var(--font-sans);
     outline: none;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.barra-paciente select:focus,
+.barra-paciente input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.barra-paciente select option {
+    color: var(--text-2);
+    background: var(--surface-input);
 }
 
 .barra-paciente select {
     min-width: 6.875rem;
     cursor: pointer;
-}
-
-.barra-paciente select option {
-    color: var(--text-muted);
-    background: var(--bg-input);
 }
 
 .barra-paciente input {
@@ -125,52 +107,39 @@ header {
 /* ── ACCIONES CABECERA ── */
 .acciones-cabecera {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-2);
     align-items: center;
     flex-shrink: 0;
+    margin-left: 4rem;
 }
 
 /* ── GRID PRINCIPAL ── */
 main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 20rem;
+    grid-template-columns: 1fr 1fr 29.6rem 30rem;
     grid-template-rows: 1fr auto;
     grid-template-areas:
         "hema bioquim imagenes resultados"
         "flujo flujo clinico resultados";
     gap: 1px;
-    background: var(--border);
+    background: var(--border-1);
     flex: 1;
     min-height: 0;
     overflow: hidden;
 }
 
-#panel-hema {
-    grid-area: hema;
-}
-
-#panel-bioquim {
-    grid-area: bioquim;
-}
-
-#panel-imagenes {
-    grid-area: imagenes;
-}
-
-#panel-resultados {
-    grid-area: resultados;
-}
-
-.panel-flujo {
-    grid-area: flujo;
-}
+#panel-hema     { grid-area: hema; }
+#panel-bioquim  { grid-area: bioquim; }
+#panel-imagenes { grid-area: imagenes; }
+#panel-resultados { grid-area: resultados; }
+.panel-flujo    { grid-area: flujo; }
 
 /* ── HEMA / BIOQUIM — contenido más grande ── */
 #panel-hema,
 #panel-bioquim {
-    --fs-xs:   0.75rem;
-    --fs-sm:   0.9rem;
-    --fs-ui:   0.95rem;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.9rem;
+    --fs-ui: 0.95rem;
 }
 
 #panel-hema .panel-cuerpo,
@@ -197,7 +166,7 @@ main {
 }
 
 .panel {
-    background: var(--bg-panel);
+    background: var(--surface-1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -207,60 +176,50 @@ main {
     height: 2.5rem;
     display: flex;
     align-items: center;
-    padding: 0 1rem;
-    font-size: var(--fs-sm);
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--text-label);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-card);
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border-1);
+    background: var(--surface-2);
     flex-shrink: 0;
 }
 
 .panel-cuerpo {
     flex: 1;
     overflow-y: auto;
-    padding: 0.875rem 1rem;
+    padding: var(--space-3) var(--space-4);
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: var(--border-2) transparent;
 }
 
 /* ── ENCABEZADOS DE COLUMNA ── */
 .cabecera-columnas {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0 0 0.375rem 0;
-    margin-bottom: 0.625rem;
-    border-bottom: 1px solid var(--border);
+    gap: var(--space-2);
+    padding: 0 0 var(--space-1) 0;
+    margin-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-1);
     position: sticky;
     top: 0;
-    background: var(--bg-panel);
+    background: var(--surface-1);
     z-index: 1;
 }
 
 .cabecera-columnas span {
     font-size: var(--fs-xs);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-4);
 }
 
-.cabecera-columnas span:first-child {
-    flex: 1;
-}
-
-.cabecera-columnas span:nth-child(2) {
-    width: calc(5rem + 2rem);
-    text-align: center;
-}
-
-.cabecera-columnas span:nth-child(3) {
-    min-width: 3.125rem;
-    text-align: right;
-}
+.cabecera-columnas span:first-child { flex: 1; }
+.cabecera-columnas span:nth-child(2) { width: calc(5rem + 2rem); text-align: center; }
+.cabecera-columnas span:nth-child(3) { min-width: 3.125rem; text-align: right; }
 
 /* ── CAMPOS DEL FORMULARIO ── */
 .grupo-campo {
@@ -270,12 +229,12 @@ main {
 .titulo-grupo {
     font-size: var(--fs-xs);
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--text-accent);
     margin-bottom: 0.85rem;
-    padding-bottom: 0.25rem;
-    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border-1);
 }
 
 .fila-campo {
@@ -283,18 +242,18 @@ main {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.375rem;
-    gap: 0.5rem;
+    gap: var(--space-2);
 }
 
 .fila-campo label {
     font-size: var(--fs-sm);
-    color: var(--text-label);
+    color: var(--text-3);
     flex: 1;
 }
 
 .fila-campo .unidad {
     font-size: var(--fs-xs);
-    color: var(--text-muted);
+    color: var(--text-4);
     white-space: nowrap;
     min-width: 3.125rem;
     text-align: right;
@@ -302,16 +261,19 @@ main {
 
 .fila-campo input {
     width: calc(5rem + 2rem);
-    background: var(--bg-input);
-    border: 1px solid var(--border);
+    background: var(--surface-input);
+    border: 1px solid var(--border-1);
     border-radius: var(--radius-sm);
-    color: var(--text-main);
-    padding: 0.25rem 0.5rem;
+    color: var(--text-1);
+    padding: var(--space-1) var(--space-2);
     font-size: var(--fs-ui);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
     text-align: right;
     outline: none;
     appearance: textfield;
     -moz-appearance: textfield;
+    transition: border-color var(--dur-fast), background-color var(--dur-fast), color var(--dur-fast);
 }
 
 .fila-campo input::-webkit-outer-spin-button,
@@ -320,56 +282,60 @@ main {
 }
 
 .fila-campo input:focus {
-    border-color: var(--accent);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .fila-campo input.alto,
 .fila-campo input.alto:focus {
-    border-color: var(--alto-text);
+    border-color: var(--alto);
     background: var(--alto-bg);
+    color: var(--alto-strong);
 }
 
 .fila-campo input.bajo,
 .fila-campo input.bajo:focus {
-    border-color: var(--bajo-text);
+    border-color: var(--bajo);
     background: var(--bajo-bg);
+    color: var(--bajo-strong);
 }
 
 .fila-campo input.max-chars,
 .fila-campo input.max-chars:focus {
-    border-color: var(--max-chars-text);
-    background: var(--max-chars-bg);
+    border-color: var(--monitor);
+    background: var(--monitor-bg);
 }
-
 
 /* ── IMAGENES ── */
 .cuerpo-imagenes {
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: var(--space-2);
 }
 
 .ranura-imagen {
     flex: 1;
-    border: 1.5px dashed var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-card);
+    border: 1.5px dashed var(--border-2);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
+    color: var(--text-4);
     flex-direction: column;
-    gap: 0.375rem;
+    gap: var(--space-1);
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color var(--dur-fast), background-color var(--dur-fast), color var(--dur-fast);
 }
 
 .ranura-imagen:hover {
     border-color: var(--accent);
+    background: var(--surface-3);
+    color: var(--accent);
 }
 
 .ranura-imagen svg {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .ranura-imagen span {
@@ -377,9 +343,7 @@ main {
 }
 
 /* ── SECCIÓN SIGNOS CLÍNICOS ── */
-#panel-clinico {
-    grid-area: clinico;
-}
+#panel-clinico { grid-area: clinico; }
 
 .seccion-clinica {
     display: flex;
@@ -390,7 +354,7 @@ main {
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
-    color: var(--text-muted);
+    color: var(--text-4);
     font-size: var(--fs-xs);
 }
 
@@ -398,36 +362,38 @@ main {
     padding: 0.75rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
 }
 
 .etiqueta-clinica {
     font-size: var(--fs-xs);
-    color: var(--text-muted);
-    line-height: 1.4;
+    color: var(--text-4);
+    line-height: var(--lh-snug);
 }
 
 .seccion-clinica textarea {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
+    background: var(--surface-input);
+    border: 1px solid var(--border-1);
     border-radius: var(--radius-sm);
-    color: var(--text-main);
-    padding: 0.5rem 0.625rem;
+    color: var(--text-1);
+    padding: var(--space-2) var(--space-3);
     font-size: var(--fs-ui);
-    font-family: var(--font);
+    font-family: var(--font-sans);
     resize: none;
     min-height: 5rem;
     outline: none;
-    line-height: 1.5;
+    line-height: var(--lh-normal);
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
 }
 
 .seccion-clinica textarea:focus {
-    border-color: var(--accent);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 /* ── PANEL DE RESULTADOS ── */
 #panel-resultados {
-    border-left: 2px solid var(--border);
+    border-left: 1px solid var(--border-1);
 }
 
 .seccion-resultado {
@@ -436,65 +402,136 @@ main {
 
 .titulo-seccion-resultado {
     font-size: var(--fs-xs);
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
+    color: var(--text-accent);
+    margin-bottom: var(--space-2);
 }
 
+/* ── HALLAZGOS ── */
 .insignia-hallazgo {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.3125rem 0.5625rem;
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
     font-size: var(--fs-sm);
-    gap: 0.375rem;
-    margin-bottom: 0.3125rem;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+    border: 1px solid var(--border-1);
+    background: var(--surface-1);
+}
+
+.insignia-hallazgo .nombre {
+    font-weight: 500;
+    color: var(--text-2);
+    flex: 1;
+}
+
+.insignia-hallazgo .valor {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-1);
+}
+
+.insignia-hallazgo .etiqueta {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .insignia-hallazgo.alto {
     background: var(--alto-bg);
-    color: var(--alto-text);
-    border: 1px solid rgba(192,57,43,0.25);
+    border-color: var(--alto-border);
+}
+
+.insignia-hallazgo.alto .nombre,
+.insignia-hallazgo.alto .valor,
+.insignia-hallazgo.alto .etiqueta {
+    color: var(--alto-strong);
 }
 
 .insignia-hallazgo.bajo {
     background: var(--bajo-bg);
-    color: var(--bajo-text);
-    border: 1px solid rgba(52,120,200,0.25);
+    border-color: var(--bajo-border);
 }
 
+.insignia-hallazgo.bajo .nombre,
+.insignia-hallazgo.bajo .valor,
+.insignia-hallazgo.bajo .etiqueta {
+    color: var(--bajo-strong);
+}
+
+/* ── PATRONES ── */
 .elemento-patron {
-    background: var(--bg-card);
+    background: var(--surface-2);
+    border: 1px solid var(--border-1);
     border-left: 3px solid var(--accent);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 0.4375rem 0.625rem;
-    font-size: var(--fs-sm);
-    color: var(--text-main);
-    line-height: 1.5;
-    margin-bottom: 0.5rem;
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-2);
 }
 
+.elemento-patron .titulo-patron {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-accent);
+    margin-bottom: 2px;
+}
+
+.elemento-patron .cuerpo-patron {
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height: var(--lh-normal);
+}
+
+.elemento-patron.gravedad-grave {
+    border-left-color: var(--urgent);
+}
+
+.elemento-patron.gravedad-grave .titulo-patron {
+    color: var(--urgent);
+}
+
+.elemento-patron.gravedad-moderado {
+    border-left-color: var(--monitor);
+}
+
+.elemento-patron.gravedad-moderado .titulo-patron {
+    color: var(--monitor);
+}
+
+/* ── EMPTY STATES ── */
+.sin-hallazgos {
+    font-size: var(--fs-sm);
+    color: var(--text-4);
+    font-style: italic;
+}
+
+/* ── IA OUTPUT ── */
 #salida-ia {
     font-size: var(--fs-ui);
-    color: var(--text-main);
+    color: var(--text-1);
     line-height: 1.7;
     white-space: pre-wrap;
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 0.625rem 0.75rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
 }
 
 /* ── FOOTER ── */
 footer {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.625rem 1.25rem;
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
+    gap: var(--space-4);
+    padding: var(--space-2) var(--space-6);
+    background: var(--surface-1);
+    border-top: 1px solid var(--border-1);
     flex-wrap: wrap;
     flex-shrink: 0;
 }
@@ -502,33 +539,38 @@ footer {
 #aviso {
     flex: 1;
     font-size: var(--fs-xs);
-    color: var(--text-muted);
-    line-height: 1.4;
+    color: var(--text-4);
+    line-height: var(--lh-snug);
 }
 
 #aviso strong {
-    color: var(--text-label);
+    color: var(--text-3);
 }
 
 .acciones-pie {
     display: flex;
-    gap: 0.625rem;
+    gap: var(--space-2);
     flex-shrink: 0;
 }
 
+/* ── BOTONES ── */
 .boton {
-    padding: 0.4375rem 1.125rem;
+    padding: 7px 16px;
     border-radius: var(--radius-sm);
-    border: none;
+    border: 1px solid transparent;
     font-size: var(--fs-ui);
     font-weight: 500;
+    font-family: var(--font-sans);
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition:
+        background-color var(--dur-fast),
+        color var(--dur-fast),
+        border-color var(--dur-fast),
+        opacity var(--dur-fast);
     white-space: nowrap;
-}
-
-.boton:hover {
-    opacity: 0.85;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
 }
 
 .boton:disabled {
@@ -537,22 +579,88 @@ footer {
 }
 
 .boton-limpiar {
-    background: var(--bg-card);
-    color: var(--text-label);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-3);
+    border-color: var(--border-1);
+}
+
+.boton-limpiar:hover:not(:disabled) {
+    background: var(--surface-3);
+    color: var(--text-2);
 }
 
 .boton-analizar {
     background: var(--accent);
-    color: #fff;
+    color: var(--text-on-accent);
+    border-color: var(--accent);
     min-width: 6.25rem;
 }
 
-.boton-exportar {
-    background: var(--bg-card);
-    color: var(--accent);
-    border: 1px solid var(--accent-dim);
+.boton-analizar:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
 }
+
+.boton-exportar {
+    background: var(--surface-1);
+    color: var(--text-accent);
+    border-color: var(--accent-dim);
+}
+
+.boton-exportar:hover:not(:disabled) {
+    background: var(--surface-2);
+}
+
+/* ── PANEL PIE DE ACCIONES ── */
+.panel-pie-acciones {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--border-1);
+    background: var(--surface-2);
+    flex-shrink: 0;
+    justify-content: flex-end;
+}
+
+.panel-pie-acciones .boton {
+    padding: 7px 19px;
+}
+
+.panel-pie-acciones .boton-analizar {
+    min-width: 7.5rem;
+}
+
+/* ── INICIAR SESIÓN ── */
+.boton-iniciar-sesion {
+    background: var(--surface-1);
+    color: var(--text-accent);
+    border-color: var(--accent);
+}
+
+.boton-iniciar-sesion:hover:not(:disabled) {
+    background: var(--surface-2);
+}
+
+/* ── THEME TOGGLE ── */
+.boton-tema {
+    background: var(--surface-2);
+    color: var(--text-3);
+    border-color: var(--border-1);
+    padding: 7px var(--space-2);
+}
+
+.boton-tema:hover {
+    background: var(--surface-3);
+    color: var(--text-2);
+    border-color: var(--border-2);
+}
+
+/* Show/hide sun & moon based on active theme */
+.icono-sol { display: none; }
+.icono-luna { display: block; }
+
+[data-theme="dark"] .icono-sol { display: block; }
+[data-theme="dark"] .icono-luna { display: none; }
 
 /* ── PANEL FLUJO DE TRABAJO ── */
 .cuerpo-flujo {
@@ -587,19 +695,19 @@ footer {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 2px;
+    width: 1px;
     height: 70%;
-    background: var(--border);
+    background: var(--border-1);
 }
 
 .num-paso {
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 50%;
-    background: var(--bg-card);
+    background: var(--surface-1);
     border: 1px solid var(--accent-dim);
-    color: var(--accent);
-    font-size: 0.55rem;
+    color: var(--text-accent);
+    font-size: 0.6rem;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -610,21 +718,22 @@ footer {
 .pasos-flujo strong {
     display: block;
     font-size: var(--fs-xs);
-    color: var(--text-label);
+    color: var(--text-2);
+    font-weight: 600;
     margin-bottom: 0;
 }
 
 .pasos-flujo p {
     font-size: 0.6rem;
-    color: var(--text-muted);
-    line-height: 1.3;
+    color: var(--text-3);
+    line-height: var(--lh-snug);
 }
 
 /* ── NAV INFERIOR ── */
 .nav-inferior {
     display: none;
-    background: var(--bg-panel);
-    border-top: 1px solid var(--border);
+    background: var(--surface-1);
+    border-top: 1px solid var(--border-1);
     flex-shrink: 0;
 }
 
@@ -635,17 +744,17 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    color: var(--text-muted);
+    color: var(--text-4);
     font-size: 0.6rem;
     font-weight: 500;
     letter-spacing: 0.03em;
-    transition: color 0.15s;
+    transition: color var(--dur-fast);
     padding: 0.4rem 0.25rem 0.3rem;
     border-top: 2px solid transparent;
 }
 
 .pestanya-nav:hover {
-    color: var(--text-label);
+    color: var(--text-2);
 }
 
 .pestanya-nav.activo {
@@ -659,10 +768,10 @@ footer {
 
 /* ── RESPONSIVE ── */
 
-/* Monitores Full HD 1920×1080 */
+/* Full HD 1920×1080 */
 @media (min-width: 1920px) {
     main {
-        grid-template-columns: 1fr 1fr 1fr 380px;
+        grid-template-columns: 1fr 1fr 465px 570px;
     }
 
     #panel-hema,
@@ -763,12 +872,12 @@ footer {
         padding: 0 1rem;
         font-size: var(--fs-sm);
         font-weight: 600;
-        letter-spacing: 0.08em;
+        letter-spacing: var(--tracking-wide);
         text-transform: uppercase;
-        color: var(--text-label);
-        border-bottom: 1px solid var(--border);
-        border-top: 1px solid var(--border);
-        background: var(--bg-card);
+        color: var(--text-3);
+        border-bottom: 1px solid var(--border-1);
+        border-top: 1px solid var(--border-1);
+        background: var(--surface-2);
         flex-shrink: 0;
         margin: 1.5rem -1rem 0.5rem -1rem;
         width: calc(100% + 2rem);
@@ -801,7 +910,7 @@ footer {
     main {
         display: flex;
         flex-direction: column;
-        background: var(--bg-deep);
+        background: var(--surface-page);
         gap: 0;
         overflow: hidden;
     }
@@ -873,3 +982,4 @@ footer {
         flex-direction: column;
     }
 }
+
