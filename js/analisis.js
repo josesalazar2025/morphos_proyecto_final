@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// analisis.js — Clasificación clínica de parámetros analíticos veterinarios
-// ─────────────────────────────────────────────────────────────────────────────
-
 
 // ─── Gravedad ─────────────────────────────────────────────────────────────────
 // La desviación se mide en múltiplos del ancho del rango de referencia.
@@ -425,6 +421,115 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         descripcion: alt.hiperfosforemia.descripcion,
         gravedad: gravedadDe('phosphorus'),
         parametros: ['phosphorus']
+    });
+
+
+    // ── Riñón — marcadores precoces ───────────────────────────────────────────
+
+    if (esAlto('sdma')) agregar({
+        nombre: alt.sdma_elevado.nombre,
+        descripcion: alt.sdma_elevado.descripcion,
+        gravedad: gravedadDe('sdma'),
+        parametros: ['sdma']
+    });
+
+    if (esAlto('cystatin_b')) agregar({
+        nombre: alt.cistatina_b_elevada.nombre,
+        descripcion: alt.cistatina_b_elevada.descripcion,
+        gravedad: gravedadDe('cystatin_b'),
+        parametros: ['cystatin_b']
+    });
+
+
+    // ── Urianálisis ───────────────────────────────────────────────────────────
+
+    if (esAlto('upc')) agregar({
+        nombre: alt.proteinuria_glomerular.nombre,
+        descripcion: alt.proteinuria_glomerular.descripcion,
+        gravedad: gravedadDe('upc'),
+        parametros: ['upc', ...(presente('microalbumin') ? ['microalbumin'] : [])]
+    });
+    else if (esAlto('microalbumin')) agregar({
+        nombre: alt.microalbuminuria.nombre,
+        descripcion: alt.microalbuminuria.descripcion,
+        gravedad: gravedadDe('microalbumin'),
+        parametros: ['microalbumin']
+    });
+
+    const valUsg = valor('usg');
+    if (valUsg !== null && valUsg < 1.008) agregar({
+        nombre: alt.hiposthenuria.nombre,
+        descripcion: alt.hiposthenuria.descripcion,
+        gravedad: valUsg < 1.005 ? 'grave' : 'moderado',
+        parametros: ['usg']
+    });
+    else if (valUsg !== null && valUsg < 1.013) agregar({
+        nombre: alt.isosthenuria.nombre,
+        descripcion: alt.isosthenuria.descripcion,
+        gravedad: 'leve',
+        parametros: ['usg']
+    });
+
+
+    // ── Tiroides ──────────────────────────────────────────────────────────────
+
+    const t4Bajo  = esBajo('t4_total') || esBajo('ft4');
+    const t4Alto  = esAlto('t4_total') || esAlto('ft4');
+    const ctshAlto = esAlto('ctsh');
+
+    if (especie === 'canino' && t4Bajo) agregar({
+        nombre: alt.hipotiroidismo.nombre,
+        descripcion: alt.hipotiroidismo.descripcion.canino,
+        gravedad: gravedadDe('t4_total', 'ft4'),
+        parametros: ['t4_total', 'ft4', 'ctsh'].filter(presente)
+    });
+
+    if (t4Alto && !ctshAlto) agregar({
+        nombre: alt.hipertiroidismo.nombre,
+        descripcion: alt.hipertiroidismo.descripcion[especie] ?? alt.hipertiroidismo.descripcion.felino,
+        gravedad: gravedadDe('t4_total', 'ft4'),
+        parametros: ['t4_total', 'ft4', 'ctsh'].filter(presente)
+    });
+
+
+    // ── Suprarrenal / Cortisol ────────────────────────────────────────────────
+
+    if (esAlto('cortisol_acth')) agregar({
+        nombre: alt.hiperadrenocorticismo.nombre,
+        descripcion: alt.hiperadrenocorticismo.descripcion[especie] ?? alt.hiperadrenocorticismo.descripcion.canino,
+        gravedad: gravedadDe('cortisol_acth'),
+        parametros: ['cortisol_acth', ...(presente('cortisol_basal') ? ['cortisol_basal'] : [])]
+    });
+
+    if (esBajo('cortisol_acth')) agregar({
+        nombre: alt.hipoadrenocorticismo_cortisol.nombre,
+        descripcion: alt.hipoadrenocorticismo_cortisol.descripcion,
+        gravedad: gravedadDe('cortisol_acth'),
+        parametros: ['cortisol_acth', ...(presente('cortisol_basal') ? ['cortisol_basal'] : [])]
+    });
+
+    if (esBajo('cortisol_basal') && !presente('cortisol_acth')) agregar({
+        nombre: alt.cortisol_basal_bajo.nombre,
+        descripcion: alt.cortisol_basal_bajo.descripcion,
+        gravedad: 'moderado',
+        parametros: ['cortisol_basal']
+    });
+
+
+    // ── Glucosa / Diabetes ────────────────────────────────────────────────────
+
+    if (esAlto('fructosamina')) agregar({
+        nombre: alt.fructosamina_elevada.nombre,
+        descripcion: alt.fructosamina_elevada.descripcion,
+        gravedad: gravedadDe('fructosamina'),
+        parametros: ['fructosamina', ...(presente('glucose') ? ['glucose'] : [])]
+    });
+
+    if (esBajo('insulina') && esAlto('glucose')) agregar({
+        nombre: alt.deficit_insulina.nombre,
+        descripcion: alt.deficit_insulina.descripcion,
+        gravedad: 'moderado',
+        parametros: ['insulina', 'glucose'].filter(presente)
     });
 
     return patrones;

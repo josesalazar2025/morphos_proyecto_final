@@ -141,5 +141,65 @@
   "hiperfosforemia": {
     "nombre": "Hiperfosforemia",
     "descripcion": "Frecuente en enfermedad renal crónica (ERC); la retención de fósforo contribuye al hiperparatiroidismo renal secundario y acelera la progresión del daño tubular. Considerar también hipoparatiroidismo, hipervitaminosis D, lisis tumoral o hemólisis artefactual. Clave en estadiaje IRIS y planificación dietética (restricción de fósforo en ERC estadio ≥ II)."
+  },
+  "sdma_elevado": {
+    "nombre": "SDMA elevado — disfunción renal precoz",
+    "descripcion": "El SDMA es un marcador sensible de tasa de filtración glomerular (TFG); se eleva cuando la función renal desciende un ~25%, antes de que suba la creatinina. Compatible con ERC estadio I (IRIS) o deterioro renal agudo incipiente. Correlacionar con creatinina, densidad urinaria y presión arterial. Repetir en 1–4 semanas para confirmar persistencia."
+  },
+  "cistatina_b_elevada": {
+    "nombre": "Cistatina B elevada — daño tubular renal",
+    "descripcion": "La cistatina B es un marcador de lesión tubular proximal. Su elevación sugiere nefropatía tubulointersticial, toxicidad por fármacos nefrotóxicos (aminoglucósidos, AINEs, cisplatino) o ERC con componente tubular predominante. Complementar con SDMA, creatinina y urianálisis (cilindros, glucosuria sin hiperglucemia)."
+  },
+  "proteinuria_glomerular": {
+    "nombre": "Proteinuria glomerular significativa (UPC elevado)",
+    "descripcion": "Cociente proteína/creatinina urinaria (UPC) elevado. Compatible con glomerulonefritis (inmunomediada, infecciosa — Leishmania, Ehrlichia, FIP —), amiloidosis renal o hipertensión sistémica. Estadificar proteinuria según IRIS (UPC > 0,5 canino / > 0,4 felino = proteinúrico). Evaluar presión arterial y considerar biopsia renal si persiste sin causa identificada."
+  },
+  "microalbuminuria": {
+    "nombre": "Microalbuminuria — lesión glomerular incipiente",
+    "descripcion": "Albuminuria en rango de microalbuminuria: marcador precoz de daño glomerular antes de que el UPC alcance el umbral proteinúrico. Puede asociarse a hipertensión sistémica, diabetes mellitus, ERC estadio I o inflamación sistémica crónica. Repetir en 1–3 meses y medir UPC si progresa."
+  },
+  "hiposthenuria": {
+    "nombre": "Hiposthenuria (USG < 1.008) — concentración muy disminuida",
+    "descripcion": "Densidad urinaria muy baja. Compatible con diabetes insípida central o nefrogénica, hiperadrenocorticismo (HAC), hipercalcemia, hipopotasemia o administración de diuréticos. En felinos, considerar acromegalia y HAC. Requiere prueba de privación de agua o test de vasopresina para diferenciar los subtipos de diabetes insípida."
+  },
+  "isosthenuria": {
+    "nombre": "Isosthenuria (USG 1.008–1.013) — capacidad de concentración deteriorada",
+    "descripcion": "La densidad urinaria isostenúrica refleja incapacidad para concentrar la orina por encima de la osmolaridad plasmática. Compatible con ERC moderada–grave (pérdida tubular), pielonefritis, hiperadrenocorticismo o diabetes insípida parcial. Evaluar función renal completa (creatinina, SDMA, BUN) y presión arterial."
+  },
+  "hipotiroidismo": {
+    "nombre": "Hipotiroidismo — T4 disminuida",
+    "descripcion": {
+      "canino": "T4 total y/o T4 libre disminuidas. El hipotiroidismo canino es la endocrinopatía más frecuente en perros adultos de mediana edad. El cTSH elevado apoya el diagnóstico de hipotiroidismo primario. Signos clásicos: letargia, obesidad, alopecia bilateral simétrica, intolerancia al frío. Evaluar cTSH; confirmar con T4 libre por diálisis de equilibrio. Los fármacos (glucocorticoides, fenobarbital, sulfonamidas) y la enfermedad sistémica pueden suprimir T4 falsamente (síndrome del enfermo eutiroideo)."
+    }
+  },
+  "hipertiroidismo": {
+    "nombre": "Hipertiroidismo — T4 elevada",
+    "descripcion": {
+      "canino": "T4 total elevada en caninos: infrecuente; descartar adenocarcinoma tiroideo o suplementación exógena. Evaluar masa cervical palpable y ecografía tiroidea.",
+      "felino": "Causa endocrina más frecuente en gatos mayores de 8 años. Compatible con adenoma o hiperplasia nodular tiroidea. Signos clásicos: pérdida de peso con polifagia, hiperactividad, vómito, taquicardia. El cTSH normalmente suprimido. Confirmar con T4 libre si T4 total en zona limítrofe. Evaluar función renal antes de iniciar tratamiento (el hipertiroidismo puede enmascarar ERC subyacente)."
+    }
+  },
+  "hiperadrenocorticismo": {
+    "nombre": "Hiperadrenocorticismo (Cushing) — cortisol post-ACTH elevado",
+    "descripcion": {
+      "canino": "Cortisol post-ACTH elevado compatible con hiperadrenocorticismo (HAC). El 85% de los casos son hipofisarios (PDH); el 15% adrenales (ADH). Signos clásicos: poliuria/polidipsia, polifagia, abdomen péndulo, alopecia, calcinosis cutis. Confirmar con prueba de supresión con dexametasona a dosis baja (PSDDB) y ecografía abdominal. Otras causas de cortisol post-ACTH alto: iatrógeno por glucocorticoides exógenos.",
+      "felino": "HAC felino es infrecuente; frecuentemente asociado a diabetes mellitus resistente a insulina. Sospechar en gatos diabéticos de difícil control. Signos: piel frágil, PU/PD marcada, abdomen distendido. Confirmar con PSDDB o test de ACTH."
+    }
+  },
+  "hipoadrenocorticismo_cortisol": {
+    "nombre": "Hipoadrenocorticismo (Addison) — cortisol post-ACTH bajo",
+    "descripcion": "Respuesta adrenocortical insuficiente al test de estimulación con ACTH. Diagnóstico de hipoadrenocorticismo si cortisol post-ACTH < 2 μg/dL (canino) o < 3,5 μg/dL (felino). Correlacionar con electrolitos (ratio Na:K < 27 en forma clásica). La forma atípica (solo déficit glucocorticoide) cursa con electrolitos normales. Puede presentarse como crisis addisoniana (colapso, hipoglucemia, bradiarritmia)."
+  },
+  "cortisol_basal_bajo": {
+    "nombre": "Cortisol basal bajo — posible hipoadrenocorticismo",
+    "descripcion": "Cortisol basal disminuido. Un valor < 1 μg/dL (canino) o < 0,5 μg/dL (felino) es altamente sugestivo de hipoadrenocorticismo; confirmar con test de estimulación con ACTH. Valores basales < 2 μg/dL justifican la realización del test. Evaluar junto a electrolitos y ratio Na:K."
+  },
+  "fructosamina_elevada": {
+    "nombre": "Fructosamina elevada — hiperglucemia persistente",
+    "descripcion": "La fructosamina refleja la glucemia media de las últimas 2–3 semanas, sin verse afectada por el estrés agudo. Su elevación confirma hiperglucemia sostenida compatible con diabetes mellitus. Útil para diferenciar diabetes mellitus de hiperglucemia de estrés (frecuente en felinos). Monitorizar también para ajuste de dosis de insulina en pacientes diabéticos en tratamiento."
+  },
+  "deficit_insulina": {
+    "nombre": "Posible déficit de insulina — hiperglucemia con insulina baja",
+    "descripcion": "Insulinemia baja en presencia de hiperglucemia sugiere déficit insulínico relativo o absoluto compatible con diabetes mellitus tipo 1 (destrucción de células β) o pancreatitis crónica con afectación exocrina y endocrina. Correlacionar con fructosamina para confirmar cronicidad. En felinos, la diabetes mellitus tipo 2 (resistencia insulínica) es más frecuente y puede cursar con insulina normal o alta."
   }
 }

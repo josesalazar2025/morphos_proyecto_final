@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Morphos - Interprete de Analíticas potenciado con IA</title>
-    <!-- Theme init — runs before paint to avoid flash -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('mx-theme');
-            var preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            document.documentElement.dataset.theme = saved || preferred;
-        })();
-    </script>
-    <link rel="stylesheet" href="../Morphos%20Design%20System/colors_and_type.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+    
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -328,7 +323,8 @@
         </div>
     </section>
 
-    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + IMÁGENES -->
+    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + SIGNOS CLÍNICOS -->
+    <div class="col3-wrapper">
     <section class="panel" id="panel-imagenes">
 
         <!-- URIANÁLISIS -->
@@ -489,6 +485,7 @@
             <textarea id="signos-clinicos" name="signos-clinicos" placeholder="ej. Poliuria, polidipsia, pérdida de peso…"></textarea>
         </div>
     </section>
+    </div><!-- /.col3-wrapper -->
 
     <!-- RESULTADOS -->
     <section class="panel" id="panel-resultados">

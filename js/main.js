@@ -1,5 +1,10 @@
 import { analizarResultados } from './analisis.js';
 
+// ─── Theme init ────────────────────────────────────────────────────────────────
+const saved = localStorage.getItem('mx-theme');
+const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+document.documentElement.dataset.theme = saved || preferred;
+
 // ─── Theme toggle ─────────────────────────────────────────────────────────────
 const btnTema = document.getElementById('btn-tema');
 if (btnTema) {
@@ -14,7 +19,7 @@ let referencias = [];
 let alteraciones = {};
 
 const tabs = document.querySelectorAll('.pestanya-nav');
-const paneles = document.querySelectorAll('main > .panel');
+const paneles = document.querySelectorAll('main > .panel, .col3-wrapper > .panel');
 
 function activateTab(targetId) {
     tabs.forEach(tab => {
@@ -63,8 +68,13 @@ const INPUT_A_CLAVE = {
     wbc: 'wbc', neutro: 'neutrophils', linfo: 'lymphocytes', mono: 'monocytes',
     eosino: 'eosinophils', baso: 'basophils', plt: 'platelets',
     alt: 'alt', ast: 'ast', fal: 'alp', ggt: 'ggt', bun: 'bun', creat: 'creatinine',
+    sdma: 'sdma', cistb: 'cystatin_b',
     gluc: 'glucose', prot: 'total_protein', alb: 'albumin', bili: 'total_bilirubin',
-    fosf: 'phosphorus', calc: 'calcium', sodio: 'sodium', potasio: 'potassium', cloro: 'chloride'
+    fosf: 'phosphorus', calc: 'calcium', sodio: 'sodium', potasio: 'potassium', cloro: 'chloride',
+    usg: 'usg', ph: 'urine_ph', upc: 'upc', microalb: 'microalbumin',
+    'cortisol-bas': 'cortisol_basal', 'cortisol-acth': 'cortisol_acth',
+    't4-total': 't4_total', ft4: 'ft4', ctsh: 'ctsh',
+    fructosamina: 'fructosamina', insulina: 'insulina'
 };
 
 const CLAVE_A_INPUT = Object.entries(INPUT_A_CLAVE).reduce((acc, [nombre, clave]) => {
@@ -182,8 +192,9 @@ document.getElementById('pt-edad-unidad').addEventListener('change', evaluar);
 
 // ─── Colapsar panel Flujo de trabajo ─────────────────────────────────────────
 const panelFlujo = document.getElementById('panel-flujo');
+const panelClinico = document.getElementById('panel-clinico');
 const btnColapsar = document.getElementById('btn-colapsar-flujo');
-const mainEl      = document.querySelector('main');
+const mainEl = document.querySelector('main');
 
 let collapsedRow = '';
 let expandedRow  = '';
@@ -192,11 +203,16 @@ const isDesktopGrid = () => window.innerWidth > 1100;
 
 function initGridRows() {
     if (!isDesktopGrid()) return;
+    panelClinico.style.height = '';
+    mainEl.style.gridTemplateRows = '1fr auto';
+
     const panelH  = panelFlujo.getBoundingClientRect().height;
     const headerH = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
     if (panelH  > 0) expandedRow  = `${panelH}px`;
     if (headerH > 0) collapsedRow = `${headerH}px`;
+
     mainEl.style.gridTemplateRows = `1fr ${expandedRow || 'auto'}`;
+    if (expandedRow) panelClinico.style.height = expandedRow;
 }
 
 function setGridRows(collapsed, animate) {
@@ -206,7 +222,7 @@ function setGridRows(collapsed, animate) {
         ? `1fr ${collapsedRow}`
         : `1fr ${expandedRow}`;
     if (!animate) {
-        mainEl.offsetHeight; // force reflow before restoring transition
+        mainEl.offsetHeight;
         mainEl.style.transition = '';
     }
 }
@@ -228,8 +244,10 @@ btnColapsar.addEventListener('click', () => {
 });
 
 window.addEventListener('resize', () => {
-    if (isDesktopGrid() && !panelFlujo.classList.contains('collapsed')) {
-        initGridRows();
+    if (isDesktopGrid()) {
+        if (!panelFlujo.classList.contains('collapsed')) initGridRows();
+    } else {
+        panelClinico.style.height = '';
     }
 });
 document.getElementById('pt-sexo').addEventListener('change', evaluar);

@@ -1,5 +1,119 @@
 @charset "utf-8";
 
+:root {
+    --brand-teal-200:  #8DCCBE;
+    --brand-teal-500:  #0F7A6B;
+    --brand-teal-600:  #0B6158;
+
+    --neutral-0:       #FFFFFF;
+    --neutral-50:      #FAFAF8;
+    --neutral-100:     #F3F3F0;
+    --neutral-150:     #ECECE8;
+    --neutral-200:     #E1E1DC;
+    --neutral-300:     #CCCCC5;
+    --neutral-500:     #7A7A72;
+    --neutral-600:     #55554F;
+    --neutral-700:     #3A3A36;
+    --neutral-900:     #14140F;
+
+    --alto:            #B8372C;
+    --alto-bg:         rgba(184, 55, 44, 0.10);
+    --alto-border:     rgba(184, 55, 44, 0.35);
+    --alto-strong:     #8C271E;
+
+    --bajo:            #2F6FB5;
+    --bajo-bg:         rgba(47, 111, 181, 0.10);
+    --bajo-border:     rgba(47, 111, 181, 0.35);
+    --bajo-strong:     #21548D;
+
+    --urgent:          #A21E1E;
+    --monitor:         #B5791A;
+    --monitor-bg:      rgba(181, 121, 26, 0.12);
+
+    --surface-page:    var(--neutral-50);
+    --surface-1:       var(--neutral-0);
+    --surface-2:       var(--neutral-100);
+    --surface-3:       var(--neutral-150);
+    --surface-input:   var(--neutral-0);
+
+    --text-1:          var(--neutral-900);
+    --text-2:          var(--neutral-700);
+    --text-3:          var(--neutral-600);
+    --text-4:          var(--neutral-500);
+    --text-accent:     var(--brand-teal-600);
+    --text-on-accent:  var(--neutral-0);
+
+    --border-1:        var(--neutral-200);
+    --border-2:        var(--neutral-300);
+    --border-focus:    var(--brand-teal-500);
+
+    --accent:          var(--brand-teal-500);
+    --accent-hover:    var(--brand-teal-600);
+    --accent-dim:      var(--brand-teal-200);
+
+    --radius-sm:       4px;
+    --radius-md:       8px;
+
+    --space-1:         4px;
+    --space-2:         8px;
+    --space-3:         12px;
+    --space-4:         16px;
+    --space-6:         24px;
+
+    --dur-fast:        120ms;
+    --dur-base:        180ms;
+
+    --font-sans:       'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono:       'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+    --fs-xs:           clamp(0.6875rem, 0.67rem + 0.09vw, 0.75rem);
+    --fs-sm:           clamp(0.8125rem, 0.79rem + 0.09vw, 0.875rem);
+    --fs-ui:           clamp(0.875rem,  0.86rem + 0.09vw, 0.9375rem);
+    --fs-base:         clamp(1rem,      0.98rem + 0.09vw, 1.0625rem);
+    --fs-xl:           clamp(1.375rem,  1.33rem + 0.18vw, 1.5rem);
+    --lh-snug:         1.4;
+    --lh-normal:       1.5;
+    --tracking-wide:   0.06em;
+    --tracking-wider:  0.1em;
+    --tracking-widest: 0.25em;
+}
+
+:root[data-theme="dark"] {
+    --surface-page:    #0E1011;
+    --surface-1:       #16191B;
+    --surface-2:       #1E2224;
+    --surface-3:       #262B2E;
+    --surface-input:   #121517;
+
+    --text-1:          #ECECE8;
+    --text-2:          #BFC0BC;
+    --text-3:          #8E9290;
+    --text-4:          #6B6F6D;
+    --text-accent:     #5ECDB8;
+    --text-on-accent:  #062520;
+
+    --border-1:        #2A2E31;
+    --border-2:        #363B3E;
+    --border-focus:    #5ECDB8;
+
+    --accent:          #5ECDB8;
+    --accent-hover:    #7BDAC7;
+    --accent-dim:      #2A5A52;
+
+    --alto:            #F08478;
+    --alto-bg:         rgba(240, 132, 120, 0.14);
+    --alto-border:     rgba(240, 132, 120, 0.32);
+    --alto-strong:     #F5A59B;
+
+    --bajo:            #7EB8F0;
+    --bajo-bg:         rgba(126, 184, 240, 0.14);
+    --bajo-border:     rgba(126, 184, 240, 0.32);
+    --bajo-strong:     #A3CDF5;
+
+    --urgent:          #F08478;
+    --monitor:         #E5B261;
+    --monitor-bg:      rgba(229, 178, 97, 0.14);
+}
+
 *,
 *::before,
 *::after {
@@ -119,8 +233,8 @@ main {
     grid-template-columns: 1fr 1fr 29.6rem 30rem;
     grid-template-rows: 1fr auto;
     grid-template-areas:
-        "hema bioquim imagenes resultados"
-        "flujo flujo clinico resultados";
+        "hema bioquim col3 resultados"
+        "flujo flujo col3 resultados";
     gap: 1px;
     background: var(--border-1);
     flex: 1;
@@ -128,11 +242,39 @@ main {
     overflow: hidden;
 }
 
-#panel-hema     { grid-area: hema; }
-#panel-bioquim  { grid-area: bioquim; }
-#panel-imagenes { grid-area: imagenes; }
+#panel-hema       { grid-area: hema; }
+#panel-bioquim    { grid-area: bioquim; }
 #panel-resultados { grid-area: resultados; }
-.panel-flujo    { grid-area: flujo; }
+.panel-flujo      { grid-area: flujo; }
+
+.col3-wrapper {
+    grid-area: col3;
+    display: flex;
+    flex-direction: column;
+    background: var(--border-1);
+    gap: 1px;
+    overflow: hidden;
+}
+
+#panel-imagenes {
+    flex: 1;
+    min-height: 0;
+}
+
+#panel-clinico {
+    flex-shrink: 0;
+}
+
+
+#panel-clinico .cuerpo-clinica {
+    flex: 1;
+    min-height: 0;
+}
+
+#panel-clinico textarea {
+    flex: 1;
+    min-height: 0;
+}
 
 /* ── HEMA / BIOQUIM — contenido más grande ── */
 #panel-hema,
@@ -187,8 +329,7 @@ main {
     flex-shrink: 0;
 }
 
-/* These headers match the height of .panel-pie-acciones:
-   1px border + 2 × space-2(8px) padding + button height(≈37px) = ≈54px */
+
 #panel-flujo .panel-cabecera,
 #panel-clinico .panel-cabecera {
     height: 3.375rem;
@@ -340,7 +481,6 @@ main {
     padding: 0.75rem 1rem;
 }
 
-/* select fields match numeric inputs */
 .fila-campo select {
     width: calc(5rem + 2rem);
     background: var(--surface-input);
@@ -375,7 +515,6 @@ main {
 }
 
 /* ── SECCIÓN SIGNOS CLÍNICOS ── */
-#panel-clinico { grid-area: clinico; }
 
 .seccion-clinica {
     display: flex;
@@ -537,7 +676,6 @@ main {
     color: var(--monitor);
 }
 
-/* ── EMPTY STATES ── */
 .sin-hallazgos {
     font-size: var(--fs-sm);
     color: var(--text-4);
@@ -700,12 +838,12 @@ footer {
     border-color: var(--border-2);
 }
 
-/* Show/hide sun & moon based on active theme */
 .icono-sol { display: none; }
 .icono-luna { display: block; }
 
 [data-theme="dark"] .icono-sol { display: block; }
 [data-theme="dark"] .icono-luna { display: none; }
+
 
 /* ── BOTÓN COLAPSAR FLUJO ── */
 .btn-colapsar-flujo {
@@ -741,10 +879,19 @@ main {
     transform: rotate(180deg);
 }
 
+#panel-flujo::after {
+    content: '';
+    display: block;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
 /* ── PANEL FLUJO DE TRABAJO ── */
 .cuerpo-flujo {
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
     padding: 0.3rem 1.25rem;
     overflow: hidden;
 }
@@ -762,6 +909,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     gap: 0.2rem;
     padding: 0 0.75rem;
@@ -994,11 +1142,17 @@ main {
         overflow: hidden;
     }
 
-    main > .panel {
+    .col3-wrapper {
+        display: contents;
+    }
+
+    main > .panel,
+    .col3-wrapper > .panel {
         display: none;
     }
 
-    main > .panel.activo {
+    main > .panel.activo,
+    .col3-wrapper > .panel.activo {
         display: flex;
         flex: 1;
         min-height: 0;

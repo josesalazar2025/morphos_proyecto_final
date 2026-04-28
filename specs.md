@@ -161,7 +161,6 @@ MedGemma response → rendered interpretation
 ## Non-Goals (MVP)
 
 - ❌ No OCR / image input for blood smear analysis (post-MVP)
-- ❌ No user registration or accounts
 - ❌ No database persistence of patient data
 - ❌ No bundled or default AI key
 - ❌ No Python anywhere in the stack
