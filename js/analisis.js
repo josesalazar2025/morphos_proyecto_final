@@ -158,16 +158,54 @@ const detectarPatrones = (hallazgos, especie, alt) => {
 
         const morfologia = (tipoPorVcm + tipoPorMchc).trim();
 
-        const etKey = esBajo('mcv') && esBajo('mchc') ? 'ferropenia' :
-                      esAlto('mcv') ? 'macrocitica' :
-                      morfologia.includes('normocítica') ? 'normocitica' : null;
-        const etiologia = etKey ? alt.anemia.etiologias[etKey] : '';
+        const tieneRetics = presente('retics_pct') || presente('retics_abs');
+        const regenerativa = esAlto('retics_pct') || esAlto('retics_abs');
+        const arregenerativa = tieneRetics && !regenerativa;
 
+        if (regenerativa) {
+            const desc = alt.anemia_regenerativa.descripcion[especie] ?? alt.anemia_regenerativa.descripcion.canino;
+            agregar({
+                nombre: `${alt.anemia_regenerativa.nombre}${morfologia ? ` ${morfologia}` : ''}`,
+                descripcion: desc,
+                gravedad: gravedadDe('hct', 'hgb', 'rbc'),
+                parametros: ['hct', 'hgb', 'rbc', 'mcv', 'mchc', 'retics_pct', 'retics_abs'].filter(presente)
+            });
+        } else if (arregenerativa) {
+            const desc = alt.anemia_arregenerativa.descripcion[especie] ?? alt.anemia_arregenerativa.descripcion.canino;
+            agregar({
+                nombre: `${alt.anemia_arregenerativa.nombre}${morfologia ? ` ${morfologia}` : ''}`,
+                descripcion: desc,
+                gravedad: gravedadDe('hct', 'hgb', 'rbc'),
+                parametros: ['hct', 'hgb', 'rbc', 'mcv', 'mchc', 'retics_pct', 'retics_abs'].filter(presente)
+            });
+        } else {
+            const etKey = esBajo('mcv') && esBajo('mchc') ? 'ferropenia' :
+                          esAlto('mcv') ? 'macrocitica' :
+                          morfologia.includes('normocítica') ? 'normocitica' : null;
+            const etiologia = etKey ? alt.anemia.etiologias[etKey] : '';
+            agregar({
+                nombre: `${alt.anemia.nombre}${morfologia ? ` ${morfologia}` : ''}`,
+                descripcion: [alt.anemia.prefijo, etiologia].filter(Boolean).join(' '),
+                gravedad: gravedadDe('hct', 'hgb', 'rbc'),
+                parametros: ['hct', 'hgb', 'rbc', 'mcv', 'mchc'].filter(presente)
+            });
+        }
+    }
+
+    if (esAlto('rdw')) agregar({
+        nombre: alt.anisocitosis.nombre,
+        descripcion: alt.anisocitosis.descripcion,
+        gravedad: gravedadDe('rdw'),
+        parametros: ['rdw', ...(['mcv', 'retics_pct', 'retics_abs'].filter(presente))]
+    });
+
+    if (esAlto('nrbc')) {
+        const desc = alt.eritroblastemia.descripcion[especie] ?? alt.eritroblastemia.descripcion.canino;
         agregar({
-            nombre: `${alt.anemia.nombre}${morfologia ? ` ${morfologia}` : ''}`,
-            descripcion: [alt.anemia.prefijo, etiologia].filter(Boolean).join(' '),
-            gravedad: gravedadDe('hct', 'hgb', 'rbc'),
-            parametros: ['hct', 'hgb', 'rbc', 'mcv', 'mchc'].filter(presente)
+            nombre: alt.eritroblastemia.nombre,
+            descripcion: desc,
+            gravedad: gravedadDe('nrbc'),
+            parametros: ['nrbc', ...(['hct', 'hgb', 'rbc'].filter(presente))]
         });
     }
 
@@ -222,11 +260,19 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['wbc']
     });
 
-    if (esBajo('neutrophils')) agregar({
+    if (esBajo('neutrophils') || esBajo('neutrophils_abs')) agregar({
         nombre: alt.neutropenia.nombre,
         descripcion: alt.neutropenia.descripcion,
-        gravedad: gravedadDe('neutrophils'),
-        parametros: ['neutrophils']
+        gravedad: gravedadDe('neutrophils', 'neutrophils_abs'),
+        parametros: ['neutrophils', 'neutrophils_abs'].filter(presente)
+    });
+
+    const valBands = valor('bands');
+    if (valBands !== null && valBands > 0) agregar({
+        nombre: alt.desviacion_izquierda.nombre,
+        descripcion: alt.desviacion_izquierda.descripcion,
+        gravedad: valBands > 10 ? 'grave' : valBands > 5 ? 'moderado' : 'leve',
+        parametros: ['bands', ...(['wbc', 'neutrophils'].filter(presente))]
     });
 
     if (esBajo('lymphocytes')) agregar({
@@ -246,12 +292,33 @@ const detectarPatrones = (hallazgos, especie, alt) => {
 
     // ── Plaquetas ─────────────────────────────────────────────────────────────
 
-    if (esBajo('platelets')) agregar({
-        nombre: alt.trombocitopenia.nombre,
-        descripcion: alt.trombocitopenia.descripcion,
-        gravedad: gravedadDe('platelets'),
-        parametros: ['platelets']
-    });
+    if (esBajo('platelets')) {
+        const tieneMpv = presente('mpv');
+        if (tieneMpv && esAlto('mpv')) {
+            const desc = alt.trombocitopenia_regenerativa.descripcion[especie] ?? alt.trombocitopenia_regenerativa.descripcion.canino;
+            agregar({
+                nombre: alt.trombocitopenia_regenerativa.nombre,
+                descripcion: desc,
+                gravedad: gravedadDe('platelets'),
+                parametros: ['platelets', 'mpv']
+            });
+        } else if (tieneMpv && esBajo('mpv')) {
+            const desc = alt.trombocitopenia_arregenerativa.descripcion[especie] ?? alt.trombocitopenia_arregenerativa.descripcion.canino;
+            agregar({
+                nombre: alt.trombocitopenia_arregenerativa.nombre,
+                descripcion: desc,
+                gravedad: gravedadDe('platelets'),
+                parametros: ['platelets', 'mpv']
+            });
+        } else {
+            agregar({
+                nombre: alt.trombocitopenia.nombre,
+                descripcion: alt.trombocitopenia.descripcion,
+                gravedad: gravedadDe('platelets'),
+                parametros: ['platelets', ...(tieneMpv ? ['mpv'] : [])]
+            });
+        }
+    }
 
     if (esAlto('platelets')) agregar({
         nombre: alt.trombocitosis.nombre,

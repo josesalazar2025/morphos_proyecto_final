@@ -1,4 +1,47 @@
 {
+  "anemia_regenerativa": {
+    "nombre": "Anemia regenerativa",
+    "descripcion": {
+      "canino": "Reticulocitosis activa en presencia de anemia: la médula ósea responde adecuadamente. Compatible con pérdida hemorrágica aguda (hemorragia interna o externa), hemólisis (AHIM, babesiosis, intoxicación por cebolla/zinc) o recuperación de anemia previa. Identificar la causa subyacente para dirigir el tratamiento. Si la hemorragia es activa, evaluar coagulación y origen del sangrado.",
+      "felino": "Reticulocitosis (reticulocitos en agregado) con anemia: respuesta medular adecuada. Las causas más frecuentes son hemólisis (Mycoplasma haemofelis, FeLV con hemólisis, intoxicación por paracetamol/cebolla) y hemorragia aguda. En gatos la reticulocitosis en punteado puede persistir semanas sin anemia activa; el recuento en agregado es el indicador clínicamente relevante de regeneración."
+    }
+  },
+  "anemia_arregenerativa": {
+    "nombre": "Anemia arregenerativa",
+    "descripcion": {
+      "canino": "Anemia sin respuesta reticulocitaria adecuada: la médula ósea no está compensando. Compatible con enfermedad inflamatoria o infecciosa crónica (anemia de proceso inflamatorio, causa más frecuente), insuficiencia renal crónica (déficit de eritropoyetina), hipotiroidismo, aplasia o hipoplasia eritroide (erlichiosis crónica, estrógenos, quimioterapia) o mieloftisis. Evaluar perfil bioquímico completo, función renal y considerar aspirado/biopsia de médula ósea si no hay causa evidente.",
+      "felino": "Anemia no regenerativa en el gato. La causa más frecuente es la ERC con déficit de EPO. Otras: FeLV (supresión medular directa, aplasia eritroide pura), FIV, anemia inflamatoria crónica, hipotiroidismo (raro), aplasia eritroide. El diagnóstico de aplasia eritroide pura (AEP) requiere biopsia medular. Tratar la enfermedad subyacente; la eritropoyetina recombinante puede emplearse en ERC pero riesgo de anticuerpos anti-EPO."
+    }
+  },
+  "anisocitosis": {
+    "nombre": "Anisocitosis (ADE/RDW elevado)",
+    "descripcion": "Aumento de la variabilidad en el tamaño eritrocitario. La anisocitosis puede preceder a la aparición de anemia franca en cuadros de deficiencia de hierro o respuesta regenerativa emergente. En combinación con microcitosis, sugiere ferropenia activa (mezcla de eritrocitos normales y microcitos nuevos). En combinación con macrocitosis, sugiere regeneración eritroide activa o déficit de cobalamina/folato. Un RDW elevado aislado justifica seguimiento analítico en 4–6 semanas."
+  },
+  "eritroblastemia": {
+    "nombre": "Eritroblastemia (nRBC en sangre periférica)",
+    "descripcion": {
+      "canino": "Presencia de eritrocitos nucleados (normoblastos) en sangre periférica por encima del límite normal. Compatible con anemia hemolítica grave con respuesta medular intensa, hipoxia severa, lesión esplénica (el bazo actúa como filtro de nRBC), toxemia grave o enfermedad infiltrativa de médula ósea (mieloptisis). Valores muy elevados sin anemia marcada sugieren lesión esplénica o proceso infiltrativo más que regeneración. Correlacionar con reticulocitos y morfología eritroide.",
+      "felino": "nRBC en sangre periférica en el gato. Más frecuente en: anemia hemolítica grave (Mycoplasma haemofelis, intoxicación por paracetamol, FeLV hemolítico), hipoxia severa cardiopulmonar, leucemia mieloproliferativa eritroide (eritroleucemia) y mieloftisis. Su presencia siempre justifica evaluación completa de médula ósea si la causa no es evidente."
+    }
+  },
+  "desviacion_izquierda": {
+    "nombre": "Desviación a la izquierda (neutrófilos banda)",
+    "descripcion": "Presencia de neutrófilos inmaduros (en banda) en sangre periférica. Indica alta demanda de neutrófilos maduros, con liberación de formas inmaduras desde la médula ósea. Compatible con infección bacteriana grave, sepsis, endotoxemia, inflamación severa (peritonitis, pancreatitis necrotizante) o necrosis tisular extensa. Una desviación izquierda que supera el recuento de neutrófilos maduros ('degenerativa') es signo de pronóstico grave. Correlacionar con WBC total, proteínas de fase aguda y hallazgos clínicos."
+  },
+  "trombocitopenia_regenerativa": {
+    "nombre": "Trombocitopenia regenerativa (destrucción / consumo)",
+    "descripcion": {
+      "canino": "Trombocitopenia con VPM (MPV) elevado: las plaquetas grandes indican producción medular activa compensatoria. Compatible con destrucción inmunomediada (trombocitopenia inmunomediada primaria — TIM — o secundaria a lupus, neoplasia, fármacos), consumo por CID, trombosis masiva o destrucción por agentes infecciosos (Ehrlichia canis, Anaplasma, Babesia). Prioridad diagnóstica: descartar TIM primaria (anticuerpos antiplaquetarios) y enfermedades vectoriales (serología/PCR). Recuento < 50.000/μL implica riesgo hemorrágico significativo.",
+      "felino": "Trombocitopenia con MPV alto en el gato: producción medular activa frente a consumo o destrucción. Principales causas: TIM primaria (menos frecuente que en perros), FeLV/FIV (destrucción periférica), CID (sepsis, lipidosis hepática grave, trauma), enfermedades infecciosas (PIF, Mycoplasma haemofelis). Evaluar coagulación completa y test FeLV/FIV."
+    }
+  },
+  "trombocitopenia_arregenerativa": {
+    "nombre": "Trombocitopenia arregenerativa (fallo medular)",
+    "descripcion": {
+      "canino": "Trombocitopenia con VPM (MPV) bajo o normal-bajo: la médula ósea no produce plaquetas suficientes. Compatible con aplasia megacariocítica (ehrlichiosis crónica grave, estrógenos endógenos — tumor de células de Sertoli —, estrógenos exógenos, quimioterapia), hipoplasia medular generalizada, mieloftisis (infiltración neoplásica) o mielofibrosis. Requiere aspirado/biopsia de médula ósea para diagnóstico definitivo. La erliquiosis crónica es una causa importante en zonas endémicas.",
+      "felino": "Trombocitopenia con MPV bajo en el gato: insuficiencia megacariocítica. Causas: FeLV (aplasia medular directa), intoxicación por fármacos mielotóxicos, infiltración medular neoplásica (linfoma, leucemia), mielofibrosis. El diagnóstico requiere confirmación medular."
+    }
+  },
   "anemia": {
     "nombre": "Anemia",
     "prefijo": "Parámetros eritrocitarios disminuidos.",

@@ -65,8 +65,13 @@ cargarAlteraciones();
 
 const INPUT_A_CLAVE = {
     rbc: 'rbc', hgb: 'hgb', hct: 'hct', vcm: 'mcv', hcm: 'mch', chcm: 'mchc',
-    wbc: 'wbc', neutro: 'neutrophils', linfo: 'lymphocytes', mono: 'monocytes',
-    eosino: 'eosinophils', baso: 'basophils', plt: 'platelets',
+    rdw: 'rdw', 'retics-pct': 'retics_pct', 'retics-abs': 'retics_abs', nrbc: 'nrbc',
+    wbc: 'wbc', neutro: 'neutrophils', 'neutro-abs': 'neutrophils_abs', bands: 'bands',
+    linfo: 'lymphocytes', 'linfo-abs': 'lymphocytes_abs',
+    mono: 'monocytes', 'mono-abs': 'monocytes_abs',
+    eosino: 'eosinophils', 'eosino-abs': 'eosinophils_abs',
+    baso: 'basophils', 'baso-abs': 'basophils_abs',
+    plt: 'platelets', mpv: 'mpv',
     alt: 'alt', ast: 'ast', fal: 'alp', ggt: 'ggt', bun: 'bun', creat: 'creatinine',
     sdma: 'sdma', cistb: 'cystatin_b',
     gluc: 'glucose', prot: 'total_protein', alb: 'albumin', bili: 'total_bilirubin',
