@@ -476,9 +476,44 @@ main {
     border-top: none;
 }
 
+.subpanel-anim {
+    overflow: hidden;
+    transition: height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .subpanel-cuerpo {
     flex-shrink: 0;
     padding: 0.75rem 1rem;
+}
+
+/* ── BOTÓN COLAPSAR SUBPANEL ── */
+.btn-colapsar-subpanel {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-3);
+    cursor: pointer;
+    border-radius: var(--radius-sm, 4px);
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-colapsar-subpanel:hover {
+    background: var(--border-1);
+    color: var(--text-1);
+}
+
+.btn-colapsar-subpanel svg {
+    transition: transform 0.2s ease;
+}
+
+.subpanel.collapsed .btn-colapsar-subpanel svg {
+    transform: rotate(-90deg);
 }
 
 .fila-campo select {
@@ -1002,7 +1037,8 @@ main {
     }
 
     #panel-hema,
-    #panel-bioquim {
+    #panel-bioquim,
+    #panel-imagenes {
         --fs-xs:   0.68rem;
         --fs-sm:   0.78rem;
         --fs-ui:   0.82rem;
@@ -1012,7 +1048,7 @@ main {
     #panel-hema .panel-cuerpo,
     #panel-bioquim .panel-cuerpo {
         padding: 0.4rem 0.75rem;
-        overflow: hidden;
+        overflow-y: auto;
     }
 
     #panel-hema .cabecera-columnas,

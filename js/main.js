@@ -256,3 +256,32 @@ window.addEventListener('resize', () => {
     }
 });
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
+
+// ─── Colapsar subpaneles (urianálisis, perfil endocrino) ──────────────────────
+document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
+    const subpanel = btn.closest('.subpanel');
+    const anim    = subpanel.querySelector('.subpanel-anim');
+    const storageKey = `mx-${subpanel.id}-collapsed`;
+
+    // Set explicit height without transition so CSS can animate from a known value
+    anim.style.transition = 'none';
+    anim.style.height = `${anim.scrollHeight}px`;
+
+    if (localStorage.getItem(storageKey) === '1') {
+        subpanel.classList.add('collapsed');
+        btn.setAttribute('aria-expanded', 'false');
+        anim.style.height = '0px';
+    }
+
+    // Force reflow then restore transition
+    anim.offsetHeight;
+    anim.style.transition = '';
+
+    btn.addEventListener('click', () => {
+        const collapsed = subpanel.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', String(!collapsed));
+        // When expanding, re-measure in case content changed
+        anim.style.height = collapsed ? '0px' : `${anim.scrollHeight}px`;
+        localStorage.setItem(storageKey, collapsed ? '1' : '0');
+    });
+});

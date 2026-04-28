@@ -383,8 +383,17 @@
     <section class="panel" id="panel-imagenes">
 
         <!-- URIANÁLISIS -->
-        <h2 class="panel-cabecera">Urianálisis</h2>
-        <div class="subpanel-cuerpo">
+        <div class="subpanel" id="subpanel-uri">
+        <h2 class="panel-cabecera">
+            Urianálisis
+            <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-uri">
             <div class="fila-campo">
                 <label for="uri-usg">Densidad (USG)</label>
                 <input id="uri-usg" name="usg" type="number" min="1.000" max="1.060" step="0.001" placeholder="—">
@@ -487,11 +496,20 @@
                 <input id="uri-microalb" name="microalb" type="number" min="0" step="0.1" placeholder="—">
                 <span class="unidad">mg/L</span>
             </div>
-        </div>
+        </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
 
         <!-- PERFIL ENDOCRINO -->
-        <h2 class="panel-cabecera">Perfil Endocrino</h2>
-        <div class="subpanel-cuerpo">
+        <div class="subpanel" id="subpanel-endo">
+        <h2 class="panel-cabecera">
+            Perfil Endocrino
+            <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
             <div class="fila-campo">
                 <label for="endo-cort-bas">Cortisol basal</label>
                 <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
@@ -527,8 +545,7 @@
                 <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
                 <span class="unidad">μIU/mL</span>
             </div>
-        </div>
-
+        </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
 
     </section>
 
