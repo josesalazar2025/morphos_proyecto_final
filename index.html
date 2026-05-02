@@ -55,7 +55,7 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
         </button>
-        <button class="boton boton-iniciar-sesion" type="button">
+<button class="boton boton-iniciar-sesion" type="button">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                 <polyline points="10 17 15 12 10 7"/>
@@ -70,9 +70,17 @@
 <main>
 
     <!-- HEMATOLOGÍA -->
-    <section class="panel" id="panel-hema">
-        <h2 class="panel-cabecera">Hematología</h2>
-        <div class="panel-cuerpo">
+    <section class="panel subpanel" id="panel-hema">
+        <h2 class="panel-cabecera">
+            Hematología
+            <button class="btn-colapsar-subpanel" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-hema" aria-label="Colapsar Hematología">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="panel-cuerpo" id="cuerpo-hema">
             <div class="cabecera-columnas" aria-hidden="true">
                 <span></span>
                 <span>Valor</span>
@@ -105,31 +113,6 @@
                     <input id="hema-hcm" name="hcm" type="number" min="0" placeholder="—">
                     <span class="unidad">pg</span>
                 </div>
-                <div class="fila-campo">
-                    <label for="hema-chcm">CHCM (MCHC)</label>
-                    <input id="hema-chcm" name="chcm" type="number" min="0" placeholder="—">
-                    <span class="unidad">g/dL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-rdw">ADE/RDW-CV</label>
-                    <input id="hema-rdw" name="rdw" type="number" min="0" placeholder="—">
-                    <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-retics-pct">Reticulocitos %</label>
-                    <input id="hema-retics-pct" name="retics-pct" type="number" min="0" placeholder="—">
-                    <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-retics-abs">Reticulocitos (abs)</label>
-                    <input id="hema-retics-abs" name="retics-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-nrbc">nRBC</label>
-                    <input id="hema-nrbc" name="nrbc" type="number" min="0" placeholder="—">
-                    <span class="unidad">/100 WBC</span>
-                </div>
             </div>
             <div class="grupo-campo">
                 <h3 class="titulo-grupo">Serie Blanca</h3>
@@ -144,34 +127,9 @@
                     <span class="unidad">%</span>
                 </div>
                 <div class="fila-campo">
-                    <label for="hema-neutro-abs">Neutrófilos (abs)</label>
-                    <input id="hema-neutro-abs" name="neutro-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-bands">Bandas</label>
-                    <input id="hema-bands" name="bands" type="number" min="0" placeholder="—">
-                    <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
                     <label for="hema-linfo">Linfocitos</label>
                     <input id="hema-linfo" name="linfo" type="number" min="0" placeholder="—">
                     <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-linfo-abs">Linfocitos (abs)</label>
-                    <input id="hema-linfo-abs" name="linfo-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-mono">Monocitos</label>
-                    <input id="hema-mono" name="mono" type="number" min="0" placeholder="—">
-                    <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-mono-abs">Monocitos (abs)</label>
-                    <input id="hema-mono-abs" name="mono-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
                 </div>
                 <div class="fila-campo">
                     <label for="hema-eosino">Eosinófilos</label>
@@ -179,19 +137,9 @@
                     <span class="unidad">%</span>
                 </div>
                 <div class="fila-campo">
-                    <label for="hema-eosino-abs">Eosinófilos (abs)</label>
-                    <input id="hema-eosino-abs" name="eosino-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
-                </div>
-                <div class="fila-campo">
                     <label for="hema-baso">Basófilos</label>
                     <input id="hema-baso" name="baso" type="number" min="0" placeholder="—">
                     <span class="unidad">%</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="hema-baso-abs">Basófilos (abs)</label>
-                    <input id="hema-baso-abs" name="baso-abs" type="number" min="0" placeholder="—">
-                    <span class="unidad">x10³/μL</span>
                 </div>
             </div>
             <div class="grupo-campo">
@@ -201,19 +149,22 @@
                     <input id="hema-plt" name="plt" type="number" min="0" placeholder="—">
                     <span class="unidad">x10³/μL</span>
                 </div>
-                <div class="fila-campo">
-                    <label for="hema-mpv">VPM (MPV)</label>
-                    <input id="hema-mpv" name="mpv" type="number" min="0" placeholder="—">
-                    <span class="unidad">fL</span>
-                </div>
             </div>
-        </div>
+        </div></div>
     </section>
 
     <!-- BIOQUÍMICA -->
-    <section class="panel" id="panel-bioquim">
-        <h2 class="panel-cabecera">Bioquímica sanguínea</h2>
-        <div class="panel-cuerpo">
+    <section class="panel subpanel" id="panel-bioquim">
+        <h2 class="panel-cabecera">
+            Bioquímica sanguínea
+            <button class="btn-colapsar-subpanel" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-bioquim" aria-label="Colapsar Bioquímica">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="panel-cuerpo" id="cuerpo-bioquim">
             <div class="cabecera-columnas" aria-hidden="true">
                 <span></span>
                 <span>Valor</span>
@@ -236,11 +187,6 @@
                     <input id="bio-fal" name="fal" type="number" min="0" placeholder="—">
                     <span class="unidad">U/L</span>
                 </div>
-                <div class="fila-campo">
-                    <label for="bio-ggt">GGT</label>
-                    <input id="bio-ggt" name="ggt" type="number" min="0" placeholder="—">
-                    <span class="unidad">U/L</span>
-                </div>
             </div>
             <div class="grupo-campo">
                 <h3 class="titulo-grupo">Función Renal</h3>
@@ -253,16 +199,6 @@
                     <label for="bio-creat">Creatinina</label>
                     <input id="bio-creat" name="creat" type="number" min="0" placeholder="—">
                     <span class="unidad">mg/dL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="bio-sdma">SDMA</label>
-                    <input id="bio-sdma" name="sdma" type="number" min="0" placeholder="—">
-                    <span class="unidad">μg/dL</span>
-                </div>
-                <div class="fila-campo">
-                    <label for="bio-cistb">Cistatina B</label>
-                    <input id="bio-cistb" name="cistb" type="number" min="0" step="0.01" placeholder="—">
-                    <span class="unidad">mg/L</span>
                 </div>
             </div>
             <div class="grupo-campo">
@@ -316,7 +252,7 @@
                     <span class="unidad">mEq/L</span>
                 </div>
             </div>
-        </div>
+        </div></div>
     </section>
 
     <!-- FLUJO DE TRABAJO -->
@@ -416,16 +352,6 @@
                 <span class="unidad"></span>
             </div>
             <div class="fila-campo">
-                <label for="uri-upc">UPC</label>
-                <input id="uri-upc" name="upc" type="number" min="0" step="0.01" placeholder="—">
-                <span class="unidad">ratio</span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-creat">Creatinina</label>
-                <input id="uri-creat" name="uri-creat" type="number" min="0" step="0.1" placeholder="—">
-                <span class="unidad">mg/dL</span>
-            </div>
-            <div class="fila-campo">
                 <label for="uri-gluc">Glucosuria</label>
                 <select id="uri-gluc" name="uri-gluc">
                     <option value="">—</option>
@@ -435,66 +361,6 @@
                     <option value="+++">+++</option>
                 </select>
                 <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-ceto">Cetonuria</label>
-                <select id="uri-ceto" name="uri-ceto">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-bili">Bilirrubinuria</label>
-                <select id="uri-bili" name="uri-bili">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-hgb">Hemoglobina (HGB)</label>
-                <select id="uri-hgb" name="uri-hgb">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-ubg">Urobilinógeno (UBG)</label>
-                <select id="uri-ubg" name="uri-ubg">
-                    <option value="">—</option>
-                    <option value="normal">Normal</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-leuco">Leucocitos</label>
-                <select id="uri-leuco" name="uri-leuco">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-microalb">Microalbuminuria</label>
-                <input id="uri-microalb" name="microalb" type="number" min="0" step="0.1" placeholder="—">
-                <span class="unidad">mg/L</span>
             </div>
         </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
 
@@ -526,21 +392,6 @@
                 <span class="unidad">nmol/L</span>
             </div>
             <div class="fila-campo">
-                <label for="endo-ft4">T4 libre (fT4)</label>
-                <input id="endo-ft4" name="ft4" type="number" min="0" step="0.1" placeholder="—">
-                <span class="unidad">pmol/L</span>
-            </div>
-            <div class="fila-campo">
-                <label for="endo-ctsh">cTSH</label>
-                <input id="endo-ctsh" name="ctsh" type="number" min="0" step="0.01" placeholder="—">
-                <span class="unidad">ng/mL</span>
-            </div>
-            <div class="fila-campo">
-                <label for="endo-fruct">Fructosamina</label>
-                <input id="endo-fruct" name="fructosamina" type="number" min="0" step="1" placeholder="—">
-                <span class="unidad">μmol/L</span>
-            </div>
-            <div class="fila-campo">
                 <label for="endo-ins">Insulina basal</label>
                 <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
                 <span class="unidad">μIU/mL</span>
@@ -564,14 +415,19 @@
         <h2 class="panel-cabecera">Resultados / IA</h2>
         <div class="panel-cuerpo">
 
-            <div class="seccion-resultado">
-                <h3 class="titulo-seccion-resultado">Valores fuera de rango</h3>
-                <div id="hallazgos-lista"></div>
-            </div>
-
-            <div class="seccion-resultado">
-                <h3 class="titulo-seccion-resultado">Patrones detectados</h3>
-                <div id="patrones-lista"></div>
+            <div class="seccion-resultado seccion-patrones" id="seccion-patrones">
+                <h3 class="titulo-seccion-resultado titulo-patrones">
+                    Patrones detectados
+                    <button class="btn-colapsar-patrones" id="btn-colapsar-patrones" type="button"
+                            aria-expanded="true" aria-controls="patrones-anim" aria-label="Colapsar patrones">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                </h3>
+                <div class="patrones-anim" id="patrones-anim">
+                    <div id="patrones-lista"></div>
+                </div>
             </div>
 
             <div class="seccion-resultado">

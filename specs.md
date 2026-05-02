@@ -175,6 +175,78 @@ MedGemma response → rendered interpretation
 
 ---
 
+## MVP Final Phase — Clinical Validation of Reference Ranges and Interpretations
+
+This phase must be completed before the MVP is considered clinically releasable. It is a structured audit of all numeric reference intervals in `data/valores_referencia.json` and all clinical interpretations in `data/alteraciones.json`, cross-checked against authoritative veterinary sources.
+
+### Scope
+
+| Target | File | Items |
+|---|---|---|
+| Reference intervals (canino + felino) | `data/valores_referencia.json` | ~70 parameters × 2 species |
+| Clinical pattern descriptions and differentials | `data/alteraciones.json` | ~60 pattern entries |
+| Pattern detection thresholds (e.g. Na:K < 27, band % cutoffs) | `js/analisis.js` | ~15 hardcoded thresholds |
+
+### Required Source Documents
+
+All three categories require different primary sources. The validation session must have at least one document from each row:
+
+| Layer | Primary source | Secondary / cross-check |
+|---|---|---|
+| Biochemistry reference intervals | Thrall, MA et al. — *Veterinary Hematology and Clinical Chemistry*, 3rd ed., Wiley-Blackwell, 2022 | IDEXX Catalyst One reference interval insert (instrument-specific) |
+| Hematology reference intervals | Thrall 3rd ed. (same volume) | IDEXX ProCyte Dx reference interval insert |
+| Clinical interpretations / differentials | Nelson & Couto — *Small Animal Internal Medicine*, 6th ed. | Ettinger — *Textbook of Veterinary Internal Medicine*, 8th ed. |
+| IRIS staging thresholds (SDMA, creatinine, UPC) | IRIS Canine and Feline CKD Guidelines 2023 (iris-kidney.com) | — |
+
+> IDEXX instrument inserts are preferred over textbook ranges for the Catalyst One and ProCyte Dx parameters because they are validated against the specific assay chemistry. Textbook ranges are the fallback when instrument inserts are unavailable.
+
+### Validation Methodology
+
+Each parameter is audited in three steps:
+
+1. **Compare** — current value in JSON vs. source value. Record `current | source | match`.
+2. **Classify the discrepancy** (if any):
+   - `minor` — within 10% of source; likely rounding difference; update silently.
+   - `significant` — >10% difference; flag for review before updating.
+   - `missing` — parameter exists in source but not in JSON; add.
+   - `extra` — parameter in JSON with no source backing; flag for removal or citation.
+3. **Update** — apply corrections to JSON files only after the full comparison table is reviewed, not parameter by parameter.
+
+For `alteraciones.json`, validation is qualitative:
+- Each differential list is checked for completeness and accuracy against Nelson & Couto / Ettinger.
+- Species-specific nuances (e.g. feline stress hyperglycemia, feline lipase specificity) are verified.
+- Outdated terminology or superseded diagnostic criteria are flagged and rewritten.
+
+### Execution Protocol
+
+To run this phase efficiently (token-aware):
+
+1. Drop the relevant PDF(s) into the project root or any local path.
+2. Provide the path and the relevant page range (reference interval appendix tables are typically 10–20 pages; clinical chapters can be targeted by parameter).
+3. Claude Code reads only those pages using the `pages` parameter of the Read tool — no full-book ingestion.
+4. Claude Code produces a comparison table (Markdown) as an intermediate artifact for review.
+5. On approval, JSON files are updated in a single committed pass with a changelog comment in the commit message.
+
+**Do not update `valores_referencia.json` or `alteraciones.json` during this phase until the full comparison table has been reviewed.**
+
+### Acceptance Criteria
+
+The MVP is considered clinically validated when:
+
+- [ ] All parameters in `valores_referencia.json` have a documented source citation (added as a `"fuente"` field or recorded in a separate `SOURCES.md`).
+- [ ] All `alteraciones.json` entries have been reviewed against at least one primary clinical reference.
+- [ ] No `significant` discrepancy remains unresolved.
+- [ ] IRIS 2023 thresholds for SDMA, creatinine staging, and UPC are confirmed current in `analisis.js`.
+- [ ] A `SOURCES.md` file exists at the project root listing every reference used, edition, and which parameters it covers.
+
+### Out of Scope for This Phase
+
+- Equine or exotic species ranges (post-MVP).
+- Age-bracket multipliers in `analisis.js` (separate audit; requires pediatric and geriatric-specific literature).
+- AI prompt quality (separate evaluation against MedGemma outputs).
+
+---
+
 ## Development Notes for Claude Code
 
 - All pattern logic lives in `js/patterns.js` — this is the core engine, treat changes carefully

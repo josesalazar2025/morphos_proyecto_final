@@ -1,11 +1,9 @@
 import { analizarResultados } from './analisis.js';
 
-// ─── Theme init ────────────────────────────────────────────────────────────────
 const saved = localStorage.getItem('mx-theme');
 const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 document.documentElement.dataset.theme = saved || preferred;
 
-// ─── Theme toggle ─────────────────────────────────────────────────────────────
 const btnTema = document.getElementById('btn-tema');
 if (btnTema) {
     btnTema.addEventListener('click', () => {
@@ -64,22 +62,14 @@ cargarAlteraciones();
 // ─── Mapeo de campos ──────────────────────────────────────────────────────────
 
 const INPUT_A_CLAVE = {
-    rbc: 'rbc', hgb: 'hgb', hct: 'hct', vcm: 'mcv', hcm: 'mch', chcm: 'mchc',
-    rdw: 'rdw', 'retics-pct': 'retics_pct', 'retics-abs': 'retics_abs', nrbc: 'nrbc',
-    wbc: 'wbc', neutro: 'neutrophils', 'neutro-abs': 'neutrophils_abs', bands: 'bands',
-    linfo: 'lymphocytes', 'linfo-abs': 'lymphocytes_abs',
-    mono: 'monocytes', 'mono-abs': 'monocytes_abs',
-    eosino: 'eosinophils', 'eosino-abs': 'eosinophils_abs',
-    baso: 'basophils', 'baso-abs': 'basophils_abs',
-    plt: 'platelets', mpv: 'mpv',
-    alt: 'alt', ast: 'ast', fal: 'alp', ggt: 'ggt', bun: 'bun', creat: 'creatinine',
-    sdma: 'sdma', cistb: 'cystatin_b',
+    rbc: 'rbc', hgb: 'hgb', hct: 'hct', vcm: 'mcv', hcm: 'mch',
+    wbc: 'wbc', neutro: 'neutrophils', linfo: 'lymphocytes', eosino: 'eosinophils', baso: 'basophils', plt: 'platelets',
+    alt: 'alt', ast: 'ast', fal: 'alp', bun: 'bun', creat: 'creatinine',
     gluc: 'glucose', prot: 'total_protein', alb: 'albumin', bili: 'total_bilirubin',
     fosf: 'phosphorus', calc: 'calcium', sodio: 'sodium', potasio: 'potassium', cloro: 'chloride',
-    usg: 'usg', ph: 'urine_ph', upc: 'upc', microalb: 'microalbumin',
+    usg: 'usg', ph: 'urine_ph',
     'cortisol-bas': 'cortisol_basal', 'cortisol-acth': 'cortisol_acth',
-    't4-total': 't4_total', ft4: 'ft4', ctsh: 'ctsh',
-    fructosamina: 'fructosamina', insulina: 'insulina'
+    't4-total': 't4_total', insulina: 'insulina'
 };
 
 const CLAVE_A_INPUT = Object.entries(INPUT_A_CLAVE).reduce((acc, [nombre, clave]) => {
@@ -118,30 +108,33 @@ const obtenerValoresFormulario = () => {
 // ─── Renderizado de resultados ────────────────────────────────────────────────
 
 const ETIQUETA_GRAVEDAD = { leve: 'Leve', moderado: 'Moderado', grave: 'Grave' };
-const ETIQUETA_DIRECCION = { alto: 'ALTO', bajo: 'BAJO' };
+
+// Inject a status span before each number input (runs once at module load)
+document.querySelectorAll('.fila-campo input[type="number"]').forEach(input => {
+    const span = document.createElement('span');
+    span.className = 'estado-campo';
+    input.before(span);
+});
 
 const actualizarClasesInputs = (hallazgos) => {
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.classList.remove('alto', 'bajo');
+        const span = input.previousElementSibling;
+        if (span?.classList.contains('estado-campo')) {
+            span.textContent = '';
+            span.className = 'estado-campo';
+        }
     });
     hallazgos.forEach(h => {
         const input = document.querySelector(`input[name="${CLAVE_A_INPUT[h.clave]}"]`);
-        input?.classList.add(h.direccion);
+        if (!input) return;
+        input.classList.add(h.direccion);
+        const span = input.previousElementSibling;
+        if (span?.classList.contains('estado-campo')) {
+            span.textContent = `${h.direccion === 'alto' ? 'Alto' : 'Bajo'} · ${ETIQUETA_GRAVEDAD[h.gravedad]}`;
+            span.className = `estado-campo estado-campo--${h.direccion}`;
+        }
     });
-};
-
-const renderizarHallazgos = (hallazgos) => {
-    const contenedor = document.getElementById('hallazgos-lista');
-    if (!contenedor) return;
-
-    contenedor.innerHTML = hallazgos.length === 0
-        ? '<p class="sin-hallazgos">Sin valores fuera de rango.</p>'
-        : hallazgos.map(h => `
-            <div class="insignia-hallazgo ${h.direccion}">
-                <span class="nombre">${h.nombre}</span>
-                <span class="valor">${h.valor} ${h.unidad}</span>
-                <span class="etiqueta">${ETIQUETA_DIRECCION[h.direccion]} · ${ETIQUETA_GRAVEDAD[h.gravedad]}</span>
-            </div>`).join('');
 };
 
 const renderizarPatrones = (patrones) => {
@@ -165,7 +158,6 @@ const evaluar = () => {
 
     if (!paciente.especie || !referencias[paciente.especie]) {
         actualizarClasesInputs([]);
-        renderizarHallazgos([]);
         renderizarPatrones([]);
         return;
     }
@@ -174,7 +166,6 @@ const evaluar = () => {
     const { hallazgos, patrones } = analizarResultados(valores, paciente, referencias, alteraciones);
 
     actualizarClasesInputs(hallazgos);
-    renderizarHallazgos(hallazgos);
     renderizarPatrones(patrones);
 };
 
@@ -257,13 +248,11 @@ window.addEventListener('resize', () => {
 });
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
 
-// ─── Colapsar subpaneles (urianálisis, perfil endocrino) ──────────────────────
 document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const subpanel = btn.closest('.subpanel');
     const anim    = subpanel.querySelector('.subpanel-anim');
     const storageKey = `mx-${subpanel.id}-collapsed`;
 
-    // Set explicit height without transition so CSS can animate from a known value
     anim.style.transition = 'none';
     anim.style.height = `${anim.scrollHeight}px`;
 
@@ -273,15 +262,46 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
         anim.style.height = '0px';
     }
 
-    // Force reflow then restore transition
     anim.offsetHeight;
     anim.style.transition = '';
 
     btn.addEventListener('click', () => {
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
-        // When expanding, re-measure in case content changed
         anim.style.height = collapsed ? '0px' : `${anim.scrollHeight}px`;
         localStorage.setItem(storageKey, collapsed ? '1' : '0');
     });
+});
+
+// ─── Colapsar patrones detectados ─────────────────────────────────────────────
+
+const btnColapsarPatrones = document.getElementById('btn-colapsar-patrones');
+const patronesAnim = document.getElementById('patrones-anim');
+
+function colapsarPatrones(shouldCollapse) {
+    const isExpanded = btnColapsarPatrones.getAttribute('aria-expanded') === 'true';
+    const collapse = shouldCollapse ?? isExpanded;
+
+    if (collapse && isExpanded) {
+        // Snapshot px height before animating to 0
+        patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
+        patronesAnim.offsetHeight;
+        patronesAnim.style.height = '0px';
+        btnColapsarPatrones.setAttribute('aria-expanded', 'false');
+    } else if (!collapse && !isExpanded) {
+        patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
+        patronesAnim.addEventListener('transitionend', () => {
+            // Remove fixed height so content can grow naturally as patterns update
+            if (btnColapsarPatrones.getAttribute('aria-expanded') === 'true') {
+                patronesAnim.style.height = '';
+            }
+        }, { once: true });
+        btnColapsarPatrones.setAttribute('aria-expanded', 'true');
+    }
+}
+
+btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
+
+document.querySelector('.boton-analizar').addEventListener('click', () => {
+    colapsarPatrones(true);
 });

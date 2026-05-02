@@ -1,47 +1,4 @@
 {
-  "anemia_regenerativa": {
-    "nombre": "Anemia regenerativa",
-    "descripcion": {
-      "canino": "Reticulocitosis activa en presencia de anemia: la médula ósea responde adecuadamente. Compatible con pérdida hemorrágica aguda (hemorragia interna o externa), hemólisis (AHIM, babesiosis, intoxicación por cebolla/zinc) o recuperación de anemia previa. Identificar la causa subyacente para dirigir el tratamiento. Si la hemorragia es activa, evaluar coagulación y origen del sangrado.",
-      "felino": "Reticulocitosis (reticulocitos en agregado) con anemia: respuesta medular adecuada. Las causas más frecuentes son hemólisis (Mycoplasma haemofelis, FeLV con hemólisis, intoxicación por paracetamol/cebolla) y hemorragia aguda. En gatos la reticulocitosis en punteado puede persistir semanas sin anemia activa; el recuento en agregado es el indicador clínicamente relevante de regeneración."
-    }
-  },
-  "anemia_arregenerativa": {
-    "nombre": "Anemia arregenerativa",
-    "descripcion": {
-      "canino": "Anemia sin respuesta reticulocitaria adecuada: la médula ósea no está compensando. Compatible con enfermedad inflamatoria o infecciosa crónica (anemia de proceso inflamatorio, causa más frecuente), insuficiencia renal crónica (déficit de eritropoyetina), hipotiroidismo, aplasia o hipoplasia eritroide (erlichiosis crónica, estrógenos, quimioterapia) o mieloftisis. Evaluar perfil bioquímico completo, función renal y considerar aspirado/biopsia de médula ósea si no hay causa evidente.",
-      "felino": "Anemia no regenerativa en el gato. La causa más frecuente es la ERC con déficit de EPO. Otras: FeLV (supresión medular directa, aplasia eritroide pura), FIV, anemia inflamatoria crónica, hipotiroidismo (raro), aplasia eritroide. El diagnóstico de aplasia eritroide pura (AEP) requiere biopsia medular. Tratar la enfermedad subyacente; la eritropoyetina recombinante puede emplearse en ERC pero riesgo de anticuerpos anti-EPO."
-    }
-  },
-  "anisocitosis": {
-    "nombre": "Anisocitosis (ADE/RDW elevado)",
-    "descripcion": "Aumento de la variabilidad en el tamaño eritrocitario. La anisocitosis puede preceder a la aparición de anemia franca en cuadros de deficiencia de hierro o respuesta regenerativa emergente. En combinación con microcitosis, sugiere ferropenia activa (mezcla de eritrocitos normales y microcitos nuevos). En combinación con macrocitosis, sugiere regeneración eritroide activa o déficit de cobalamina/folato. Un RDW elevado aislado justifica seguimiento analítico en 4–6 semanas."
-  },
-  "eritroblastemia": {
-    "nombre": "Eritroblastemia (nRBC en sangre periférica)",
-    "descripcion": {
-      "canino": "Presencia de eritrocitos nucleados (normoblastos) en sangre periférica por encima del límite normal. Compatible con anemia hemolítica grave con respuesta medular intensa, hipoxia severa, lesión esplénica (el bazo actúa como filtro de nRBC), toxemia grave o enfermedad infiltrativa de médula ósea (mieloptisis). Valores muy elevados sin anemia marcada sugieren lesión esplénica o proceso infiltrativo más que regeneración. Correlacionar con reticulocitos y morfología eritroide.",
-      "felino": "nRBC en sangre periférica en el gato. Más frecuente en: anemia hemolítica grave (Mycoplasma haemofelis, intoxicación por paracetamol, FeLV hemolítico), hipoxia severa cardiopulmonar, leucemia mieloproliferativa eritroide (eritroleucemia) y mieloftisis. Su presencia siempre justifica evaluación completa de médula ósea si la causa no es evidente."
-    }
-  },
-  "desviacion_izquierda": {
-    "nombre": "Desviación a la izquierda (neutrófilos banda)",
-    "descripcion": "Presencia de neutrófilos inmaduros (en banda) en sangre periférica. Indica alta demanda de neutrófilos maduros, con liberación de formas inmaduras desde la médula ósea. Compatible con infección bacteriana grave, sepsis, endotoxemia, inflamación severa (peritonitis, pancreatitis necrotizante) o necrosis tisular extensa. Una desviación izquierda que supera el recuento de neutrófilos maduros ('degenerativa') es signo de pronóstico grave. Correlacionar con WBC total, proteínas de fase aguda y hallazgos clínicos."
-  },
-  "trombocitopenia_regenerativa": {
-    "nombre": "Trombocitopenia regenerativa (destrucción / consumo)",
-    "descripcion": {
-      "canino": "Trombocitopenia con VPM (MPV) elevado: las plaquetas grandes indican producción medular activa compensatoria. Compatible con destrucción inmunomediada (trombocitopenia inmunomediada primaria — TIM — o secundaria a lupus, neoplasia, fármacos), consumo por CID, trombosis masiva o destrucción por agentes infecciosos (Ehrlichia canis, Anaplasma, Babesia). Prioridad diagnóstica: descartar TIM primaria (anticuerpos antiplaquetarios) y enfermedades vectoriales (serología/PCR). Recuento < 50.000/μL implica riesgo hemorrágico significativo.",
-      "felino": "Trombocitopenia con MPV alto en el gato: producción medular activa frente a consumo o destrucción. Principales causas: TIM primaria (menos frecuente que en perros), FeLV/FIV (destrucción periférica), CID (sepsis, lipidosis hepática grave, trauma), enfermedades infecciosas (PIF, Mycoplasma haemofelis). Evaluar coagulación completa y test FeLV/FIV."
-    }
-  },
-  "trombocitopenia_arregenerativa": {
-    "nombre": "Trombocitopenia arregenerativa (fallo medular)",
-    "descripcion": {
-      "canino": "Trombocitopenia con VPM (MPV) bajo o normal-bajo: la médula ósea no produce plaquetas suficientes. Compatible con aplasia megacariocítica (ehrlichiosis crónica grave, estrógenos endógenos — tumor de células de Sertoli —, estrógenos exógenos, quimioterapia), hipoplasia medular generalizada, mieloftisis (infiltración neoplásica) o mielofibrosis. Requiere aspirado/biopsia de médula ósea para diagnóstico definitivo. La erliquiosis crónica es una causa importante en zonas endémicas.",
-      "felino": "Trombocitopenia con MPV bajo en el gato: insuficiencia megacariocítica. Causas: FeLV (aplasia medular directa), intoxicación por fármacos mielotóxicos, infiltración medular neoplásica (linfoma, leucemia), mielofibrosis. El diagnóstico requiere confirmación medular."
-    }
-  },
   "anemia": {
     "nombre": "Anemia",
     "prefijo": "Parámetros eritrocitarios disminuidos.",
@@ -83,10 +40,6 @@
     "nombre": "Linfopenia",
     "descripcion": "Compatible con estrés agudo o hipercortisolismo (endógeno o iatrogénico por glucocorticoides), quilotórax o linfangiectasia con pérdida de linfocitos, infección viral (parvovirus, FeLV/FIV) o inmunodeficiencia grave."
   },
-  "monocitosis": {
-    "nombre": "Monocitosis",
-    "descripcion": "Compatible con inflamación crónica, piogranulomatosis (hongos, micobacterias), necrosis tisular o respuesta a corticosteroides (frecuente en caninos; leucograma de estrés). Puede acompañar a neutrofilia en procesos infecciosos graves."
-  },
   "trombocitopenia": {
     "nombre": "Trombocitopenia",
     "descripcion": "Evaluar trombocitopenia inmunomediada primaria (IMT), enfermedades vectoriales (Ehrlichia, Anaplasma, Babesia, Leishmania), CID o supresión medular. Recuento < 50.000/μL conlleva riesgo de sangrado espontáneo; < 20.000/μL requiere actuación urgente."
@@ -116,11 +69,11 @@
   },
   "azotemia": {
     "nombre": "Azotemia",
-    "descripcion": "Elevación de BUN y creatinina. Clasificar en prerrenal (deshidratación, hipoperfusión), renal (ERC o IRA) o posrenal (obstrucción, rotura urinaria). Estadificar según criterios IRIS si se sospecha ERC. Correlacionar con SDMA (marcador precoz de TFG), densidad urinaria, urianálisis y presión arterial."
+    "descripcion": "Elevación de BUN y creatinina. Clasificar en prerrenal (deshidratación, hipoperfusión), renal (ERC o IRA) o posrenal (obstrucción, rotura urinaria). Estadificar según criterios IRIS si se sospecha ERC. Correlacionar con densidad urinaria, urianálisis y presión arterial."
   },
   "hiperuremia_bun": {
     "nombre": "Hiperuremia aislada (BUN)",
-    "descripcion": "BUN elevado con creatinina normal. Compatible con dieta hiperproteica, deshidratación leve, hemorragia gastrointestinal alta (digestión de sangre) o catabolismo aumentado. Si se dispone de SDMA y es normal, la etiología renal es menos probable."
+    "descripcion": "BUN elevado con creatinina normal. Compatible con dieta hiperproteica, deshidratación leve, hemorragia gastrointestinal alta (digestión de sangre) o catabolismo aumentado."
   },
   "bun_disminuido": {
     "nombre": "BUN disminuido",
@@ -128,7 +81,7 @@
   },
   "creatinina_aislada": {
     "nombre": "Creatinina elevada (BUN normal)",
-    "descripcion": "Creatinina elevada con BUN normal o bajo. Puede reflejar inicio de ERC con BUN artificialmente bajo por baja masa muscular o dieta hipoproteica. Evaluar SDMA y realizar urianálisis con densidad urinaria para descartar ERC estadio I–II (IRIS). Repetir en 2–4 semanas."
+    "descripcion": "Creatinina elevada con BUN normal o bajo. Puede reflejar inicio de ERC con BUN artificialmente bajo por baja masa muscular o dieta hipoproteica. Realizar urianálisis con densidad urinaria para descartar ERC estadio I–II (IRIS). Repetir en 2–4 semanas."
   },
   "hiperglucemia": {
     "nombre": "Hiperglucemia",
@@ -139,7 +92,7 @@
   },
   "hipoglucemia": {
     "nombre": "Hipoglucemia",
-    "descripcion": "Compatible con insulinoma (principal en adultos/geriatricos), sepsis grave, insuficiencia hepática, glucogenosis, neonatos/cachorros de razas toy o inanición prolongada. Requiere evaluación urgente si la gravedad es moderada o grave; documentar con glucemia simultánea e insulinemia en ayuno."
+    "descripcion": "Compatible con insulinoma (principal en adultos/geriátricos), sepsis grave, insuficiencia hepática, glucogenosis, neonatos/cachorros de razas toy o inanición prolongada. Requiere evaluación urgente si la gravedad es moderada o grave; documentar con glucemia simultánea e insulinemia en ayuno."
   },
   "hiperproteinemia": {
     "nombre": "Hiperproteinemia",
@@ -185,47 +138,31 @@
     "nombre": "Hiperfosforemia",
     "descripcion": "Frecuente en enfermedad renal crónica (ERC); la retención de fósforo contribuye al hiperparatiroidismo renal secundario y acelera la progresión del daño tubular. Considerar también hipoparatiroidismo, hipervitaminosis D, lisis tumoral o hemólisis artefactual. Clave en estadiaje IRIS y planificación dietética (restricción de fósforo en ERC estadio ≥ II)."
   },
-  "sdma_elevado": {
-    "nombre": "SDMA elevado — disfunción renal precoz",
-    "descripcion": "El SDMA es un marcador sensible de tasa de filtración glomerular (TFG); se eleva cuando la función renal desciende un ~25%, antes de que suba la creatinina. Compatible con ERC estadio I (IRIS) o deterioro renal agudo incipiente. Correlacionar con creatinina, densidad urinaria y presión arterial. Repetir en 1–4 semanas para confirmar persistencia."
-  },
-  "cistatina_b_elevada": {
-    "nombre": "Cistatina B elevada — daño tubular renal",
-    "descripcion": "La cistatina B es un marcador de lesión tubular proximal. Su elevación sugiere nefropatía tubulointersticial, toxicidad por fármacos nefrotóxicos (aminoglucósidos, AINEs, cisplatino) o ERC con componente tubular predominante. Complementar con SDMA, creatinina y urianálisis (cilindros, glucosuria sin hiperglucemia)."
-  },
-  "proteinuria_glomerular": {
-    "nombre": "Proteinuria glomerular significativa (UPC elevado)",
-    "descripcion": "Cociente proteína/creatinina urinaria (UPC) elevado. Compatible con glomerulonefritis (inmunomediada, infecciosa — Leishmania, Ehrlichia, FIP —), amiloidosis renal o hipertensión sistémica. Estadificar proteinuria según IRIS (UPC > 0,5 canino / > 0,4 felino = proteinúrico). Evaluar presión arterial y considerar biopsia renal si persiste sin causa identificada."
-  },
-  "microalbuminuria": {
-    "nombre": "Microalbuminuria — lesión glomerular incipiente",
-    "descripcion": "Albuminuria en rango de microalbuminuria: marcador precoz de daño glomerular antes de que el UPC alcance el umbral proteinúrico. Puede asociarse a hipertensión sistémica, diabetes mellitus, ERC estadio I o inflamación sistémica crónica. Repetir en 1–3 meses y medir UPC si progresa."
-  },
   "hiposthenuria": {
     "nombre": "Hiposthenuria (USG < 1.008) — concentración muy disminuida",
     "descripcion": "Densidad urinaria muy baja. Compatible con diabetes insípida central o nefrogénica, hiperadrenocorticismo (HAC), hipercalcemia, hipopotasemia o administración de diuréticos. En felinos, considerar acromegalia y HAC. Requiere prueba de privación de agua o test de vasopresina para diferenciar los subtipos de diabetes insípida."
   },
   "isosthenuria": {
     "nombre": "Isosthenuria (USG 1.008–1.013) — capacidad de concentración deteriorada",
-    "descripcion": "La densidad urinaria isostenúrica refleja incapacidad para concentrar la orina por encima de la osmolaridad plasmática. Compatible con ERC moderada–grave (pérdida tubular), pielonefritis, hiperadrenocorticismo o diabetes insípida parcial. Evaluar función renal completa (creatinina, SDMA, BUN) y presión arterial."
+    "descripcion": "La densidad urinaria isostenúrica refleja incapacidad para concentrar la orina por encima de la osmolaridad plasmática. Compatible con ERC moderada–grave (pérdida tubular), pielonefritis, hiperadrenocorticismo o diabetes insípida parcial. Evaluar función renal completa (creatinina, BUN) y presión arterial."
   },
   "hipotiroidismo": {
     "nombre": "Hipotiroidismo — T4 disminuida",
     "descripcion": {
-      "canino": "T4 total y/o T4 libre disminuidas. El hipotiroidismo canino es la endocrinopatía más frecuente en perros adultos de mediana edad. El cTSH elevado apoya el diagnóstico de hipotiroidismo primario. Signos clásicos: letargia, obesidad, alopecia bilateral simétrica, intolerancia al frío. Evaluar cTSH; confirmar con T4 libre por diálisis de equilibrio. Los fármacos (glucocorticoides, fenobarbital, sulfonamidas) y la enfermedad sistémica pueden suprimir T4 falsamente (síndrome del enfermo eutiroideo)."
+      "canino": "T4 total disminuida. El hipotiroidismo canino es la endocrinopatía más frecuente en perros adultos de mediana edad. Signos clásicos: letargia, obesidad, alopecia bilateral simétrica, intolerancia al frío. Confirmar con T4 libre por diálisis de equilibrio. Los fármacos (glucocorticoides, fenobarbital, sulfonamidas) y la enfermedad sistémica pueden suprimir T4 falsamente (síndrome del enfermo eutiroideo)."
     }
   },
   "hipertiroidismo": {
     "nombre": "Hipertiroidismo — T4 elevada",
     "descripcion": {
       "canino": "T4 total elevada en caninos: infrecuente; descartar adenocarcinoma tiroideo o suplementación exógena. Evaluar masa cervical palpable y ecografía tiroidea.",
-      "felino": "Causa endocrina más frecuente en gatos mayores de 8 años. Compatible con adenoma o hiperplasia nodular tiroidea. Signos clásicos: pérdida de peso con polifagia, hiperactividad, vómito, taquicardia. El cTSH normalmente suprimido. Confirmar con T4 libre si T4 total en zona limítrofe. Evaluar función renal antes de iniciar tratamiento (el hipertiroidismo puede enmascarar ERC subyacente)."
+      "felino": "Causa endocrina más frecuente en gatos mayores de 8 años. Compatible con adenoma o hiperplasia nodular tiroidea. Signos clásicos: pérdida de peso con polifagia, hiperactividad, vómito, taquicardia. Confirmar con T4 libre si T4 total en zona limítrofe. Evaluar función renal antes de iniciar tratamiento (el hipertiroidismo puede enmascarar ERC subyacente)."
     }
   },
   "hiperadrenocorticismo": {
     "nombre": "Hiperadrenocorticismo (Cushing) — cortisol post-ACTH elevado",
     "descripcion": {
-      "canino": "Cortisol post-ACTH elevado compatible con hiperadrenocorticismo (HAC). El 85% de los casos son hipofisarios (PDH); el 15% adrenales (ADH). Signos clásicos: poliuria/polidipsia, polifagia, abdomen péndulo, alopecia, calcinosis cutis. Confirmar con prueba de supresión con dexametasona a dosis baja (PSDDB) y ecografía abdominal. Otras causas de cortisol post-ACTH alto: iatrógeno por glucocorticoides exógenos.",
+      "canino": "Cortisol post-ACTH elevado compatible con hiperadrenocorticismo (HAC). El 85% de los casos son hipofisarios (PDH); el 15% adrenales (ADH). Signos clásicos: poliuria/polidipsia, polifagia, abdomen péndulo, alopecia, calcinosis cutis. Confirmar con prueba de supresión con dexametasona a dosis baja (PSDDB) y ecografía abdominal.",
       "felino": "HAC felino es infrecuente; frecuentemente asociado a diabetes mellitus resistente a insulina. Sospechar en gatos diabéticos de difícil control. Signos: piel frágil, PU/PD marcada, abdomen distendido. Confirmar con PSDDB o test de ACTH."
     }
   },
@@ -236,10 +173,6 @@
   "cortisol_basal_bajo": {
     "nombre": "Cortisol basal bajo — posible hipoadrenocorticismo",
     "descripcion": "Cortisol basal disminuido. Un valor < 1 μg/dL (canino) o < 0,5 μg/dL (felino) es altamente sugestivo de hipoadrenocorticismo; confirmar con test de estimulación con ACTH. Valores basales < 2 μg/dL justifican la realización del test. Evaluar junto a electrolitos y ratio Na:K."
-  },
-  "fructosamina_elevada": {
-    "nombre": "Fructosamina elevada — hiperglucemia persistente",
-    "descripcion": "La fructosamina refleja la glucemia media de las últimas 2–3 semanas, sin verse afectada por el estrés agudo. Su elevación confirma hiperglucemia sostenida compatible con diabetes mellitus. Útil para diferenciar diabetes mellitus de hiperglucemia de estrés (frecuente en felinos). Monitorizar también para ajuste de dosis de insulina en pacientes diabéticos en tratamiento."
   },
   "deficit_insulina": {
     "nombre": "Posible déficit de insulina — hiperglucemia con insulina baja",
