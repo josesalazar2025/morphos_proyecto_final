@@ -55,7 +55,7 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
         </button>
-<button class="boton boton-iniciar-sesion" type="button">
+<button class="boton boton-iniciar-sesion" id="btn-auth" type="button">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                 <polyline points="10 17 15 12 10 7"/>
@@ -398,11 +398,57 @@
             </div>
         </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
 
+        <!-- IMÁGENES / CITOLOGÍA -->
+        <div class="subpanel" id="subpanel-citologia">
+        <h2 class="panel-cabecera">
+            Imágenes / Citología 
+            <button class="btn-colapsar-subpanel" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-citologia" aria-label="Colapsar Imágenes">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-citologia">
+            <div class="zonas-imagen">
+                <div class="zona-imagen" data-zona="0">
+                    <input type="file" class="input-zona" accept="image/*" hidden>
+                    <div class="zona-vacia">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span>Muestra 1</span>
+                    </div>
+                    <img class="zona-img-preview" src="" alt="Citología 1" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <div class="zona-imagen" data-zona="1">
+                    <input type="file" class="input-zona" accept="image/*" hidden>
+                    <div class="zona-vacia">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span>Muestra 2</span>
+                    </div>
+                    <img class="zona-img-preview" src="" alt="Citología 2" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div></div></div><!-- /.subpanel -->
+
     </section>
 
     <!-- SIGNOS CLÍNICOS -->
     <section class="panel seccion-clinica" id="panel-clinico">
-        <h2 class="panel-cabecera">Signos clínicos del paciente <span class="clinica-opcional"> (opcional) </span></h2>
+        <h2 class="panel-cabecera">Signos clínicos del paciente</h2>
         <div class="cuerpo-clinica">
             <label class="etiqueta-clinica" for="signos-clinicos">Escribe un resumen de los signos clínicos para enviar información adicional al modelo de IA</label>
             <textarea id="signos-clinicos" name="signos-clinicos" placeholder="ej. Poliuria, polidipsia, pérdida de peso…"></textarea>
@@ -437,9 +483,7 @@
 
         </div>
         <div class="panel-pie-acciones">
-            <button class="boton boton-exportar" type="button" disabled>Exportar PDF</button>
-            <button class="boton boton-citologia" type="button">Adjuntar citología</button>
-            <button class="boton boton-analizar" type="button">Análisis IA</button>
+<button class="boton boton-analizar" type="button">Análisis IA</button>
         </div>
     </section>
 
@@ -501,6 +545,69 @@
     </button>
     </nav>
 </footer>
+
+<!-- MODAL DE AUTENTICACIÓN -->
+<div class="modal-overlay" id="modal-auth" hidden role="dialog" aria-modal="true">
+    <div class="modal-card">
+        <button class="modal-cerrar" id="btn-modal-cerrar" aria-label="Cerrar">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+
+        <div class="modal-tabs" role="tablist">
+            <button class="modal-tab activo" data-tab="login" role="tab" aria-selected="true">Iniciar sesión</button>
+            <button class="modal-tab" data-tab="registro" role="tab" aria-selected="false">Registrarse</button>
+        </div>
+
+        <!-- LOGIN -->
+        <form class="modal-form" id="form-login" novalidate>
+            <div class="campo-form">
+                <label for="login-email">Correo electrónico</label>
+                <input type="email" id="login-email" name="email" autocomplete="email" placeholder="nombre@ejemplo.com" required>
+                <span class="error-campo" id="err-login-email"></span>
+            </div>
+            <div class="campo-form">
+                <label for="login-pass">Contraseña</label>
+                <input type="password" id="login-pass" name="password" autocomplete="current-password" required>
+                <span class="error-campo" id="err-login-pass"></span>
+            </div>
+            <div class="mensaje-form" id="msg-login" hidden></div>
+            <button type="submit" class="modal-submit">Iniciar sesión</button>
+        </form>
+
+        <!-- REGISTRO -->
+        <form class="modal-form" id="form-registro" hidden novalidate>
+            <div class="campo-form">
+                <label for="reg-nombre">Nombre</label>
+                <input type="text" id="reg-nombre" name="nombre" autocomplete="name" placeholder="Tu nombre" required>
+                <span class="error-campo" id="err-reg-nombre"></span>
+            </div>
+            <div class="campo-form">
+                <label for="reg-email">Correo electrónico</label>
+                <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="nombre@ejemplo.com" required>
+                <span class="error-campo" id="err-reg-email"></span>
+            </div>
+            <div class="campo-form">
+                <label for="reg-pass">Contraseña</label>
+                <input type="password" id="reg-pass" name="password" autocomplete="new-password" required>
+                <span class="error-campo" id="err-reg-pass"></span>
+            </div>
+            <div class="campo-form">
+                <label for="reg-pass2">Confirmar contraseña</label>
+                <input type="password" id="reg-pass2" name="password2" autocomplete="new-password" required>
+                <span class="error-campo" id="err-reg-pass2"></span>
+            </div>
+            <div class="campo-form">
+                <label for="reg-hfkey">API Key HuggingFace</label>
+                <input type="password" id="reg-hfkey" name="hf_key" autocomplete="off" placeholder="hf_…" required>
+                <span class="error-campo" id="err-reg-hfkey"></span>
+            </div>
+            <div class="mensaje-form" id="msg-registro" hidden></div>
+            <button type="submit" class="modal-submit">Crear cuenta</button>
+        </form>
+    </div>
+</div>
 
 <script type="module" src="js/main.js"></script>
 
