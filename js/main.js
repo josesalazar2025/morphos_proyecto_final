@@ -17,22 +17,57 @@ let referencias = [];
 let alteraciones = {};
 let ultimoAnalisis = { hallazgos: [], patrones: [] };
 
-const tabs = document.querySelectorAll('.pestanya-nav');
+const tabs = document.querySelectorAll('.tab-nav');
 const paneles = document.querySelectorAll('main > .panel, .col3-wrapper > .panel');
+const examenesSubtabsBar = document.getElementById('examenes-subtabs-bar');
+
+const EXAMENES_SUBTAB_PANELS = new Set(['panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo']);
+let activeExamenPanel = 'panel-hema';
 
 function activateTab(targetId) {
+    const isExamenesSubPanel = EXAMENES_SUBTAB_PANELS.has(targetId);
+    const isExamenesTab = targetId === 'examenes';
+    const showExamenes = isExamenesTab || isExamenesSubPanel;
+
+    let actualPanelId;
+    if (isExamenesTab) {
+        actualPanelId = activeExamenPanel;
+    } else if (isExamenesSubPanel) {
+        activeExamenPanel = targetId;
+        actualPanelId = targetId;
+    } else {
+        actualPanelId = targetId;
+    }
+
     tabs.forEach(tab => {
-        const isActive = tab.dataset.target === targetId;
-        tab.classList.toggle('activo',isActive);
-        tab.setAttribute('aria-selected', isActive);
+        const isActive = showExamenes
+            ? tab.dataset.target === 'examenes'
+            : tab.dataset.target === targetId;
+        tab.classList.toggle('activo', isActive);
+        tab.setAttribute('aria-selected', String(isActive));
     });
+
+    if (examenesSubtabsBar) examenesSubtabsBar.hidden = !showExamenes;
+
+    if (showExamenes) {
+        document.querySelectorAll('.tab-examenes').forEach(btn => {
+            btn.classList.toggle('activo', btn.dataset.subtabTarget === activeExamenPanel);
+        });
+    }
+
     paneles.forEach(panel => {
-        panel.classList.toggle('activo',panel.id === targetId);
+        panel.classList.toggle('activo', panel.id === actualPanelId);
     });
+
+    if (targetId === 'panel-paciente') syncMobPatientFromCanon();
 }
 
 tabs.forEach(tab => {
     tab.addEventListener('click', () => activateTab(tab.dataset.target));
+});
+
+document.querySelectorAll('.tab-examenes').forEach(btn => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.subtabTarget));
 });
 
 
@@ -110,7 +145,6 @@ const obtenerValoresFormulario = () => {
 
 const ETIQUETA_GRAVEDAD = { leve: 'Leve', moderado: 'Moderado', grave: 'Grave' };
 
-// Inject a status span before each number input (runs once at module load)
 document.querySelectorAll('.fila-campo input[type="number"]').forEach(input => {
     const span = document.createElement('span');
     span.className = 'estado-campo';
@@ -187,6 +221,35 @@ document.getElementById('pt-raza').addEventListener('input', evaluar);
 document.getElementById('pt-edad').addEventListener('input', evaluar);
 document.getElementById('pt-edad-unidad').addEventListener('change', evaluar);
 
+// ─── Sync mobile patient panel → canonical header inputs ──────────────────────
+
+const MOB_TO_CANON_MAP = {
+    'mob-pt-especie':      'pt-especie',
+    'mob-pt-raza':         'pt-raza',
+    'mob-pt-edad':         'pt-edad',
+    'mob-pt-edad-unidad':  'pt-edad-unidad',
+    'mob-pt-sexo':         'pt-sexo'
+};
+
+function syncMobPatientFromCanon() {
+    Object.entries(MOB_TO_CANON_MAP).forEach(([mobId, canonId]) => {
+        const mobEl = document.getElementById(mobId);
+        const canonEl = document.getElementById(canonId);
+        if (mobEl && canonEl) mobEl.value = canonEl.value;
+    });
+}
+
+Object.entries(MOB_TO_CANON_MAP).forEach(([mobId, canonId]) => {
+    const mobEl = document.getElementById(mobId);
+    if (!mobEl) return;
+    const eventType = mobEl.tagName === 'SELECT' ? 'change' : 'input';
+    mobEl.addEventListener(eventType, () => {
+        const canonEl = document.getElementById(canonId);
+        if (canonEl) canonEl.value = mobEl.value;
+        evaluar();
+    });
+});
+
 
 // ─── Colapsar panel Flujo de trabajo ─────────────────────────────────────────
 const panelFlujo = document.getElementById('panel-flujo');
@@ -246,6 +309,10 @@ window.addEventListener('resize', () => {
         if (!panelFlujo.classList.contains('collapsed')) initGridRows();
     } else {
         panelClinico.style.height = '';
+        document.querySelectorAll('.subpanel-anim').forEach(anim => {
+            anim.style.height = '';
+            anim.style.transition = '';
+        });
     }
 });
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
@@ -255,19 +322,22 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const anim    = subpanel.querySelector('.subpanel-anim');
     const storageKey = `mx-${subpanel.id}-collapsed`;
 
-    anim.style.transition = 'none';
-    anim.style.height = `${anim.scrollHeight}px`;
+    if (isDesktopGrid()) {
+        anim.style.transition = 'none';
+        anim.style.height = `${anim.scrollHeight}px`;
 
-    if (localStorage.getItem(storageKey) === '1') {
-        subpanel.classList.add('collapsed');
-        btn.setAttribute('aria-expanded', 'false');
-        anim.style.height = '0px';
+        if (localStorage.getItem(storageKey) === '1') {
+            subpanel.classList.add('collapsed');
+            btn.setAttribute('aria-expanded', 'false');
+            anim.style.height = '0px';
+        }
+
+        anim.offsetHeight;
+        anim.style.transition = '';
     }
 
-    anim.offsetHeight;
-    anim.style.transition = '';
-
     btn.addEventListener('click', () => {
+        if (!isDesktopGrid()) return;
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
         anim.style.height = collapsed ? '0px' : `${anim.scrollHeight}px`;
@@ -281,11 +351,11 @@ const btnColapsarPatrones = document.getElementById('btn-colapsar-patrones');
 const patronesAnim = document.getElementById('patrones-anim');
 
 function colapsarPatrones(shouldCollapse) {
+    if (!isDesktopGrid()) return;
     const isExpanded = btnColapsarPatrones.getAttribute('aria-expanded') === 'true';
     const collapse = shouldCollapse ?? isExpanded;
 
     if (collapse && isExpanded) {
-        // Snapshot px height before animating to 0
         patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
         patronesAnim.offsetHeight;
         patronesAnim.style.height = '0px';
@@ -293,7 +363,6 @@ function colapsarPatrones(shouldCollapse) {
     } else if (!collapse && !isExpanded) {
         patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
         patronesAnim.addEventListener('transitionend', () => {
-            // Remove fixed height so content can grow naturally as patterns update
             if (btnColapsarPatrones.getAttribute('aria-expanded') === 'true') {
                 patronesAnim.style.height = '';
             }

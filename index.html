@@ -61,13 +61,58 @@
                 <polyline points="10 17 15 12 10 7"/>
                 <line x1="15" y1="12" x2="3" y2="12"/>
             </svg>
-            Iniciar sesión
+            Login
         </button>
     </div>
 </header>
 
+<!-- EXAMENES SUBTABS BAR (mobile only, shown by JS when Examenes tab is active) -->
+<div id="examenes-subtabs-bar" hidden>
+    <button class="tab-examenes activo" data-subtab-target="panel-hema">Hematología</button>
+    <button class="tab-examenes" data-subtab-target="panel-bioquim">Bioquímica</button>
+    <button class="tab-examenes" data-subtab-target="panel-uri">Urianálisis</button>
+    <button class="tab-examenes" data-subtab-target="panel-endo">Endocrino</button>
+</div>
+
 <!-- GRID -->
 <main>
+
+    <!-- DATOS DEL PACIENTE (mobile tab, desktop: hidden) -->
+    <section class="panel" id="panel-paciente">
+        <h2 class="panel-cabecera">Datos del paciente</h2>
+        <div class="panel-cuerpo panel-cuerpo--paciente">
+            <div class="fila-paciente">
+                <label for="mob-pt-especie">Especie</label>
+                <select id="mob-pt-especie">
+                    <option value="">— seleccionar —</option>
+                    <option value="Canino">Canino</option>
+                    <option value="Felino">Felino</option>
+                </select>
+            </div>
+            <div class="fila-paciente">
+                <label for="mob-pt-raza">Raza</label>
+                <input id="mob-pt-raza" type="text" placeholder="ej. Labrador">
+            </div>
+            <div class="fila-paciente">
+                <label for="mob-pt-edad">Edad</label>
+                <div class="fila-paciente-edad">
+                    <input id="mob-pt-edad" type="number" min="0" placeholder="0">
+                    <select id="mob-pt-edad-unidad">
+                        <option value="anyos">Años</option>
+                        <option value="meses">Meses</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fila-paciente">
+                <label for="mob-pt-sexo">Sexo</label>
+                <select id="mob-pt-sexo">
+                    <option value="">— seleccionar —</option>
+                    <option value="Macho">Macho</option>
+                    <option value="Hembra">Hembra</option>
+                </select>
+            </div>
+        </div>
+    </section>
 
     <!-- HEMATOLOGÍA -->
     <section class="panel subpanel" id="panel-hema">
@@ -272,54 +317,46 @@
                     <span class="num-paso" aria-hidden="true">1</span>
                     <div>
                         <strong>Datos del paciente</strong>
-                        <p>Selecciona especie, raza, edad y sexo en la barra superior.</p>
+                        <p>Ingresa especie, raza, edad y sexo. Esta información ajusta los rangos de referencia utilizados en el análisis.</p>
                     </div>
                 </li>
                 <li>
                     <span class="num-paso" aria-hidden="true">2</span>
                     <div>
-                        <strong>Hematología</strong>
-                        <p>Transcribe el hemograma. Los campos se colorean en tiempo real si el valor está fuera de rango.</p>
+                        <strong>Exámenes</strong>
+                        <p>Transcribe los valores del hemograma, bioquímica, urianálisis y perfil endocrino disponibles. Los campos se colorean en tiempo real según el rango de referencia. No es necesario completar todos.</p>
                     </div>
                 </li>
                 <li>
                     <span class="num-paso" aria-hidden="true">3</span>
                     <div>
-                        <strong>Bioquímica</strong>
-                        <p>Ingresa los valores disponibles. No es necesario completar todos los campos.</p>
+                        <strong>Imágenes (opcional)</strong>
+                        <p>Adjunta fotos de citología o frotis. El modelo de IA las incluirá en su análisis visual junto con los valores de laboratorio.</p>
                     </div>
                 </li>
                 <li>
                     <span class="num-paso" aria-hidden="true">4</span>
                     <div>
-                        <strong>Imágenes (opcional)</strong>
-                        <p>Adjunta fotos de citología o frotis para análisis visual por IA.</p>
+                        <strong>Signos clínicos (opcional)</strong>
+                        <p>Describe brevemente los signos observados en el paciente. Este contexto clínico enriquece la interpretación generada por el modelo de IA.</p>
                     </div>
                 </li>
                 <li>
                     <span class="num-paso" aria-hidden="true">5</span>
                     <div>
-                        <strong>Signos clínicos (opcional)</strong>
-                        <p>Describe brevemente los signos observados para enriquecer el contexto enviado al modelo de IA.</p>
-                    </div>
-                </li>
-                <li>
-                    <span class="num-paso" aria-hidden="true">6</span>
-                    <div>
-                        <strong>Analizar</strong>
-                        <p>El algoritmo de Morphos detecta patrones y medGemma genera la interpretación clínica completa.</p>
+                        <strong>Resultados</strong>
+                        <p>Morphos detecta patrones automáticamente. Presiona <em>Análisis IA</em> para que medGemma genere una interpretación clínica completa basada en todos los datos ingresados.</p>
                     </div>
                 </li>
             </ol>
         </div>
     </section>
 
-    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + SIGNOS CLÍNICOS -->
+    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + IMÁGENES + SIGNOS CLÍNICOS -->
     <div class="col3-wrapper">
-    <section class="panel" id="panel-imagenes">
 
-        <!-- URIANÁLISIS -->
-        <div class="subpanel" id="subpanel-uri">
+        <!-- URIANÁLISIS (standalone panel: desktop col3, mobile sub-tab) -->
+        <section class="panel subpanel" id="panel-uri">
         <h2 class="panel-cabecera">
             Urianálisis
             <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
@@ -362,10 +399,11 @@
                 </select>
                 <span class="unidad"></span>
             </div>
-        </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
+        </div></div>
+        </section>
 
-        <!-- PERFIL ENDOCRINO -->
-        <div class="subpanel" id="subpanel-endo">
+        <!-- PERFIL ENDOCRINO (standalone panel: desktop col3, mobile sub-tab) -->
+        <section class="panel subpanel" id="panel-endo">
         <h2 class="panel-cabecera">
             Perfil Endocrino
             <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
@@ -396,7 +434,10 @@
                 <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
                 <span class="unidad">μIU/mL</span>
             </div>
-        </div></div></div><!-- /.subpanel-anim /.subpanel-cuerpo /.subpanel -->
+        </div></div>
+        </section>
+
+    <section class="panel" id="panel-imagenes">
 
         <!-- IMÁGENES / CITOLOGÍA -->
         <div class="subpanel" id="subpanel-citologia">
@@ -497,7 +538,7 @@
 
     <!-- NAV INFERIOR -->
     <nav class="nav-inferior" id="nav-inferior" aria-label="Secciones">
-    <button class="pestanya-nav activo" data-target="panel-flujo" aria-selected="true">
+    <button class="tab-nav activo" data-target="panel-flujo" aria-selected="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <circle cx="5" cy="6" r="2"/><line x1="8" y1="6" x2="20" y2="6"/>
             <circle cx="5" cy="12" r="2"/><line x1="8" y1="12" x2="20" y2="12"/>
@@ -505,19 +546,20 @@
         </svg>
         <span>Flujo</span>
     </button>
-    <button class="pestanya-nav" data-target="panel-hema" aria-selected="false">
+    <button class="tab-nav" data-target="panel-paciente" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M12 3C8.5 8 6 11.5 6 14a6 6 0 0 0 12 0c0-2.5-2.5-6-6-11z"/>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
         </svg>
-        <span>Hemato.</span>
+        <span>Paciente</span>
     </button>
-    <button class="pestanya-nav" data-target="panel-bioquim" aria-selected="false">
+    <button class="tab-nav" data-target="examenes" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M9 3h6M10 3v7L5.5 17A2 2 0 0 0 7.3 20h9.4a2 2 0 0 0 1.8-3L14 10V3"/>
         </svg>
-        <span>Bioquím.</span>
+        <span>Exámenes</span>
     </button>
-    <button class="pestanya-nav" data-target="panel-imagenes" aria-selected="false">
+    <button class="tab-nav" data-target="panel-imagenes" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -525,7 +567,7 @@
         </svg>
         <span>Imágenes</span>
     </button>
-    <button class="pestanya-nav" data-target="panel-clinico" aria-selected="false">
+    <button class="tab-nav" data-target="panel-clinico" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
             <rect x="9" y="3" width="6" height="4" rx="1"/>
@@ -534,7 +576,7 @@
         </svg>
         <span>Signos</span>
     </button>
-    <button class="pestanya-nav" data-target="panel-resultados" aria-selected="false">
+    <button class="tab-nav" data-target="panel-resultados" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <line x1="18" y1="20" x2="18" y2="10"/>
             <line x1="12" y1="20" x2="12" y2="4"/>
@@ -556,7 +598,7 @@
         </button>
 
         <div class="modal-tabs" role="tablist">
-            <button class="modal-tab activo" data-tab="login" role="tab" aria-selected="true">Iniciar sesión</button>
+            <button class="modal-tab activo" data-tab="login" role="tab" aria-selected="true">Login</button>
             <button class="modal-tab" data-tab="registro" role="tab" aria-selected="false">Registrarse</button>
         </div>
 
@@ -573,7 +615,7 @@
                 <span class="error-campo" id="err-login-pass"></span>
             </div>
             <div class="mensaje-form" id="msg-login" hidden></div>
-            <button type="submit" class="modal-submit">Iniciar sesión</button>
+            <button type="submit" class="modal-submit">Login</button>
         </form>
 
         <!-- REGISTRO -->

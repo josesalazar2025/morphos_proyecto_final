@@ -306,7 +306,7 @@ main {
     display: flex;
     align-items: center;
     padding: 0 var(--space-4);
-    font-size: var(--fs-sm);
+    font-size: clamp(13px, 12.6px + 0.09vw, 14px);
     font-weight: 600;
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
@@ -317,10 +317,6 @@ main {
 }
 
 
-#panel-flujo .panel-cabecera,
-#panel-clinico .panel-cabecera {
-    height: 54px;
-}
 
 .panel-cuerpo {
     flex: 1;
@@ -465,6 +461,14 @@ main {
 }
 
 /* ── PANEL COLUMNA MEDIA (urianálisis + endocrino + imágenes) ── */
+#panel-uri,
+#panel-endo {
+    --fs-ui: 15px;
+    --fs-xs: 12px;
+    --fs-sm: 0.9rem;
+    flex-shrink: 0;
+}
+
 #panel-imagenes {
     --fs-ui: 15px;
     --fs-xs: 12px;
@@ -473,6 +477,7 @@ main {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: var(--border-2) transparent;
+    flex: 1;
 }
 
 #panel-imagenes .panel-cabecera {
@@ -483,6 +488,10 @@ main {
 }
 
 #panel-imagenes .panel-cabecera:first-child {
+    border-top: none;
+}
+
+.col3-wrapper > .panel.subpanel:first-child > .panel-cabecera {
     border-top: none;
 }
 
@@ -891,7 +900,7 @@ footer {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    height: 54px;
+    height: 2.5rem;
     padding: 0 var(--space-4);
     border-top: 1px solid var(--border-1);
     background: var(--surface-2);
@@ -1065,7 +1074,7 @@ main {
     flex-shrink: 0;
 }
 
-.pestanya-nav {
+.tab-nav {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1081,17 +1090,118 @@ main {
     border-top: 2px solid transparent;
 }
 
-.pestanya-nav:hover {
+.tab-nav:hover {
     color: var(--text-2);
 }
 
-.pestanya-nav.activo {
+.tab-nav.activo {
     color: var(--accent);
     border-top-color: var(--accent);
 }
 
-.pestanya-nav svg {
+.tab-nav svg {
     flex-shrink: 0;
+}
+
+/* ── PANEL PACIENTE  ── */
+
+.panel-cuerpo--paciente {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-4);
+}
+
+.fila-paciente {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.fila-paciente label {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--text-3);
+    letter-spacing: 0.3px;
+}
+
+.fila-paciente select,
+.fila-paciente input[type="text"],
+.fila-paciente input[type="number"] {
+    height: 44px;
+    padding: 0 var(--space-3);
+    background: var(--surface-input);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-1);
+    font-size: var(--fs-ui);
+    font-family: var(--font-sans);
+    outline: none;
+    width: 100%;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.fila-paciente select:focus,
+.fila-paciente input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.fila-paciente-edad {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.fila-paciente-edad input {
+    flex: 1;
+}
+
+.fila-paciente-edad select {
+    width: 110px;
+    flex-shrink: 0;
+}
+
+/* ── EXAMENES SUBTABS BAR ── */
+#examenes-subtabs-bar {
+    flex-shrink: 0;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+#examenes-subtabs-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-examenes {
+    flex: 1;
+    padding: 0.55rem var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-4);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+
+.tab-examenes:hover {
+    color: var(--text-2);
+}
+
+.tab-examenes.activo {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ── DESKTOP ONLY: hide mobile-only elements ── */
+@media (min-width: 1101px) {
+    #panel-paciente,
+    #examenes-subtabs-bar {
+        display: none;
+    }
 }
 
 /* ── RESPONSIVE ── */
@@ -1169,47 +1279,23 @@ main {
 
 @media (max-width: 1100px) {
     header {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-            "logo acciones"
-            "barrapaciente barrapaciente";
-        row-gap: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         padding: 0.5rem 1rem;
     }
 
     #logo {
-        grid-area: logo;
         margin-right: 0;
-        align-self: center;
-    }
-
-    .acciones-cabecera {
-        grid-area: acciones;
-        align-self: center;
     }
 
     .barra-paciente {
-        grid-area: barrapaciente;
+        display: none;
     }
 
-    .barra-paciente-titulo {
-        display: flex;
-        height: 2.5rem;
-        align-items: center;
-        padding: 0 1rem;
-        font-size: var(--fs-sm);
-        font-weight: 600;
-        letter-spacing: var(--tracking-wide);
-        text-transform: uppercase;
-        color: var(--text-3);
-        border-bottom: 1px solid var(--border-1);
-        border-top: 1px solid var(--border-1);
-        background: var(--surface-2);
-        flex-shrink: 0;
-        margin: 1.5rem -1rem 0.5rem -1rem;
-        width: calc(100% + 2rem);
+    .acciones-cabecera {
+        margin-left: 0;
+        align-self: center;
     }
 
     .acciones-cabecera .boton {
@@ -1217,7 +1303,13 @@ main {
         font-size: var(--fs-sm);
     }
 
+    #examenes-subtabs-bar {
+        display: flex;
+    }
 
+    #examenes-subtabs-bar[hidden] {
+        display: none;
+    }
 
     footer {
         padding: 0;
@@ -1313,6 +1405,12 @@ main {
     .seccion-clinica .cuerpo-clinica {
         display: flex;
         flex-direction: column;
+    }
+
+    .btn-colapsar-subpanel,
+    .btn-colapsar-flujo,
+    .btn-colapsar-patrones {
+        display: none;
     }
 }
 
