@@ -85,8 +85,6 @@ $respuesta = curl_exec($ch);
 $codigoHttp = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $errorCurl = curl_error($ch);
 
-curl_close($ch);
-
 // DEVOLVER RESPUESTA
 
 if ($errorCurl) {
