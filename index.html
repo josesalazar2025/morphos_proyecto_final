@@ -207,11 +207,6 @@
             </button>
         </h2>
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
-            <div class="cabecera-columnas" aria-hidden="true">
-                <span></span>
-                <span>Valor</span>
-                <span>Unidad</span>
-            </div>
             <div class="fila-campo">
                 <label for="endo-cort-bas">Cortisol basal</label>
                 <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
@@ -444,13 +439,7 @@
         <!-- IMÁGENES / CITOLOGÍA -->
         <div class="subpanel" id="subpanel-citologia">
         <h2 class="panel-cabecera">
-            Imágenes / Citología 
-            <button class="btn-colapsar-subpanel" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-citologia" aria-label="Colapsar Imágenes">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
-                </svg>
-            </button>
+            Imágenes / Citología
         </h2>
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-citologia">
             <div class="zonas-imagen">
@@ -484,8 +473,38 @@
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
+                <div class="zona-imagen" data-zona="2">
+                    <input type="file" class="input-zona" accept="image/*" hidden>
+                    <div class="zona-vacia">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span>Muestra 3</span>
+                    </div>
+                    <img class="zona-img-preview" src="" alt="Citología 3" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <div class="zona-imagen" data-zona="3">
+                    <input type="file" class="input-zona" accept="image/*" hidden>
+                    <div class="zona-vacia">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span>Muestra 4</span>
+                    </div>
+                    <img class="zona-img-preview" src="" alt="Citología 4" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
             </div>
-            <div class="zona-microscopio" data-zona="2">
+            <div class="zona-microscopio" data-zona="4">
                 <div class="micro-vacia">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -522,14 +541,6 @@
 
     </section>
 
-    <!-- SIGNOS CLÍNICOS -->
-    <section class="panel seccion-clinica" id="panel-clinico">
-        <h2 class="panel-cabecera">Signos clínicos del paciente</h2>
-        <div class="cuerpo-clinica">
-            <label class="etiqueta-clinica" for="signos-clinicos">Escribe un resumen de los signos clínicos para enviar información adicional al modelo de IA</label>
-            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="ej. Poliuria, polidipsia, pérdida de peso…"></textarea>
-        </div>
-    </section>
     </div>
 
     <!-- RESULTADOS -->
@@ -575,8 +586,12 @@
             </div>
 
         </div>
+        <div class="chat-area">
+            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional al modelo..."></textarea>
+        </div>
         <div class="panel-pie-acciones">
-<button class="boton boton-analizar" type="button">Análisis IA</button>
+            <button class="boton boton-exportar-pdf" type="button">Exportar PDF</button>
+            <button class="boton boton-analizar" type="button">Análisis IA</button>
         </div>
     </section>
 
@@ -618,15 +633,6 @@
             <polyline points="21 15 16 10 5 21"/>
         </svg>
         <span>Imágenes</span>
-    </button>
-    <button class="tab-nav" data-target="panel-clinico" aria-selected="false">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-            <rect x="9" y="3" width="6" height="4" rx="1"/>
-            <line x1="9" y1="12" x2="15" y2="12"/>
-            <line x1="9" y1="16" x2="12" y2="16"/>
-        </svg>
-        <span>Signos</span>
     </button>
     <button class="tab-nav" data-target="panel-resultados" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">

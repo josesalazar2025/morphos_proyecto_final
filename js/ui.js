@@ -87,7 +87,6 @@ export function initMobSync(evaluar) {
 // Filas de grid
 
 const panelFlujo = document.getElementById('panel-flujo');
-const panelClinico = document.getElementById('panel-clinico');
 const btnColapsar = document.getElementById('btn-colapsar-flujo');
 const mainEl = document.querySelector('main');
 
@@ -98,7 +97,6 @@ export const isDesktopGrid = () => window.innerWidth > 1100;
 
 function initGridRows() {
     if (!isDesktopGrid()) return;
-    panelClinico.style.height = '';
     mainEl.style.gridTemplateRows = '1fr auto auto';
 
     const panelH = panelFlujo.getBoundingClientRect().height;
@@ -107,7 +105,6 @@ function initGridRows() {
     if (headerH > 0) collapsedRow = `${headerH}px`;
 
     mainEl.style.gridTemplateRows = `1fr auto ${expandedRow || 'auto'}`;
-    if (expandedRow) panelClinico.style.height = expandedRow;
 }
 
 function setGridRows(collapsed, animate) {
@@ -136,13 +133,18 @@ btnColapsar.addEventListener('click', () => {
     btnColapsar.setAttribute('aria-expanded', String(!collapsed));
     setGridRows(collapsed, true);
     localStorage.setItem('mx-flujo-collapsed', collapsed ? '1' : '0');
+    if (!collapsed) {
+        ['panel-endo', 'panel-uri'].forEach(id => {
+            const sp = document.getElementById(id);
+            if (sp) setSubpanelCollapsed(sp, true);
+        });
+    }
 });
 
 window.addEventListener('resize', () => {
     if (isDesktopGrid()) {
         if (!panelFlujo.classList.contains('collapsed')) initGridRows();
     } else {
-        panelClinico.style.height = '';
         document.querySelectorAll('.subpanel-anim').forEach(anim => {
             anim.style.height = '';
             anim.style.transition = '';
@@ -154,6 +156,29 @@ window.addEventListener('resize', () => {
 });
 
 // Paneles colapsables
+
+function setSubpanelCollapsed(subpanel, shouldCollapse) {
+    if (!isDesktopGrid()) return;
+    const anim = subpanel.querySelector('.subpanel-anim');
+    const btn = subpanel.querySelector('.btn-colapsar-subpanel');
+    const isFill = subpanel.id === 'subpanel-citologia';
+    if (shouldCollapse === subpanel.classList.contains('collapsed')) return;
+    subpanel.classList.toggle('collapsed', shouldCollapse);
+    if (btn) btn.setAttribute('aria-expanded', String(!shouldCollapse));
+    if (shouldCollapse) {
+        anim.style.height = `${anim.offsetHeight}px`;
+        anim.offsetHeight;
+        anim.style.height = '0px';
+    } else {
+        anim.style.height = `${anim.scrollHeight}px`;
+        if (isFill) {
+            anim.addEventListener('transitionend', () => { anim.style.height = ''; }, { once: true });
+        }
+    }
+    localStorage.setItem(`mx-${subpanel.id}-collapsed`, shouldCollapse ? '1' : '0');
+}
+
+const LINKED_SUBPANEL_IDS = ['panel-endo', 'panel-uri'];
 
 document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const subpanel = btn.closest('.subpanel');
@@ -195,6 +220,15 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
             }
         }
         localStorage.setItem(storageKey, collapsed ? '1' : '0');
+
+        if (LINKED_SUBPANEL_IDS.includes(subpanel.id)) {
+            LINKED_SUBPANEL_IDS.forEach(id => {
+                if (id !== subpanel.id) {
+                    const partner = document.getElementById(id);
+                    if (partner) setSubpanelCollapsed(partner, collapsed);
+                }
+            });
+        }
     });
 });
 

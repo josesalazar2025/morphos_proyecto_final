@@ -108,7 +108,7 @@ formRegistro.addEventListener('submit', async e => {
     const hf_key = formRegistro.hf_key.value.trim();
     let ok = true;
 
-    if (!REGEX_NOMBRE.test(nombre)) { setFieldError('err-reg-nombre', 'Nombre inválido (2–100 caracteres, solo letras)'); ok = false; }
+    if (!REGEX_NOMBRE.test(nombre)) { setFieldError('err-reg-nombre', 'Nombre inválido (2-100 caracteres, solo letras)'); ok = false; }
     if (!REGEX_EMAIL.test(email)) { setFieldError('err-reg-email', 'Correo electrónico inválido'); ok = false; }
     if (!REGEX_PASSWORD.test(password)) { setFieldError('err-reg-pass', 'Mín. 8 caracteres, una mayúscula, una minúscula y un número'); ok = false; }
     if (password !== password2) { setFieldError('err-reg-pass2', 'Las contraseñas no coinciden'); ok = false; }
