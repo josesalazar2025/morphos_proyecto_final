@@ -27,7 +27,7 @@ $hfKey = trim($datos['hf_key'] ?? '');
 $errores = [];
 
 if (!preg_match('/^[\p{L}\s\-\.]{2,100}$/u', $nombre)) {
-    $errores['nombre'] = 'Nombre inválido (2–100 caracteres, solo letras)';
+    $errores['nombre'] = 'Nombre inválido (2-100 caracteres, solo letras)';
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

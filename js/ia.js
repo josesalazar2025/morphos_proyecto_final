@@ -72,21 +72,36 @@ function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUlti
         ? (paciente.edadMeses < 24 ? `${Math.round(paciente.edadMeses)} meses` : `${(paciente.edadMeses / 12).toFixed(1)} años`)
         : 'desconocida';
 
-        return `Eres un médico veterinario especialista en patología clínica. Sólo responderás consultas asociadas a ésta área de conocimiento y basado en la evidencia proporcionada.
-        Si te envían imágenes de citología debes hacer una revisión exhaustiva de la morfología celular, identificar lesiones, patrones anormales, presencia
-        de hemoparásitos intracelulares y extracelulares o inclusiones citoplasmáticas.
-        Analiza los resultados y proporciona una interpretación clínica concisa en español.
+    return `IMPORTANTE: Responde ÚNICAMENTE en español. Do not write in English under any circumstance.
 
+    Eres un médico veterinario especialista en patología clínica. Sólo responderás consultas asociadas a ésta área de conocimiento y basado en la evidencia proporcionada.
+    Si te envían imágenes de citología debes hacer una revisión exhaustiva de la morfología celular, identificar lesiones, patrones anormales, presencia de hemoparásitos intracelulares y extracelulares (Anaplasma, Babesia, Ehrlichia, Hepatozoon, Piroplasma, Mycoplasma, etc)  o inclusiones citoplasmáticas.
+    Analiza los resultados y proporciona una interpretación clínica concisa.
 
-        Paciente: ${paciente.especie || 'desconocido'}, raza: ${paciente.raza || 'NE'}, edad: ${edadTexto}, sexo: ${paciente.sexo || 'NE'}
+    Paciente: ${paciente.especie || 'desconocido'}, raza: ${paciente.raza || 'NE'}, edad: ${edadTexto}, sexo: ${paciente.sexo || 'NE'}
 
-        Resultados de laboratorio:
-        ${lineasValores}
+    Resultados de laboratorio:
+    ${lineasValores}
 
-        Patrones detectados:
-        ${lineasPatrones}
-        ${signosText ? `\nSignos clínicos: ${signosText}` : ''}
-        Proporciona una interpretación clínica breve (3-5 oraciones) destacando los hallazgos más significativos y las recomendaciones diagnósticas inmediatas.`;
+    Patrones detectados:
+    ${lineasPatrones}
+    ${signosText ? `\nSignos clínicos: ${signosText}` : ''}
+    Proporciona una interpretación clínica breve (6-8 oraciones) destacando los hallazgos más significativos y las recomendaciones diagnósticas inmediatas.`;
+        }
+
+// Strips MedGemma chain-of-thought tokens and chat template markers
+function limpiarRespuesta(text) {
+    // If closing tag is present, take everything after it (clean split)
+    if (text.includes('<unused95>')) {
+        text = text.split('<unused95>').slice(1).join('');
+    } else if (text.includes('<unused94>')) {
+        // Opening tag without closing — strip from tag to end (thinking swallows response)
+        text = text.slice(0, text.indexOf('<unused94>'));
+    }
+    // Remove any remaining unused tokens and Gemma chat markers
+    text = text.replace(/<unused\d+>/g, '');
+    text = text.replace(/<start_of_turn>\w+\n?/g, '').replace(/<end_of_turn>/g, '');
+    return text.trim();
 }
 
 // Llamado a IA
@@ -118,7 +133,7 @@ export async function llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, g
 
 async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const baseUrl = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
-    const model = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma:4b';
+    const model = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma1.5:latest';
     const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
     const images = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
 
@@ -135,6 +150,7 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
         messages: [{ role: 'user', content: contenido.length === 1 ? prompt : contenido }],
         max_tokens: 600,
         stream: false,
+        think: false,
     };
 
     try {
@@ -154,7 +170,7 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
             const msg = data?.error?.message ?? data?.error ?? `HTTP ${res.status}`;
             salidaEl.textContent = `Error Ollama: ${msg}`;
         } else {
-            salidaEl.textContent = data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.';
+            salidaEl.textContent = limpiarRespuesta(data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.');
         }
     } catch {
         salidaEl.textContent = `No se pudo conectar con Ollama en ${baseUrl}. Verifica que esté ejecutándose con "ollama serve".`;
@@ -167,7 +183,8 @@ const HF_MODELOS = {
     'unsloth/medgemma-27b-it': { proveedor: 'featherless-ai', multimodal: false, max_tokens: 1000 },
     'unsloth/medgemma-4b-it': { proveedor: 'featherless-ai', multimodal: true, max_tokens: 600 },
     'unsloth/medgemma-1.5-4b-it': { proveedor: 'featherless-ai', multimodal: true, max_tokens: 1000 },
-    'google/gemma-3-27b-it': { proveedor: 'scaleway', multimodal: true, max_tokens: 800 },
+    'google/medgemma-1.5-4b-it': { proveedor: 'scaleway', multimodal: true, max_tokens: 800 },
+    'blackmistcode/morphos_medGemma': { proveedor: 'space', multimodal: true, max_tokens: 512 },
 };
 
 async function _llamarHuggingFace(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
@@ -178,9 +195,9 @@ async function _llamarHuggingFace(salidaEl, obtenerDatosPaciente, obtenerValores
         return;
     }
 
-    const modelId = document.getElementById('ia-hf-model')?.value || 'google/gemma-3-27b-it';
-    const config = HF_MODELOS[modelId] ?? HF_MODELOS['google/gemma-3-27b-it'];
-    const modelo = HF_MODELOS[modelId] ? modelId : 'google/gemma-3-27b-it';
+    const modelId = document.getElementById('ia-hf-model')?.value || 'unsloth/medgemma-1.5-4b-it';
+    const config = HF_MODELOS[modelId] ?? HF_MODELOS['unsloth/medgemma-1.5-4b-it'];
+    const modelo = HF_MODELOS[modelId] ? modelId : 'unsloth/medgemma-1.5-4b-it';
     const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
     const imagenes = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
 
@@ -195,34 +212,78 @@ async function _llamarHuggingFace(salidaEl, obtenerDatosPaciente, obtenerValores
     if (contenido.length === 1) contenido = prompt;
 
     try {
-        const res = await fetch(`https://router.huggingface.co/${config.proveedor}/v1/chat/completions`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify({
-                model: modelo,
-                messages: [{ role: 'user', content: contenido }],
-                max_tokens: config.max_tokens,
-            }),
-        });
+        let res, data;
 
-        let data;
-        try { data = await res.json(); } catch {
-            salidaEl.textContent = `Error inesperado (HTTP ${res.status}). Intenta de nuevo.`;
-            return;
-        }
+        if (config.proveedor === 'space') {
+            const SPACE = 'https://blackmistcode-morphos-medgemma.hf.space/gradio_api';
+            const imagen = imagenes.find(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img)) ?? null;
+            const imageInput = imagen ? { url: imagen } : null;
 
-        if (!res.ok) {
-            const err = data?.error;
-            const msg = typeof err === 'string' ? err
-                      : Array.isArray(err) ? err.join(' ')
-                      : err != null ? JSON.stringify(err)
-                      : `HTTP ${res.status}`;
-            salidaEl.textContent = `Error: ${msg}`;
+            // Step 1: submit job
+            const submitRes = await fetch(`${SPACE}/call/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                body: JSON.stringify({ data: [imageInput, prompt] }),
+            });
+            if (!submitRes.ok) {
+                salidaEl.textContent = `Error Space: HTTP ${submitRes.status}`;
+                return;
+            }
+            const { event_id } = await submitRes.json();
+
+            // Step 2: stream SSE result
+            const streamRes = await fetch(`${SPACE}/call/analyze/${event_id}`, {
+                headers: { 'Authorization': `Bearer ${apiKey}` },
+            });
+            const reader = streamRes.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '', result = null;
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop();
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].trim() === 'event: complete' && lines[i + 1]?.startsWith('data: ')) {
+                        result = JSON.parse(lines[i + 1].slice(6))[0];
+                    }
+                }
+            }
+            if (result !== null) {
+                salidaEl.textContent = limpiarRespuesta(result);
+            } else {
+                salidaEl.textContent = 'Sin respuesta del modelo.';
+            }
         } else {
-            salidaEl.textContent = data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.';
+            res = await fetch(`https://router.huggingface.co/${config.proveedor}/v1/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                },
+                body: JSON.stringify({
+                    model: modelo,
+                    messages: [{ role: 'user', content: contenido }],
+                    max_tokens: config.max_tokens,
+                }),
+            });
+
+            try { data = await res.json(); } catch {
+                salidaEl.textContent = `Error inesperado (HTTP ${res.status}). Intenta de nuevo.`;
+                return;
+            }
+
+            if (!res.ok) {
+                const err = data?.error;
+                const msg = typeof err === 'string' ? err
+                          : Array.isArray(err) ? err.join(' ')
+                          : err != null ? JSON.stringify(err)
+                          : `HTTP ${res.status}`;
+                salidaEl.textContent = `Error: ${msg}`;
+            } else {
+                salidaEl.textContent = limpiarRespuesta(data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.');
+            }
         }
     } catch (e) {
         salidaEl.textContent = `Error de red: ${e.message}`;
