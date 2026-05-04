@@ -217,11 +217,12 @@ button {
 /* ── GRID PRINCIPAL ── */
 main {
     display: grid;
-    grid-template-columns: 1fr 1fr 29.6rem 30rem;
-    grid-template-rows: 1fr auto;
+    grid-template-columns: 1fr 1fr 40rem 30rem;
+    grid-template-rows: 1fr auto auto;
     grid-template-areas:
-        "hema bioquim col3 resultados"
-        "flujo flujo col3 resultados";
+        "hema    bioquim  col3 resultados"
+        "endo    uri      col3 resultados"
+        "flujo   flujo    col3 resultados";
     gap: 1px;
     background: var(--border-1);
     flex: 1;
@@ -231,6 +232,8 @@ main {
 
 #panel-hema       { grid-area: hema; }
 #panel-bioquim    { grid-area: bioquim; }
+#panel-endo       { grid-area: endo; }
+#panel-uri        { grid-area: uri; }
 #panel-resultados { grid-area: resultados; }
 .panel-flujo      { grid-area: flujo; }
 
@@ -466,7 +469,6 @@ main {
     --fs-ui: 15px;
     --fs-xs: 12px;
     --fs-sm: 0.9rem;
-    flex-shrink: 0;
 }
 
 #panel-imagenes {
@@ -832,7 +834,117 @@ footer {
     font-style: italic;
 }
 
+/* ── IA BACKEND CONFIG ── */
+
+.ia-backend-config {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-1);
+}
+
+.ia-backend-label {
+    font-size: var(--fs-xs);
+    color: var(--text-4);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.ia-backend-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
+    color: var(--text-3);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ia-backend-opt input[type="radio"] {
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.ia-ollama-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    width: 100%;
+}
+
+.ia-text-input {
+    flex: 1;
+    min-width: 140px;
+    padding: 4px 8px;
+    font-size: var(--fs-xs);
+    font-family: var(--font-mono, monospace);
+    background: var(--surface-1);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-2);
+}
+
+.ia-text-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.ia-model-input {
+    max-width: 130px;
+    flex: 0 0 auto;
+}
+
+.ia-hf-fields {
+    width: 100%;
+}
+
+.ia-select {
+    width: 100%;
+    padding: 4px 8px;
+    font-size: var(--fs-xs);
+    font-family: var(--font-sans);
+    background: var(--surface-1);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-sm);
+    color: var(--text-2);
+    cursor: pointer;
+}
+
+.ia-select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
 /* ── ZONAS DE IMAGEN ── */
+
+#subpanel-citologia {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#subpanel-citologia .subpanel-anim {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#cuerpo-citologia {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#cuerpo-citologia .zonas-imagen {
+    flex-shrink: 0;
+}
+
 .zonas-imagen {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -869,6 +981,177 @@ footer {
     font-size: var(--fs-xs);
 }
 
+/* ── ZONA MICROSCOPIO ── */
+
+.zona-microscopio {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    min-height: 150px;
+    margin-top: var(--space-3);
+    border: 1.5px dashed var(--border-2);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color var(--dur-fast);
+    background: var(--surface-1);
+}
+
+.zona-microscopio:hover {
+    border-color: var(--accent);
+}
+
+.micro-vacia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-4);
+    font-size: var(--fs-xs);
+    pointer-events: none;
+}
+
+.micro-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* controls bar */
+.micro-controles {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface-2);
+    border-top: 1px solid var(--border-1);
+    gap: var(--space-2);
+}
+
+.micro-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: var(--text-3);
+    background: var(--surface-3);
+    border: 1px solid var(--border-1);
+    flex-shrink: 0;
+    transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.micro-btn:hover {
+    background: var(--border-1);
+    border-color: var(--border-2);
+    color: var(--text-1);
+}
+
+.micro-btn-capturar {
+    width: 3rem;
+    height: 3rem;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--text-on-accent);
+}
+
+.micro-btn-capturar:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.micro-btn-capturar:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.micro-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--text-on-accent);
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--surface-1);
+}
+
+/* gallery panel */
+.micro-galeria {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0;
+    right: 0;
+    background: var(--surface-1);
+    border-top: 1px solid var(--border-1);
+    padding: var(--space-2) var(--space-3);
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.micro-galeria-vacia {
+    font-size: var(--fs-xs);
+    color: var(--text-4);
+    font-style: italic;
+}
+
+.micro-thumb {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--border-1);
+    background: var(--surface-2);
+}
+
+.micro-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.micro-thumb-quitar {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--dur-fast);
+}
+
+.micro-thumb-quitar:hover {
+    background: rgba(0, 0, 0, 0.82);
+}
+
 .zona-img-preview {
     width: 100%;
     height: 100%;
@@ -882,17 +1165,20 @@ footer {
     width: 20px;
     height: 20px;
     border-radius: var(--radius-sm);
-    border: none;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
+    border: 1px solid var(--border-1);
+    background: var(--surface-2);
+    color: var(--text-3);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+    transition: background var(--dur-fast), color var(--dur-fast);
 }
 .btn-quitar-zona:hover {
-    background: rgba(0, 0, 0, 0.80);
+    background: var(--surface-3);
+    color: var(--text-1);
+    border-color: var(--border-2);
 }
 
 /* ── PANEL PIE DE ACCIONES ── */
@@ -1209,7 +1495,7 @@ main {
 /* Full HD 1920×1080 */
 @media (min-width: 1920px) {
     main {
-        grid-template-columns: 1fr 1fr 465px 570px;
+        grid-template-columns: 1fr 1fr 642px 570px;
     }
 
     #panel-hema,
@@ -1227,9 +1513,9 @@ main {
         overflow-y: auto;
     }
 
-    #panel-hema .cabecera-columnas,
-    #panel-bioquim .cabecera-columnas {
-        display: none;
+    #panel-hema .cabecera-columnas span:nth-child(2),
+    #panel-bioquim .cabecera-columnas span:nth-child(2) {
+        width: calc(4.5rem + 1.5rem);
     }
 
     #panel-hema .grupo-campo,

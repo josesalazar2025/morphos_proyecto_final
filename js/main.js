@@ -224,11 +224,11 @@ document.getElementById('pt-edad-unidad').addEventListener('change', evaluar);
 // ─── Sync mobile patient panel → canonical header inputs ──────────────────────
 
 const MOB_TO_CANON_MAP = {
-    'mob-pt-especie':      'pt-especie',
-    'mob-pt-raza':         'pt-raza',
-    'mob-pt-edad':         'pt-edad',
-    'mob-pt-edad-unidad':  'pt-edad-unidad',
-    'mob-pt-sexo':         'pt-sexo'
+    'mob-pt-especie': 'pt-especie',
+    'mob-pt-raza': 'pt-raza',
+    'mob-pt-edad': 'pt-edad',
+    'mob-pt-edad-unidad': 'pt-edad-unidad',
+    'mob-pt-sexo': 'pt-sexo'
 };
 
 function syncMobPatientFromCanon() {
@@ -258,21 +258,21 @@ const btnColapsar = document.getElementById('btn-colapsar-flujo');
 const mainEl = document.querySelector('main');
 
 let collapsedRow = '';
-let expandedRow  = '';
+let expandedRow = '';
 
 const isDesktopGrid = () => window.innerWidth > 1100;
 
 function initGridRows() {
     if (!isDesktopGrid()) return;
     panelClinico.style.height = '';
-    mainEl.style.gridTemplateRows = '1fr auto';
+    mainEl.style.gridTemplateRows = '1fr auto auto';
 
-    const panelH  = panelFlujo.getBoundingClientRect().height;
+    const panelH = panelFlujo.getBoundingClientRect().height;
     const headerH = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
-    if (panelH  > 0) expandedRow  = `${panelH}px`;
+    if (panelH > 0) expandedRow = `${panelH}px`;
     if (headerH > 0) collapsedRow = `${headerH}px`;
 
-    mainEl.style.gridTemplateRows = `1fr ${expandedRow || 'auto'}`;
+    mainEl.style.gridTemplateRows = `1fr auto ${expandedRow || 'auto'}`;
     if (expandedRow) panelClinico.style.height = expandedRow;
 }
 
@@ -280,8 +280,8 @@ function setGridRows(collapsed, animate) {
     if (!isDesktopGrid()) return;
     if (!animate) mainEl.style.transition = 'none';
     mainEl.style.gridTemplateRows = collapsed
-        ? `1fr ${collapsedRow}`
-        : `1fr ${expandedRow}`;
+        ? `1fr auto ${collapsedRow}`
+        : `1fr auto ${expandedRow}`;
     if (!animate) {
         mainEl.offsetHeight;
         mainEl.style.transition = '';
@@ -313,34 +313,52 @@ window.addEventListener('resize', () => {
             anim.style.height = '';
             anim.style.transition = '';
         });
+        document.getElementById('subpanel-citologia')
+            ?.querySelector('.subpanel-anim')
+            ?.style.setProperty('height', '');
     }
 });
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
 
 document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const subpanel = btn.closest('.subpanel');
-    const anim    = subpanel.querySelector('.subpanel-anim');
+    const anim = subpanel.querySelector('.subpanel-anim');
     const storageKey = `mx-${subpanel.id}-collapsed`;
+    const isFill = subpanel.id === 'subpanel-citologia';
 
     if (isDesktopGrid()) {
-        anim.style.transition = 'none';
-        anim.style.height = `${anim.scrollHeight}px`;
+        if (!isFill) {
+            anim.style.transition = 'none';
+            anim.style.height = `${anim.scrollHeight}px`;
+        }
 
         if (localStorage.getItem(storageKey) === '1') {
             subpanel.classList.add('collapsed');
             btn.setAttribute('aria-expanded', 'false');
+            if (isFill) anim.style.transition = 'none';
             anim.style.height = '0px';
+            if (isFill) { anim.offsetHeight; anim.style.transition = ''; }
         }
 
-        anim.offsetHeight;
-        anim.style.transition = '';
+        if (!isFill) { anim.offsetHeight; anim.style.transition = ''; }
     }
 
     btn.addEventListener('click', () => {
         if (!isDesktopGrid()) return;
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
-        anim.style.height = collapsed ? '0px' : `${anim.scrollHeight}px`;
+        if (collapsed) {
+            anim.style.height = `${anim.offsetHeight}px`;
+            anim.offsetHeight;
+            anim.style.height = '0px';
+        } else {
+            anim.style.height = `${anim.scrollHeight}px`;
+            if (isFill) {
+                anim.addEventListener('transitionend', () => {
+                    anim.style.height = '';
+                }, { once: true });
+            }
+        }
         localStorage.setItem(storageKey, collapsed ? '1' : '0');
     });
 });
@@ -376,12 +394,15 @@ btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
 // ─── Zonas de imagen ─────────────────────────────────────────────────────────
 
 const imagenesDataUrl = [null, null];
+const microscopioCaptures = [];
+const MAX_MICRO_CAPTURES = 2;
 
+// ── Zonas de muestra (file picker) ───────────────────────────────────────────
 document.querySelectorAll('.zona-imagen').forEach(zona => {
-    const idx      = parseInt(zona.dataset.zona);
-    const input    = zona.querySelector('.input-zona');
-    const vacia    = zona.querySelector('.zona-vacia');
-    const preview  = zona.querySelector('.zona-img-preview');
+    const idx = parseInt(zona.dataset.zona);
+    const input = zona.querySelector('.input-zona');
+    const vacia = zona.querySelector('.zona-vacia');
+    const preview = zona.querySelector('.zona-img-preview');
     const btnQuitar = zona.querySelector('.btn-quitar-zona');
 
     zona.addEventListener('click', e => {
@@ -416,21 +437,134 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
     });
 });
 
+// ── Zona microscopio (getUserMedia) ──────────────────────────────────────────
+(function () {
+    const zona = document.querySelector('.zona-microscopio');
+    if (!zona) return;
+
+    const micVacia = zona.querySelector('.micro-vacia');
+    const video = zona.querySelector('.micro-video');
+    const controles = zona.querySelector('.micro-controles');
+    const btnGaleria = zona.querySelector('.micro-btn-galeria');
+    const badge = zona.querySelector('.micro-badge');
+    const btnCapturar = zona.querySelector('.micro-btn-capturar');
+    const btnCerrar = zona.querySelector('.micro-btn-cerrar');
+    const galeriaEl = zona.querySelector('.micro-galeria');
+
+    let stream = null;
+    let galeriaVisible = false;
+
+    function stopStream() {
+        if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    }
+
+    function updateBadge() {
+        const n = microscopioCaptures.length;
+        badge.textContent = n;
+        badge.hidden = n === 0;
+        btnCapturar.disabled = n >= MAX_MICRO_CAPTURES;
+    }
+
+    function renderGaleria() {
+        if (microscopioCaptures.length === 0) {
+            galeriaEl.innerHTML = '<span class="micro-galeria-vacia">Sin capturas</span>';
+            return;
+        }
+        galeriaEl.innerHTML = microscopioCaptures.map((src, i) => `
+            <div class="micro-thumb">
+                <img src="${src}" alt="Captura ${i + 1}">
+                <button class="micro-thumb-quitar" type="button" data-capture-idx="${i}" aria-label="Eliminar captura ${i + 1}">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>`).join('');
+
+        galeriaEl.querySelectorAll('.micro-thumb-quitar').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const i = parseInt(btn.dataset.captureIdx);
+                microscopioCaptures.splice(i, 1);
+                updateBadge();
+                renderGaleria();
+                if (microscopioCaptures.length === 0 && galeriaVisible) toggleGaleria();
+            });
+        });
+    }
+
+    function toggleGaleria() {
+        galeriaVisible = !galeriaVisible;
+        galeriaEl.hidden = !galeriaVisible;
+        if (galeriaVisible) renderGaleria();
+        btnGaleria.style.color = galeriaVisible ? 'var(--accent)' : '';
+    }
+
+    async function openCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 } }
+            });
+            video.srcObject = stream;
+            video.hidden = false;
+            micVacia.hidden = true;
+            controles.hidden = false;
+            updateBadge();
+        } catch {
+            // permission denied or unavailable — no fallback needed
+        }
+    }
+
+    zona.addEventListener('click', e => {
+        if (controles.contains(e.target) || galeriaEl.contains(e.target)) return;
+        if (!stream) openCamera();
+    });
+
+    btnGaleria.addEventListener('click', e => {
+        e.stopPropagation();
+        toggleGaleria();
+    });
+
+    btnCapturar.addEventListener('click', e => {
+        e.stopPropagation();
+        if (microscopioCaptures.length >= MAX_MICRO_CAPTURES) return;
+        const canvas = document.createElement('canvas');
+        const MAX_PX = 1024;
+        const scale = Math.min(MAX_PX / video.videoWidth, MAX_PX / video.videoHeight, 1);
+        canvas.width = Math.round(video.videoWidth * scale);
+        canvas.height = Math.round(video.videoHeight * scale);
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        microscopioCaptures.push(canvas.toDataURL('image/jpeg', 0.85));
+        updateBadge();
+        if (galeriaVisible) renderGaleria();
+    });
+
+    btnCerrar.addEventListener('click', e => {
+        e.stopPropagation();
+        stopStream();
+        video.hidden = true;
+        video.srcObject = null;
+        controles.hidden = true;
+        galeriaEl.hidden = true;
+        galeriaVisible = false;
+        micVacia.hidden = false;
+    });
+})();
+
 // ─── Autenticación ────────────────────────────────────────────────────────────
 
 let sessionActiva = false;
 
-const btnAuth        = document.getElementById('btn-auth');
-const modalAuth      = document.getElementById('modal-auth');
+const btnAuth = document.getElementById('btn-auth');
+const modalAuth = document.getElementById('modal-auth');
 const btnModalCerrar = document.getElementById('btn-modal-cerrar');
-const modalTabs      = document.querySelectorAll('.modal-tab');
-const formLogin      = document.getElementById('form-login');
-const formRegistro   = document.getElementById('form-registro');
+const modalTabs = document.querySelectorAll('.modal-tab');
+const formLogin = document.getElementById('form-login');
+const formRegistro = document.getElementById('form-registro');
 
-const REGEX_NOMBRE   = /^[\p{L}\s\-.]{2,100}$/u;
-const REGEX_EMAIL    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const REGEX_NOMBRE = /^[\p{L}\s\-.]{2,100}$/u;
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,72}$/;
-const REGEX_HF_KEY   = /^hf_[A-Za-z0-9]{10,}$/;
+const REGEX_HF_KEY = /^hf_[A-Za-z0-9]{10,}$/;
 
 function abrirModal(tab = 'login') {
     modalAuth.hidden = false;
@@ -449,7 +583,7 @@ function activarTabModal(tab) {
         t.classList.toggle('activo', active);
         t.setAttribute('aria-selected', active);
     });
-    formLogin.hidden    = tab !== 'login';
+    formLogin.hidden = tab !== 'login';
     formRegistro.hidden = tab !== 'registro';
 }
 
@@ -474,9 +608,9 @@ function clearErrors(form) {
 function showMsg(id, msg, tipo) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent  = msg;
-    el.className    = `mensaje-form ${tipo}`;
-    el.hidden       = !msg;
+    el.textContent = msg;
+    el.className = `mensaje-form ${tipo}`;
+    el.hidden = !msg;
 }
 
 formLogin.addEventListener('submit', async e => {
@@ -484,18 +618,18 @@ formLogin.addEventListener('submit', async e => {
     clearErrors(formLogin);
     showMsg('msg-login', '', '');
 
-    const email    = formLogin.email.value.trim();
+    const email = formLogin.email.value.trim();
     const password = formLogin.password.value;
     let ok = true;
 
-    if (!REGEX_EMAIL.test(email))  { setFieldError('err-login-email', 'Correo electrónico inválido'); ok = false; }
-    if (!password)                 { setFieldError('err-login-pass',  'Ingresa tu contraseña');       ok = false; }
+    if (!REGEX_EMAIL.test(email)) { setFieldError('err-login-email', 'Correo electrónico inválido'); ok = false; }
+    if (!password) { setFieldError('err-login-pass', 'Ingresa tu contraseña'); ok = false; }
     if (!ok) return;
 
     const btn = formLogin.querySelector('.modal-submit');
     btn.disabled = true;
     try {
-        const res  = await fetch('api/actions/login.php', {
+        const res = await fetch('api/actions/login.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -520,24 +654,24 @@ formRegistro.addEventListener('submit', async e => {
     clearErrors(formRegistro);
     showMsg('msg-registro', '', '');
 
-    const nombre    = formRegistro.nombre.value.trim();
-    const email     = formRegistro.email.value.trim();
-    const password  = formRegistro.password.value;
+    const nombre = formRegistro.nombre.value.trim();
+    const email = formRegistro.email.value.trim();
+    const password = formRegistro.password.value;
     const password2 = formRegistro.password2.value;
-    const hf_key    = formRegistro.hf_key.value.trim();
+    const hf_key = formRegistro.hf_key.value.trim();
     let ok = true;
 
-    if (!REGEX_NOMBRE.test(nombre))        { setFieldError('err-reg-nombre', 'Nombre inválido (2–100 caracteres, solo letras)'); ok = false; }
-    if (!REGEX_EMAIL.test(email))          { setFieldError('err-reg-email',  'Correo electrónico inválido');                     ok = false; }
-    if (!REGEX_PASSWORD.test(password))    { setFieldError('err-reg-pass',   'Mín. 8 caracteres, una mayúscula, una minúscula y un número'); ok = false; }
-    if (password !== password2)            { setFieldError('err-reg-pass2',  'Las contraseñas no coinciden');                    ok = false; }
-    if (!REGEX_HF_KEY.test(hf_key))        { setFieldError('err-reg-hfkey',  'API Key inválida (debe comenzar con hf_ seguido de al menos 10 caracteres)'); ok = false; }
+    if (!REGEX_NOMBRE.test(nombre)) { setFieldError('err-reg-nombre', 'Nombre inválido (2–100 caracteres, solo letras)'); ok = false; }
+    if (!REGEX_EMAIL.test(email)) { setFieldError('err-reg-email', 'Correo electrónico inválido'); ok = false; }
+    if (!REGEX_PASSWORD.test(password)) { setFieldError('err-reg-pass', 'Mín. 8 caracteres, una mayúscula, una minúscula y un número'); ok = false; }
+    if (password !== password2) { setFieldError('err-reg-pass2', 'Las contraseñas no coinciden'); ok = false; }
+    if (!REGEX_HF_KEY.test(hf_key)) { setFieldError('err-reg-hfkey', 'API Key inválida (debe comenzar con hf_ seguido de al menos 10 caracteres)'); ok = false; }
     if (!ok) return;
 
     const btn = formRegistro.querySelector('.modal-submit');
     btn.disabled = true;
     try {
-        const res  = await fetch('api/actions/register.php', {
+        const res = await fetch('api/actions/register.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, email, password, password2, hf_key })
@@ -578,28 +712,74 @@ async function cerrarSesion() {
 
 (async () => {
     try {
-        const res  = await fetch('api/actions/session.php');
+        const res = await fetch('api/actions/session.php');
         const data = await res.json();
         if (data.loggedIn) { sessionActiva = true; actualizarHeaderAuth(data.nombre); }
     } catch {}
 })();
 
+// ─── Backend IA config ────────────────────────────────────────────────────────
+
+const BACKEND_KEY = 'mx-ia-backend';
+const OLLAMA_URL_KEY = 'mx-ia-ollama-url';
+const OLLAMA_MOD_KEY = 'mx-ia-ollama-model';
+const HF_MOD_KEY = 'mx-ia-hf-model';
+
+function initBackendConfig() {
+    const localRadio = document.getElementById('ia-backend-local');
+    const hfRadio = document.getElementById('ia-backend-hf');
+    const urlInput = document.getElementById('ia-ollama-url');
+    const modelInput = document.getElementById('ia-ollama-model');
+    const ollamaFields = document.getElementById('ia-ollama-fields');
+    const hfFields = document.getElementById('ia-hf-fields');
+    const hfModelSel = document.getElementById('ia-hf-model');
+
+    const savedBackend = localStorage.getItem(BACKEND_KEY) ?? 'hf';
+    if (savedBackend === 'local') localRadio.checked = true;
+    else hfRadio.checked = true;
+
+    const savedUrl = localStorage.getItem(OLLAMA_URL_KEY);
+    const savedOllMod = localStorage.getItem(OLLAMA_MOD_KEY);
+    const savedHfMod = localStorage.getItem(HF_MOD_KEY);
+    if (savedUrl) urlInput.value = savedUrl;
+    if (savedOllMod) modelInput.value = savedOllMod;
+    if (savedHfMod) hfModelSel.value = savedHfMod;
+
+    function applyBackend(val) {
+        ollamaFields.hidden = val !== 'local';
+        hfFields.hidden = val !== 'hf';
+    }
+    applyBackend(savedBackend);
+
+    [localRadio, hfRadio].forEach(r => r.addEventListener('change', () => {
+        const val = document.querySelector('input[name="ia-backend"]:checked').value;
+        localStorage.setItem(BACKEND_KEY, val);
+        applyBackend(val);
+    }));
+
+    urlInput.addEventListener('input', () => localStorage.setItem(OLLAMA_URL_KEY, urlInput.value.trim()));
+    modelInput.addEventListener('input', () => localStorage.setItem(OLLAMA_MOD_KEY, modelInput.value.trim()));
+    hfModelSel.addEventListener('change', () => localStorage.setItem(HF_MOD_KEY, hfModelSel.value));
+}
+
+initBackendConfig();
+
 // ─── Integración HuggingFace / medGemma ──────────────────────────────────────
 
 function construirPrompt() {
     const paciente = obtenerDatosPaciente();
-    const valores  = obtenerValoresFormulario();
+    const valores = obtenerValoresFormulario();
     const { hallazgos, patrones } = ultimoAnalisis;
     const signosText = document.getElementById('signos-clinicos').value.trim();
     const refEspecie = paciente.especie ? (referencias[paciente.especie] || {}) : {};
 
     const lineasValores = Object.entries(valores).map(([clave, valor]) => {
-        const ref    = refEspecie[clave];
+        const ref = refEspecie[clave];
         const nombre = ref?.nombre || clave;
         const unidad = ref?.unidad || '';
-        const rango  = ref ? ` [ref: ${ref.inferior}–${ref.superior}]` : '';
-        const h      = hallazgos.find(h => h.clave === clave);
-        const flag   = h ? ` ← ${h.direccion === 'alto' ? 'ELEVADO' : 'BAJO'} (${h.gravedad})` : '';
+        const rango = ref ? ` [ref: ${ref.inferior}–${ref.superior}]` : '';
+        const h = hallazgos.find(h => h.clave === clave);
+        const flag = h ? ` ← ${h.direccion === 'alto' ? 'ELEVADO' : 'BAJO'} (${h.gravedad})` : '';
         return `  ${nombre}: ${valor} ${unidad}${rango}${flag}`;
     }).join('\n') || '  Sin valores ingresados';
 
@@ -611,42 +791,104 @@ function construirPrompt() {
         ? (paciente.edadMeses < 24 ? `${Math.round(paciente.edadMeses)} meses` : `${(paciente.edadMeses / 12).toFixed(1)} años`)
         : 'desconocida';
 
-    return `Eres un médico veterinario especialista en patología clínica. Analiza los resultados y proporciona una interpretación clínica concisa en español.
+        return `Eres un médico veterinario especialista en patología clínica. Sólo responderás consultas asociadas a ésta área de conocimiento y basado en la evidencia proporcionada. 
+        Si te envían imágenes de citología debes hacer una revisión exhaustiva de la morfología celular, identificar lesiones, patrones anormales, presencia
+        de hemoparásitos intracelulares y extracelulares o inclusiones citoplasmáticas.
+        Analiza los resultados y proporciona una interpretación clínica concisa en español.
+        
 
-Paciente: ${paciente.especie || 'desconocido'}, raza: ${paciente.raza || 'NE'}, edad: ${edadTexto}, sexo: ${paciente.sexo || 'NE'}
+        Paciente: ${paciente.especie || 'desconocido'}, raza: ${paciente.raza || 'NE'}, edad: ${edadTexto}, sexo: ${paciente.sexo || 'NE'}
 
-Resultados de laboratorio:
-${lineasValores}
+        Resultados de laboratorio:
+        ${lineasValores}
 
-Patrones detectados:
-${lineasPatrones}
-${signosText ? `\nSignos clínicos: ${signosText}` : ''}
-Proporciona una interpretación clínica breve (3-5 oraciones) destacando los hallazgos más significativos y las recomendaciones diagnósticas inmediatas.`;
-}
+        Patrones detectados:
+        ${lineasPatrones}
+        ${signosText ? `\nSignos clínicos: ${signosText}` : ''}
+        Proporciona una interpretación clínica breve (3-5 oraciones) destacando los hallazgos más significativos y las recomendaciones diagnósticas inmediatas.`;
+        }
 
 async function llamarIA() {
     const salidaEl = document.getElementById('salida-ia');
+    const backend = document.querySelector('input[name="ia-backend"]:checked')?.value ?? 'hf';
 
-    if (!sessionActiva) {
-        salidaEl.textContent = 'Inicia sesión para usar el análisis IA.';
+    if (backend === 'hf' && !sessionActiva) {
+        salidaEl.textContent = 'Inicia sesión para usar el análisis IA con HuggingFace.';
         abrirModal('login');
         return;
     }
 
-    salidaEl.textContent = 'Consultando medGemma…';
+    salidaEl.textContent = 'Consultando al modelo de I.A…';
     salidaEl.classList.add('cargando');
 
+    try {
+        if (backend === 'local') {
+            await _llamarOllama(salidaEl);
+        } else {
+            await _llamarHuggingFace(salidaEl);
+        }
+    } finally {
+        salidaEl.classList.remove('cargando');
+    }
+}
+
+async function _llamarOllama(salidaEl) {
+    const baseUrl = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
+    const model = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma:4b';
+    const prompt = construirPrompt();
+    const images = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
+
+    const contenido = [];
+    for (const img of images) {
+        if (typeof img === 'string' && img.startsWith('data:image/')) {
+            contenido.push({ type: 'image_url', image_url: { url: img } });
+        }
+    }
+    contenido.push({ type: 'text', text: prompt });
+
+    const payload = {
+        model,
+        messages: [{ role: 'user', content: contenido.length === 1 ? prompt : contenido }],
+        max_tokens: 600,
+        stream: false,
+    };
+
+    try {
+        const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        let data;
+        try { data = await res.json(); } catch {
+            salidaEl.textContent = `Error del servidor Ollama (HTTP ${res.status}). Verifica que esté ejecutándose.`;
+            return;
+        }
+
+        if (!res.ok) {
+            const msg = data?.error?.message ?? data?.error ?? `HTTP ${res.status}`;
+            salidaEl.textContent = `Error Ollama: ${msg}`;
+        } else {
+            salidaEl.textContent = data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.';
+        }
+    } catch {
+        salidaEl.textContent = `No se pudo conectar con Ollama en ${baseUrl}. Verifica que esté ejecutándose con "ollama serve".`;
+    }
+}
+
+async function _llamarHuggingFace(salidaEl) {
+    const model = document.getElementById('ia-hf-model')?.value || 'unsloth/medgemma-4b-it';
     try {
         const res = await fetch('api/actions/medgemma.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 prompt: construirPrompt(),
-                images: imagenesDataUrl.filter(Boolean)
+                images: [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures],
+                model,
             })
         });
-
-        const data = await res.json();
 
         if (res.status === 401) {
             sessionActiva = false;
@@ -655,15 +897,24 @@ async function llamarIA() {
             return;
         }
 
+        let data;
+        try { data = await res.json(); } catch {
+            salidaEl.textContent = `Error del servidor (HTTP ${res.status}). Intenta de nuevo.`;
+            return;
+        }
+
         if (!res.ok) {
-            salidaEl.textContent = `Error: ${data?.error ?? res.status}`;
+            const err = data?.error;
+            const msg = typeof err === 'string' ? err
+                      : Array.isArray(err) ? err.join(' ')
+                      : err != null ? JSON.stringify(err)
+                      : `HTTP ${res.status}`;
+            salidaEl.textContent = `Error: ${msg}`;
         } else {
             salidaEl.textContent = data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.';
         }
-    } catch {
-        salidaEl.textContent = 'Error de red. Verifica tu conexión e inténtalo de nuevo.';
-    } finally {
-        salidaEl.classList.remove('cargando');
+    } catch (e) {
+        salidaEl.textContent = `Error de red: ${e.message}`;
     }
 }
 

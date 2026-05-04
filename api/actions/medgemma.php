@@ -1,10 +1,10 @@
 <?php
-
 require_once __DIR__ . '/../config/config.php';
 require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../config/conexion.php';
 
 header('Content-Type: application/json; charset=utf-8');
+set_time_limit(120);
 
 // VERIFICAR MÉTODO
 
@@ -19,6 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $datos = json_decode(file_get_contents('php://input'), true);
 $prompt = trim($datos['prompt'] ?? '');
 $imagenes = is_array($datos['images'] ?? null) ? $datos['images'] : [];
+
+// proveedor => whether the model accepts image content
+$MODELOS = [
+    'unsloth/medgemma-27b-it' => ['proveedor' => 'featherless-ai', 'multimodal' => false, 'max_tokens' => 1000],
+    'unsloth/medgemma-4b-it' => ['proveedor' => 'featherless-ai', 'multimodal' => true, 'max_tokens' => 600],
+    'unsloth/medgemma-1.5-4b-it' => ['proveedor' => 'featherless-ai', 'multimodal' => true, 'max_tokens' => 1000],
+    'google/gemma-3-27b-it' => ['proveedor' => 'scaleway', 'multimodal' => true, 'max_tokens' => 800],
+];
+$modeloSolicitado = $datos['model'] ?? 'google/gemma-3-27b-it';
+$config = $MODELOS[$modeloSolicitado] ?? $MODELOS['google/gemma-3-27b-it'];
+$modelo = array_key_exists($modeloSolicitado, $MODELOS) ? $modeloSolicitado : 'google/gemma-3-27b-it';
+$proveedor = $config['proveedor'];
+$multimodal = $config['multimodal'];
 
 if (!$prompt) {
     http_response_code(400);
@@ -44,18 +57,18 @@ if (!$apiKey) {
 
 // CONSTRUIR CONTENIDO DEL MENSAJE
 
-// Validar e incluir imágenes si las hay
 $contenido = [];
 
-foreach ($imagenes as $imagen) {
-    if (is_string($imagen) && preg_match('/^data:image\/(jpeg|png|gif|webp);base64,/', $imagen)) {
-        $contenido[] = ['type' => 'image_url', 'image_url' => ['url' => $imagen]];
+if ($multimodal) {
+    foreach ($imagenes as $imagen) {
+        if (is_string($imagen) && preg_match('/^data:image\/(jpeg|png|gif|webp);base64,/', $imagen)) {
+            $contenido[] = ['type' => 'image_url', 'image_url' => ['url' => $imagen]];
+        }
     }
 }
 
 $contenido[] = ['type' => 'text', 'text' => $prompt];
 
-// Si solo hay texto, enviarlo como string simple
 if (count($contenido) === 1) {
     $contenido = $prompt;
 }
@@ -63,12 +76,12 @@ if (count($contenido) === 1) {
 // LLAMAR A HUGGINGFACE
 
 $payload = json_encode([
-    'model' => 'google/medgemma-4b-it',
+    'model' => $modelo,
     'messages' => [['role' => 'user', 'content' => $contenido]],
-    'max_tokens' => 600,
+    'max_tokens' => $config['max_tokens'],
 ]);
 
-$ch = curl_init('https://api-inference.huggingface.co/models/google/medgemma-4b-it/v1/chat/completions');
+$ch = curl_init('https://router.huggingface.co/' . $proveedor . '/v1/chat/completions');
 
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
@@ -79,6 +92,8 @@ curl_setopt_array($ch, [
         'Content-Type: application/json',
     ],
     CURLOPT_TIMEOUT => 60,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_PROXY => '',
 ]);
 
 $respuesta = curl_exec($ch);
@@ -90,6 +105,15 @@ $errorCurl = curl_error($ch);
 if ($errorCurl) {
     http_response_code(502);
     echo json_encode(['error' => 'Error de conexión: ' . $errorCurl]);
+    exit;
+}
+
+// If HF returned non-JSON (HTML error page, gateway error, etc.), wrap it
+$decoded = json_decode($respuesta, true);
+if ($decoded === null) {
+    http_response_code($codigoHttp ?: 502);
+    $preview = substr(strip_tags($respuesta), 0, 300);
+    echo json_encode(['error' => "HTTP $codigoHttp — $preview"]);
     exit;
 }
 

@@ -198,6 +198,46 @@
         </div></div>
     </section>
 
+    <!-- PERFIL ENDOCRINO (under Hematología on desktop, sub-tab on mobile) -->
+    <section class="panel subpanel" id="panel-endo">
+        <h2 class="panel-cabecera">
+            Perfil Endocrino
+            <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
+            <div class="cabecera-columnas" aria-hidden="true">
+                <span></span>
+                <span>Valor</span>
+                <span>Unidad</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-cort-bas">Cortisol basal</label>
+                <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">μg/dL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-cort-acth">Cortisol post-ACTH</label>
+                <input id="endo-cort-acth" name="cortisol-acth" type="number" min="0" step="0.01" placeholder="—">
+                <span class="unidad">μg/dL</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-t4">T4 total</label>
+                <input id="endo-t4" name="t4-total" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">nmol/L</span>
+            </div>
+            <div class="fila-campo">
+                <label for="endo-ins">Insulina basal</label>
+                <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
+                <span class="unidad">μIU/mL</span>
+            </div>
+        </div></div>
+    </section>
+
     <!-- BIOQUÍMICA -->
     <section class="panel subpanel" id="panel-bioquim">
         <h2 class="panel-cabecera">
@@ -300,6 +340,53 @@
         </div></div>
     </section>
 
+    <!-- URIANÁLISIS (under Bioquímica on desktop, sub-tab on mobile) -->
+    <section class="panel subpanel" id="panel-uri">
+        <h2 class="panel-cabecera">
+            Urianálisis
+            <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
+                    aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-uri">
+            <div class="fila-campo">
+                <label for="uri-usg">Densidad (USG)</label>
+                <input id="uri-usg" name="usg" type="number" min="1.000" max="1.060" step="0.001" placeholder="—">
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-ph">pH</label>
+                <input id="uri-ph" name="ph" type="number" min="4.5" max="9.0" step="0.5" placeholder="—">
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-prot">Proteínas</label>
+                <select id="uri-prot" name="uri-prot">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+            <div class="fila-campo">
+                <label for="uri-gluc">Glucosuria</label>
+                <select id="uri-gluc" name="uri-gluc">
+                    <option value="">—</option>
+                    <option value="neg">Negativo</option>
+                    <option value="+">+</option>
+                    <option value="++">++</option>
+                    <option value="+++">+++</option>
+                </select>
+                <span class="unidad"></span>
+            </div>
+        </div></div>
+    </section>
+
     <!-- FLUJO DE TRABAJO -->
     <section class="panel panel-flujo activo" id="panel-flujo">
         <h2 class="panel-cabecera">
@@ -352,90 +439,8 @@
         </div>
     </section>
 
-    <!-- COLUMNA MEDIA: URIANÁLISIS + PERFIL ENDOCRINO + IMÁGENES + SIGNOS CLÍNICOS -->
+    <!-- COLUMNA MEDIA: IMÁGENES + SIGNOS CLÍNICOS -->
     <div class="col3-wrapper">
-
-        <!-- URIANÁLISIS (standalone panel: desktop col3, mobile sub-tab) -->
-        <section class="panel subpanel" id="panel-uri">
-        <h2 class="panel-cabecera">
-            Urianálisis
-            <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
-                </svg>
-            </button>
-        </h2>
-        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-uri">
-            <div class="fila-campo">
-                <label for="uri-usg">Densidad (USG)</label>
-                <input id="uri-usg" name="usg" type="number" min="1.000" max="1.060" step="0.001" placeholder="—">
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-ph">pH</label>
-                <input id="uri-ph" name="ph" type="number" min="4.5" max="9.0" step="0.5" placeholder="—">
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-prot">Proteínas</label>
-                <select id="uri-prot" name="uri-prot">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-            <div class="fila-campo">
-                <label for="uri-gluc">Glucosuria</label>
-                <select id="uri-gluc" name="uri-gluc">
-                    <option value="">—</option>
-                    <option value="neg">Negativo</option>
-                    <option value="+">+</option>
-                    <option value="++">++</option>
-                    <option value="+++">+++</option>
-                </select>
-                <span class="unidad"></span>
-            </div>
-        </div></div>
-        </section>
-
-        <!-- PERFIL ENDOCRINO (standalone panel: desktop col3, mobile sub-tab) -->
-        <section class="panel subpanel" id="panel-endo">
-        <h2 class="panel-cabecera">
-            Perfil Endocrino
-            <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
-                </svg>
-            </button>
-        </h2>
-        <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
-            <div class="fila-campo">
-                <label for="endo-cort-bas">Cortisol basal</label>
-                <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
-                <span class="unidad">μg/dL</span>
-            </div>
-            <div class="fila-campo">
-                <label for="endo-cort-acth">Cortisol post-ACTH</label>
-                <input id="endo-cort-acth" name="cortisol-acth" type="number" min="0" step="0.01" placeholder="—">
-                <span class="unidad">μg/dL</span>
-            </div>
-            <div class="fila-campo">
-                <label for="endo-t4">T4 total</label>
-                <input id="endo-t4" name="t4-total" type="number" min="0" step="0.1" placeholder="—">
-                <span class="unidad">nmol/L</span>
-            </div>
-            <div class="fila-campo">
-                <label for="endo-ins">Insulina basal</label>
-                <input id="endo-ins" name="insulina" type="number" min="0" step="0.1" placeholder="—">
-                <span class="unidad">μIU/mL</span>
-            </div>
-        </div></div>
-        </section>
 
     <section class="panel" id="panel-imagenes">
 
@@ -483,6 +488,42 @@
                     </button>
                 </div>
             </div>
+            <div class="zona-microscopio" data-zona="2">
+                <!-- empty state -->
+                <div class="micro-vacia">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <span>Microscopio</span>
+                </div>
+                <!-- live stream -->
+                <video class="micro-video" autoplay playsinline muted hidden></video>
+                <!-- controls bar (shown during stream) -->
+                <div class="micro-controles" hidden>
+                    <button class="micro-btn micro-btn-galeria" type="button" aria-label="Galería">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <span class="micro-badge" hidden>0</span>
+                    </button>
+                    <button class="micro-btn micro-btn-capturar" type="button" aria-label="Capturar foto">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="3" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <button class="micro-btn micro-btn-cerrar" type="button" aria-label="Cerrar cámara">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- gallery panel -->
+                <div class="micro-galeria" hidden></div>
+            </div>
         </div></div></div><!-- /.subpanel -->
 
     </section>
@@ -520,6 +561,23 @@
             <div class="seccion-resultado">
                 <h3 class="titulo-seccion-resultado">Interpretación IA</h3>
                 <div id="salida-ia">Los valores ingresados sugieren una alteración leve en el subgrupo 1. Se recomienda correlacionar con la clínica del paciente y repetir en 7 días si persiste la tendencia.</div>
+                <div class="ia-backend-config">
+                    <span class="ia-backend-label">Backend</span>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local"> Local (Ollama)</label>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf"> HuggingFace</label>
+                    <div class="ia-ollama-fields" id="ia-ollama-fields">
+                        <input type="url" id="ia-ollama-url" class="ia-text-input" placeholder="http://localhost:11434" value="http://localhost:11434" aria-label="URL de Ollama">
+                        <input type="text" id="ia-ollama-model" class="ia-text-input ia-model-input" placeholder="medgemma1.5:latest" value="medgemma1.5:latest" aria-label="Modelo Ollama">
+                    </div>
+                    <div class="ia-hf-fields" id="ia-hf-fields">
+                        <select id="ia-hf-model" class="ia-select" aria-label="Modelo HuggingFace">
+                            <option value="unsloth/medgemma-27b-it">MedGemma 27B (Unsloth)</option>
+                            <option value="unsloth/medgemma-4b-it">MedGemma 4B (Unsloth)</option>
+                            <option value="unsloth/medgemma-1.5-4b-it">MedGemma 1.5 4B (Unsloth)</option>
+                            <option value="google/gemma-3-27b-it">Gemma 3 27B</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
         </div>
