@@ -40,7 +40,6 @@
     </div>
     <div class="acciones-cabecera">
         <button class="boton boton-tema" id="btn-tema" type="button" aria-label="Cambiar tema">
-            <!-- Sun: shown in dark mode to switch to light -->
             <svg class="icono-sol" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="4"/>
                 <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
@@ -50,7 +49,6 @@
                 <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/>
                 <line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
             </svg>
-            <!-- Moon: shown in light mode to switch to dark -->
             <svg class="icono-luna" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
@@ -66,7 +64,6 @@
     </div>
 </header>
 
-<!-- EXAMENES SUBTABS BAR (mobile only, shown by JS when Examenes tab is active) -->
 <div id="examenes-subtabs-bar" hidden>
     <button class="tab-examenes activo" data-subtab-target="panel-hema">Hematología</button>
     <button class="tab-examenes" data-subtab-target="panel-bioquim">Bioquímica</button>
@@ -77,7 +74,7 @@
 <!-- GRID -->
 <main>
 
-    <!-- DATOS DEL PACIENTE (mobile tab, desktop: hidden) -->
+    <!-- DATOS DEL PACIENTE -->
     <section class="panel" id="panel-paciente">
         <h2 class="panel-cabecera">Datos del paciente</h2>
         <div class="panel-cuerpo panel-cuerpo--paciente">
@@ -198,7 +195,7 @@
         </div></div>
     </section>
 
-    <!-- PERFIL ENDOCRINO (under Hematología on desktop, sub-tab on mobile) -->
+    <!-- PERFIL ENDOCRINO -->
     <section class="panel subpanel" id="panel-endo">
         <h2 class="panel-cabecera">
             Perfil Endocrino
@@ -340,7 +337,7 @@
         </div></div>
     </section>
 
-    <!-- URIANÁLISIS (under Bioquímica on desktop, sub-tab on mobile) -->
+    <!-- URIANÁLISIS  -->
     <section class="panel subpanel" id="panel-uri">
         <h2 class="panel-cabecera">
             Urianálisis
@@ -489,7 +486,6 @@
                 </div>
             </div>
             <div class="zona-microscopio" data-zona="2">
-                <!-- empty state -->
                 <div class="micro-vacia">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -497,9 +493,7 @@
                     </svg>
                     <span>Microscopio</span>
                 </div>
-                <!-- live stream -->
                 <video class="micro-video" autoplay playsinline muted hidden></video>
-                <!-- controls bar (shown during stream) -->
                 <div class="micro-controles" hidden>
                     <button class="micro-btn micro-btn-galeria" type="button" aria-label="Galería">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -521,10 +515,10 @@
                         </svg>
                     </button>
                 </div>
-                <!-- gallery panel -->
+
                 <div class="micro-galeria" hidden></div>
             </div>
-        </div></div></div><!-- /.subpanel -->
+        </div></div></div>
 
     </section>
 
@@ -536,7 +530,7 @@
             <textarea id="signos-clinicos" name="signos-clinicos" placeholder="ej. Poliuria, polidipsia, pérdida de peso…"></textarea>
         </div>
     </section>
-    </div><!-- /.col3-wrapper -->
+    </div>
 
     <!-- RESULTADOS -->
     <section class="panel" id="panel-resultados">

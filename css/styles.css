@@ -1022,7 +1022,7 @@ footer {
     object-fit: cover;
 }
 
-/* controls bar */
+/* control bar */
 .micro-controles {
     position: absolute;
     bottom: 0;
@@ -1095,7 +1095,7 @@ footer {
     border: 1.5px solid var(--surface-1);
 }
 
-/* gallery panel */
+/* panel-galeria */
 .micro-galeria {
     position: absolute;
     bottom: 3.5rem;
@@ -1482,7 +1482,7 @@ main {
     border-bottom-color: var(--accent);
 }
 
-/* ── DESKTOP ONLY: hide mobile-only elements ── */
+/* ── DESKTOP ONLY: oculta elementos de mobile ── */
 @media (min-width: 1101px) {
     #panel-paciente,
     #examenes-subtabs-bar {

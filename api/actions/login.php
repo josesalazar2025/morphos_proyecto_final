@@ -27,7 +27,7 @@ if (!$email || !$password) {
 
 // BUSCAR USUARIO
 
-$sql = "SELECT id, nombre, password_hash FROM usuarios WHERE email = :email";
+$sql = "SELECT id, nombre, password_hash, hf_api_key FROM usuarios WHERE email = :email";
 $stmt = $conexion->prepare($sql);
 $stmt->bindParam(':email', $email);
 $stmt->execute();
@@ -51,4 +51,4 @@ session_regenerate_id(true);
 $_SESSION['user_id'] = $usuario['id'];
 $_SESSION['nombre'] = $usuario['nombre'];
 
-echo json_encode(['ok' => true, 'nombre' => $usuario['nombre']]);
+echo json_encode(['ok' => true, 'nombre' => $usuario['nombre'], 'hf_api_key' => $usuario['hf_api_key'] ?? '']);

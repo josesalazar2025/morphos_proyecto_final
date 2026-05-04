@@ -1,5 +1,5 @@
 
-// ─── Gravedad ─────────────────────────────────────────────────────────────────
+// Gravedad 
 // La desviación se mide en múltiplos del ancho del rango de referencia.
 // Ej: rango WBC 6-17 (ancho = 11). WBC = 28 → desviación = 11/11 = 1.0 → moderado.
 
@@ -17,7 +17,7 @@ const clasificarGravedad = (valor, ref) => {
 };
 
 
-// ─── Edad ─────────────────────────────────────────────────────────────────────
+// Edad 
 
 
 const categorizarEdad = (edadMeses, especie) => {
@@ -37,7 +37,7 @@ const categorizarEdad = (edadMeses, especie) => {
 };
 
 
-// ─── Ajustes por edad ─────────────────────────────────────────────────────────
+// Ajustes por edad 
 
 const AJUSTES_EDAD = {
     canino: {
@@ -54,7 +54,7 @@ const AJUSTES_EDAD = {
 };
 
 
-// ─── Ajustes por raza ─────────────────────────────────────────────────────────
+// Ajustes por raza 
 
 const AJUSTES_RAZA = {
     canino: [
@@ -79,7 +79,7 @@ const AJUSTES_RAZA = {
 };
 
 
-// ─── Ajustes por sexo ─────────────────────────────────────────────────────────
+// Ajustes por sexo 
 
 const AJUSTES_SEXO = {
     felino: {
@@ -95,7 +95,7 @@ const obtenerAjustesRaza = (raza, especie) => {
 };
 
 
-// ─── Ajuste de referencias ────────────────────────────────────────────────────
+// Ajuste de referencias
 
 const ajustarReferencias = (refsEspecie, paciente) => {
     const catEdad = categorizarEdad(paciente.edadMeses, paciente.especie);
@@ -118,7 +118,7 @@ const ajustarReferencias = (refsEspecie, paciente) => {
 };
 
 
-// ─── Detección de patrones clínicos ───────────────────────────────────────────
+// Detección de patrones clínicos 
 
 const detectarPatrones = (hallazgos, especie, alt) => {
     const mapa = hallazgos.reduce((acc, h) => { acc[h.clave] = h; return acc; }, {});
@@ -137,7 +137,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     const agregar = (patron) => patrones.push(patron);
 
 
-    // ── Serie roja ────────────────────────────────────────────────────────────
+    // Serie roja
 
     if (esBajo('hct') || esBajo('hgb') || esBajo('rbc')) {
         const tipoPorVcm = !presente('mcv') ? '' :
@@ -165,7 +165,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Serie blanca ──────────────────────────────────────────────────────────
+    // Serie blanca
 
     if (esAlto('wbc')) {
         const neutrofilia = esAlto('neutrophils');
@@ -222,7 +222,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Plaquetas ─────────────────────────────────────────────────────────────
+    // Plaquetas
 
     if (esBajo('platelets')) agregar({
         nombre: alt.trombocitopenia.nombre,
@@ -239,7 +239,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Hígado ────────────────────────────────────────────────────────────────
+    // Hígado
 
     if (esAlto('alt') && esAlto('ast')) agregar({
         nombre: alt.dano_hepatocelular.nombre,
@@ -269,7 +269,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Riñón ─────────────────────────────────────────────────────────────────
+    // Riñón
 
     if (esAlto('bun') && esAlto('creatinine')) agregar({
         nombre: alt.azotemia.nombre,
@@ -298,7 +298,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Glucosa ───────────────────────────────────────────────────────────────
+    // Glucosa
 
     if (esAlto('glucose')) agregar({
         nombre: alt.hiperglucemia.nombre,
@@ -315,7 +315,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Proteínas ─────────────────────────────────────────────────────────────
+    // Proteínas
 
     if (esAlto('total_protein')) agregar({
         nombre: alt.hiperproteinemia.nombre,
@@ -336,12 +336,11 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     }
 
 
-    // ── Electrolitos ──────────────────────────────────────────────────────────
+    // Electrolitos 
 
     const valSodio = valor('sodium');
     const valPotasio = valor('potassium');
 
-    // Ratio Na:K < 27 es un marcador clásico de hipoadrenocorticismo (Addison)
     if (valSodio !== null && valPotasio !== null && valPotasio > 0) {
         const ratioNaK = valSodio / valPotasio;
         if (ratioNaK < 27) agregar({
@@ -402,7 +401,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Urianálisis ───────────────────────────────────────────────────────────
+    // Urianálisis
 
     const valUsg = valor('usg');
     if (valUsg !== null && valUsg < 1.008) agregar({
@@ -418,7 +417,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['usg']
     });
 
-    // ── Tiroides ──────────────────────────────────────────────────────────────
+    // Tiroides 
 
     if (especie === 'canino' && esBajo('t4_total')) agregar({
         nombre: alt.hipotiroidismo.nombre,
@@ -435,7 +434,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Suprarrenal / Cortisol ────────────────────────────────────────────────
+    // Suprarrenal / Cortisol 
 
     if (esAlto('cortisol_acth')) agregar({
         nombre: alt.hiperadrenocorticismo.nombre,
@@ -459,7 +458,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     });
 
 
-    // ── Insulina ──────────────────────────────────────────────────────────────
+    // Insulina
 
     if (esBajo('insulina') && esAlto('glucose')) agregar({
         nombre: alt.deficit_insulina.nombre,
@@ -472,7 +471,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
 };
 
 
-// ─── Exportación principal ────────────────────────────────────────────────────
+// Exportación principal 
 
 export const analizarResultados = (valoresInput, paciente, referencias, alteraciones) => {
     const refsEspecie = referencias[paciente.especie];

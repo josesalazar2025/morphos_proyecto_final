@@ -1,10 +1,10 @@
-# Deny direct access to the SQLite database
+# Bloquea acceso directo a BBDD
 <Files "*.db">
     Order Allow,Deny
     Deny from all
 </Files>
 
-# Increase limits for image payloads sent to the AI endpoint
+# Incrementos de limites para imágenes
 php_value post_max_size 32M
 php_value upload_max_filesize 32M
 LimitRequestBody 33554432

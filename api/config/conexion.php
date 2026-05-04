@@ -17,4 +17,4 @@ try {
     exit;
 }
 
-// SÓLO CONEXIÓN A LA BBDD
+
