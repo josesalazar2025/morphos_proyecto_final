@@ -1,21 +1,21 @@
 @charset "utf-8";
 
 :root {
-    --surface-page:    #FAFAF8;
+    --surface-page:    #F4F6F9;
     --surface-1:       #FFFFFF;
-    --surface-2:       #F3F3F0;
-    --surface-3:       #ECECE8;
+    --surface-2:       #E3EAF2;
+    --surface-3:       #D6E0EB;
     --surface-input:   #FFFFFF;
 
-    --text-1:          #14140F;
-    --text-2:          #3A3A36;
-    --text-3:          #55554F;
-    --text-4:          #7A7A72;
+    --text-1:          #0F1923;
+    --text-2:          #2D3E50;
+    --text-3:          #3D5470;
+    --text-4:          #6B7F90;
     --text-accent:     #0B6158;
     --text-on-accent:  #FFFFFF;
 
-    --border-1:        #E1E1DC;
-    --border-2:        #CCCCC5;
+    --border-1:        #D0DAE4;
+    --border-2:        #B8C6D4;
     --border-focus:    #0F7A6B;
 
     --accent:          #0F7A6B;
@@ -255,16 +255,6 @@ main {
     flex-shrink: 0;
 }
 
-
-#panel-clinico .cuerpo-clinica {
-    flex: 1;
-    min-height: 0;
-}
-
-#panel-clinico textarea {
-    flex: 1;
-    min-height: 0;
-}
 
 /* ── HEMA / BIOQUIM — contenido más grande ── */
 #panel-hema,
@@ -557,46 +547,6 @@ main {
 }
 
 
-/* ── SECCIÓN SIGNOS CLÍNICOS ── */
-
-.seccion-clinica {
-    display: flex;
-    flex-direction: column;
-}
-
-.cuerpo-clinica {
-    padding: 12px 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-}
-
-.etiqueta-clinica {
-    font-size: var(--fs-xs);
-    color: var(--text-4);
-    line-height: var(--lh-snug);
-}
-
-.seccion-clinica textarea {
-    background: var(--surface-input);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius-sm);
-    color: var(--text-1);
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--fs-ui);
-    font-family: var(--font-sans);
-    resize: none;
-    min-height: 5rem;
-    outline: none;
-    line-height: var(--lh-normal);
-    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
-}
-
-.seccion-clinica textarea:focus {
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
 /* ── CHAT AREA (signos clínicos en resultados) ── */
 .chat-area {
     padding: 0.5rem var(--space-4);
@@ -646,6 +596,7 @@ main {
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    cursor: pointer;
 }
 
 .btn-colapsar-patrones {
@@ -672,61 +623,6 @@ main {
 .patrones-anim {
     overflow: hidden;
     transition: height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ── HALLAZGOS ── */
-.insignia-hallazgo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
-    font-size: var(--fs-sm);
-    gap: var(--space-2);
-    margin-bottom: var(--space-1);
-    border: 1px solid var(--border-1);
-    background: var(--surface-1);
-}
-
-.insignia-hallazgo .nombre {
-    font-weight: 500;
-    color: var(--text-2);
-    flex: 1;
-}
-
-.insignia-hallazgo .valor {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    color: var(--text-1);
-}
-
-.insignia-hallazgo .etiqueta {
-    font-size: var(--fs-xs);
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.insignia-hallazgo.alto {
-    background: var(--alto-bg);
-    border-color: var(--alto-border);
-}
-
-.insignia-hallazgo.alto .nombre,
-.insignia-hallazgo.alto .valor,
-.insignia-hallazgo.alto .etiqueta {
-    color: var(--alto-strong);
-}
-
-.insignia-hallazgo.bajo {
-    background: var(--bajo-bg);
-    border-color: var(--bajo-border);
-}
-
-.insignia-hallazgo.bajo .nombre,
-.insignia-hallazgo.bajo .valor,
-.insignia-hallazgo.bajo .etiqueta {
-    color: var(--bajo-strong);
 }
 
 /* ── PATRONES ── */
@@ -1180,6 +1076,8 @@ footer {
 }
 
 .zona-img-preview {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1215,6 +1113,7 @@ footer {
     gap: var(--space-2);
     height: 2.5rem;
     padding: 0 var(--space-4);
+    padding-bottom: 1rem;
     background: var(--surface-2);
     flex-shrink: 0;
     justify-content: flex-end;
@@ -1383,7 +1282,7 @@ main {
 }
 
 .pasos-flujo p {
-    font-size: 0.6rem;
+    font-size: var(--fs-xs);
     color: var(--text-3);
     line-height: var(--lh-snug);
 }
@@ -1486,7 +1385,9 @@ main {
 /* ── EXAMENES SUBTABS BAR ── */
 #examenes-subtabs-bar {
     flex-shrink: 0;
-    background: var(--surface-1);
+    display: flex;
+    height: 2.5rem;
+    background: var(--surface-2);
     border-bottom: 1px solid var(--border-1);
     overflow-x: auto;
     scrollbar-width: none;
@@ -1498,10 +1399,13 @@ main {
 
 .tab-examenes {
     flex: 1;
-    padding: 0.55rem var(--space-3);
-    font-size: var(--fs-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--space-3);
+    font-size: clamp(13px, 12.6px + 0.09vw, 14px);
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
     color: var(--text-4);
     border-bottom: 2px solid transparent;
@@ -1514,15 +1418,24 @@ main {
 }
 
 .tab-examenes.activo {
-    color: var(--accent);
+    color: var(--text-3);
     border-bottom-color: var(--accent);
 }
 
 /* ── DESKTOP ONLY: oculta elementos de mobile ── */
 @media (min-width: 1101px) {
+    .cabecera-columnas--mobile-only {
+        display: none;
+    }
+
     #panel-paciente,
     #examenes-subtabs-bar {
         display: none;
+    }
+
+    .subpanel > .panel-cabecera,
+    #panel-flujo > .panel-cabecera {
+        cursor: pointer;
     }
 }
 
@@ -1640,6 +1553,13 @@ main {
         display: none;
     }
 
+    #panel-hema > .panel-cabecera,
+    #panel-bioquim > .panel-cabecera,
+    #panel-uri > .panel-cabecera,
+    #panel-endo > .panel-cabecera {
+        display: none;
+    }
+
     footer {
         padding: 0;
     }
@@ -1677,6 +1597,12 @@ main {
         display: flex;
         flex: 1;
         min-height: 0;
+        overflow-y: auto;
+    }
+
+    main > .panel.activo .subpanel-anim,
+    .col3-wrapper > .panel.activo .subpanel-anim {
+        overflow: visible;
     }
 
     #panel-resultados {
@@ -1690,6 +1616,7 @@ main {
         align-items: flex-start;
         overflow-y: auto;
         padding: 1rem 20px;
+        margin-top: 0;
     }
 
     .pasos-flujo {

@@ -6,6 +6,9 @@ const examenesSubtabsBar = document.getElementById('examenes-subtabs-bar');
 
 const EXAMENES_SUBTAB_PANELS = new Set(['panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo']);
 let activeExamenPanel = 'panel-hema';
+let activePanel = 'panel-flujo';
+
+const SWIPE_ORDER = ['panel-flujo', 'panel-paciente', 'panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo', 'panel-imagenes', 'panel-resultados'];
 
 export function activateTab(targetId) {
     const isExamenesSubPanel = EXAMENES_SUBTAB_PANELS.has(targetId);
@@ -42,6 +45,7 @@ export function activateTab(targetId) {
         panel.classList.toggle('activo', panel.id === actualPanelId);
     });
 
+    activePanel = actualPanelId;
     if (targetId === 'panel-paciente') syncMobPatientFromCanon();
 }
 
@@ -52,6 +56,25 @@ tabs.forEach(tab => {
 document.querySelectorAll('.tab-examenes').forEach(btn => {
     btn.addEventListener('click', () => activateTab(btn.dataset.subtabTarget));
 });
+
+// Swipe para navegar entre secciones
+
+let swipeStartX = 0;
+let swipeStartY = 0;
+
+document.querySelector('main').addEventListener('touchstart', e => {
+    swipeStartX = e.touches[0].clientX;
+    swipeStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.querySelector('main').addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - swipeStartX;
+    const dy = e.changedTouches[0].clientY - swipeStartY;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    const idx = SWIPE_ORDER.indexOf(activePanel);
+    const next = dx < 0 ? SWIPE_ORDER[idx + 1] : SWIPE_ORDER[idx - 1];
+    if (next) activateTab(next);
+}, { passive: true });
 
 // Sincronizacón de datos de pacientes en mobile
 
@@ -128,7 +151,7 @@ if (startCollapsed) {
     setGridRows(true, false);
 }
 
-btnColapsar.addEventListener('click', () => {
+panelFlujo.querySelector('.panel-cabecera').addEventListener('click', () => {
     const collapsed = panelFlujo.classList.toggle('collapsed');
     btnColapsar.setAttribute('aria-expanded', String(!collapsed));
     setGridRows(collapsed, true);
@@ -203,7 +226,7 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
         if (!isFill) { anim.offsetHeight; anim.style.transition = ''; }
     }
 
-    btn.addEventListener('click', () => {
+    btn.closest('.panel-cabecera').addEventListener('click', () => {
         if (!isDesktopGrid()) return;
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
@@ -258,13 +281,13 @@ export function colapsarPatrones(shouldCollapse) {
     }
 }
 
-btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
+btnColapsarPatrones.closest('.titulo-patrones').addEventListener('click', () => colapsarPatrones());
 
 // Imágenes
 
 export const imagenesDataUrl = [null, null];
 export const microscopioCaptures = [];
-const MAX_MICRO_CAPTURES = 2;
+const MAX_MICRO_CAPTURES = 4;
 
 document.querySelectorAll('.zona-imagen').forEach(zona => {
     const idx = parseInt(zona.dataset.zona);

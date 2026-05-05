@@ -65,10 +65,10 @@
 </header>
 
 <div id="examenes-subtabs-bar" hidden>
-    <button class="tab-examenes activo" data-subtab-target="panel-hema">Hematología</button>
-    <button class="tab-examenes" data-subtab-target="panel-bioquim">Bioquímica</button>
-    <button class="tab-examenes" data-subtab-target="panel-uri">Urianálisis</button>
-    <button class="tab-examenes" data-subtab-target="panel-endo">Endocrino</button>
+    <button class="tab-examenes activo" data-subtab-target="panel-hema">Hemat.</button>
+    <button class="tab-examenes" data-subtab-target="panel-bioquim">Bioq.</button>
+    <button class="tab-examenes" data-subtab-target="panel-uri">Uri.</button>
+    <button class="tab-examenes" data-subtab-target="panel-endo">Endo.</button>
 </div>
 
 <!-- GRID -->
@@ -207,6 +207,11 @@
             </button>
         </h2>
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
+            <div class="cabecera-columnas cabecera-columnas--mobile-only" aria-hidden="true">
+                <span></span>
+                <span>Valor</span>
+                <span>Unidad</span>
+            </div>
             <div class="fila-campo">
                 <label for="endo-cort-bas">Cortisol basal</label>
                 <input id="endo-cort-bas" name="cortisol-bas" type="number" min="0" step="0.01" placeholder="—">
@@ -344,6 +349,11 @@
             </button>
         </h2>
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-uri">
+            <div class="cabecera-columnas cabecera-columnas--mobile-only" aria-hidden="true">
+                <span></span>
+                <span>Valor</span>
+                <span>Unidad</span>
+            </div>
             <div class="fila-campo">
                 <label for="uri-usg">Densidad (USG)</label>
                 <input id="uri-usg" name="usg" type="number" min="1.000" max="1.060" step="0.001" placeholder="—">
@@ -409,22 +419,15 @@
                 <li>
                     <span class="num-paso" aria-hidden="true">3</span>
                     <div>
-                        <strong>Imágenes (opcional)</strong>
-                        <p>Adjunta fotos de citología o frotis. El modelo de IA las incluirá en su análisis visual junto con los valores de laboratorio.</p>
+                        <strong>Imágenes / Citología (opcional)</strong>
+                        <p>Adjunta fotos de muestras o conecta una cámara de microscopio para captura en vivo. El modelo de IA incluirá las imágenes en su análisis junto con los valores de laboratorio.</p>
                     </div>
                 </li>
                 <li>
                     <span class="num-paso" aria-hidden="true">4</span>
                     <div>
-                        <strong>Signos clínicos (opcional)</strong>
-                        <p>Describe brevemente los signos observados en el paciente. Este contexto clínico enriquece la interpretación generada por el modelo de IA.</p>
-                    </div>
-                </li>
-                <li>
-                    <span class="num-paso" aria-hidden="true">5</span>
-                    <div>
-                        <strong>Resultados</strong>
-                        <p>Morphos detecta patrones automáticamente. Presiona <em>Análisis IA</em> para que medGemma genere una interpretación clínica completa basada en todos los datos ingresados.</p>
+                        <strong>Resultados e IA</strong>
+                        <p>Morphos detecta patrones automáticamente. Presiona <em>Análisis IA</em> para obtener una interpretación clínica completa. Usa el chat para hacer preguntas adicionales al modelo sobre el caso.</p>
                     </div>
                 </li>
             </ol>
@@ -587,7 +590,7 @@
 
         </div>
         <div class="chat-area">
-            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional al modelo..."></textarea>
+            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional a la I.A medGemma..."></textarea>
         </div>
         <div class="panel-pie-acciones">
             <button class="boton boton-exportar-pdf" type="button">Exportar PDF</button>
