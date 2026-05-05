@@ -126,7 +126,7 @@ body {
     flex-direction: column;
 }
 
-/* ── HEADER ── */
+/*  HEADER  */
 header {
     display: flex;
     align-items: center;
@@ -205,7 +205,7 @@ button {
     width: 7.5rem;
 }
 
-/* ── ACCIONES CABECERA ── */
+/*  ACCIONES CABECERA  */
 .acciones-cabecera {
     display: flex;
     gap: var(--space-2);
@@ -214,7 +214,7 @@ button {
     margin-left: 4rem;
 }
 
-/* ── GRID PRINCIPAL ── */
+/*  GRID PRINCIPAL  */
 main {
     display: grid;
     grid-template-columns: 1fr 1fr 40rem 30rem;
@@ -256,7 +256,7 @@ main {
 }
 
 
-/* ── HEMA / BIOQUIM — contenido más grande ── */
+/*  HEMA / BIOQUIM — contenido más grande  */
 #panel-hema,
 #panel-bioquim {
     --fs-xs: 12px;
@@ -319,7 +319,7 @@ main {
     scrollbar-color: var(--border-2) transparent;
 }
 
-/* ── ENCABEZADOS DE COLUMNA ── */
+/*  ENCABEZADOS DE COLUMNA  */
 .cabecera-columnas {
     display: flex;
     align-items: center;
@@ -353,7 +353,7 @@ main {
     text-align: right;
 }
 
-/* ── CAMPOS DEL FORMULARIO ── */
+/*  CAMPOS DEL FORMULARIO  */
 .grupo-campo {
     margin-bottom: 18px;
 }
@@ -453,7 +453,7 @@ main {
     background: var(--monitor-bg);
 }
 
-/* ── PANEL COLUMNA MEDIA (urianálisis + endocrino + imágenes) ── */
+/*  PANEL COLUMNA MEDIA (urianálisis + endocrino + imágenes)  */
 #panel-uri,
 #panel-endo {
     --fs-ui: 15px;
@@ -497,7 +497,7 @@ main {
     padding: 12px 1rem;
 }
 
-/* ── BOTÓN COLAPSAR SUBPANEL ── */
+/*  BOTÓN COLAPSAR SUBPANEL  */
 .btn-colapsar-subpanel {
     margin-left: auto;
     display: flex;
@@ -547,7 +547,7 @@ main {
 }
 
 
-/* ── CHAT AREA (signos clínicos en resultados) ── */
+/*  CHAT AREA (signos clínicos en resultados)  */
 .chat-area {
     padding: 0.5rem var(--space-4);
     border-top: 1px solid var(--border-1);
@@ -577,7 +577,7 @@ main {
     box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
-/* ── PANEL DE RESULTADOS ── */
+/*  PANEL DE RESULTADOS  */
 
 .seccion-resultado {
     margin-bottom: 20px;
@@ -625,7 +625,7 @@ main {
     transition: height 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── PATRONES ── */
+/*  PATRONES  */
 .elemento-patron {
     background: var(--surface-2);
     border: 1px solid var(--border-1);
@@ -672,7 +672,7 @@ main {
     font-style: italic;
 }
 
-/* ── IA OUTPUT ── */
+/*  IA OUTPUT  */
 #salida-ia {
     font-size: var(--fs-ui);
     color: var(--text-1);
@@ -684,7 +684,7 @@ main {
     padding: var(--space-3) var(--space-4);
 }
 
-/* ── FOOTER ── */
+/*  FOOTER  */
 footer {
     display: flex;
     align-items: center;
@@ -713,7 +713,7 @@ footer {
     flex-shrink: 0;
 }
 
-/* ── BOTONES ── */
+/*  BOTONES  */
 .boton {
     padding: 7px 16px;
     border-radius: var(--radius-sm);
@@ -757,7 +757,7 @@ footer {
     font-style: italic;
 }
 
-/* ── IA BACKEND CONFIG ── */
+/*  IA BACKEND CONFIG  */
 
 .ia-backend-config {
     display: flex;
@@ -841,7 +841,7 @@ footer {
     outline-offset: 1px;
 }
 
-/* ── ZONAS DE IMAGEN ── */
+/*  ZONAS DE IMAGEN  */
 
 #subpanel-citologia {
     flex: 1;
@@ -904,7 +904,7 @@ footer {
     font-size: var(--fs-xs);
 }
 
-/* ── ZONA MICROSCOPIO ── */
+/*  ZONA MICROSCOPIO  */
 
 .zona-microscopio {
     position: relative;
@@ -1106,7 +1106,7 @@ footer {
     border-color: var(--border-2);
 }
 
-/* ── PANEL PIE DE ACCIONES ── */
+/*  PANEL PIE DE ACCIONES  */
 .panel-pie-acciones {
     display: flex;
     align-items: center;
@@ -1137,7 +1137,7 @@ footer {
     background: var(--surface-2);
 }
 
-/* ── INICIAR SESIÓN ── */
+/*  INICIAR SESIÓN  */
 .boton-iniciar-sesion {
     background: var(--surface-1);
     color: var(--text-accent);
@@ -1148,7 +1148,7 @@ footer {
     background: var(--surface-2);
 }
 
-/* ── THEME TOGGLE ── */
+/*  THEME TOGGLE  */
 .boton-tema {
     background: var(--surface-2);
     color: var(--text-3);
@@ -1178,7 +1178,7 @@ footer {
 
 
 
-/* ── BOTÓN COLAPSAR FLUJO ── */
+/*  BOTÓN COLAPSAR FLUJO  */
 .btn-colapsar-flujo {
     margin-left: auto;
     display: flex;
@@ -1219,7 +1219,7 @@ main {
     flex-shrink: 0;
 }
 
-/* ── PANEL FLUJO DE TRABAJO ── */
+/*  PANEL FLUJO DE TRABAJO  */
 .cuerpo-flujo {
     display: flex;
     align-items: center;
@@ -1287,7 +1287,7 @@ main {
     line-height: var(--lh-snug);
 }
 
-/* ── NAV INFERIOR ── */
+/*  NAV INFERIOR  */
 .nav-inferior {
     display: none;
     background: var(--surface-1);
@@ -1324,7 +1324,7 @@ main {
     flex-shrink: 0;
 }
 
-/* ── PANEL PACIENTE  ── */
+/*  PANEL PACIENTE   */
 
 .panel-cuerpo--paciente {
     display: flex;
@@ -1382,7 +1382,7 @@ main {
     flex-shrink: 0;
 }
 
-/* ── EXAMENES SUBTABS BAR ── */
+/*  EXAMENES SUBTABS BAR  */
 #examenes-subtabs-bar {
     flex-shrink: 0;
     display: flex;
@@ -1422,7 +1422,7 @@ main {
     border-bottom-color: var(--accent);
 }
 
-/* ── DESKTOP ONLY: oculta elementos de mobile ── */
+/*  DESKTOP ONLY: oculta elementos de mobile  */
 @media (min-width: 1101px) {
     .cabecera-columnas--mobile-only {
         display: none;
@@ -1439,7 +1439,7 @@ main {
     }
 }
 
-/* ── RESPONSIVE ── */
+/*  RESPONSIVE  */
 
 /* Full HD 1920×1080 */
 @media (min-width: 1920px) {
@@ -1670,7 +1670,7 @@ main {
     }
 }
 
-/* ── MODAL DE AUTENTICACIÓN ── */
+/*  MODAL DE AUTENTICACIÓN  */
 .modal-overlay {
     position: fixed;
     inset: 0;

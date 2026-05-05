@@ -41,15 +41,15 @@ const categorizarEdad = (edadMeses, especie) => {
 
 const AJUSTES_EDAD = {
     canino: {
-        cachorro: { alp: { superior: 3.0 }, wbc: { superior: 1.25 } },
+        cachorro: { fal: { superior: 3.0 }, wbc: { superior: 1.25 } },
         adulto: {},
-        senior: { bun: { superior: 1.15 }, creatinine: { superior: 1.15 } },
-        geriatrico: { bun: { superior: 1.25 }, creatinine: { superior: 1.25 }, alp: { superior: 1.40 } }
+        senior: { bun: { superior: 1.15 }, creat: { superior: 1.15 } },
+        geriatrico: { bun: { superior: 1.25 }, creat: { superior: 1.25 }, fal: { superior: 1.40 } }
     },
     felino: {
-        cachorro: { alp: { superior: 2.0 }, wbc: { superior: 1.20 } },
+        cachorro: { fal: { superior: 2.0 }, wbc: { superior: 1.20 } },
         adulto: {},
-        senior: { bun: { superior: 1.20 }, creatinine: { superior: 1.20 } }
+        senior: { bun: { superior: 1.20 }, creat: { superior: 1.20 } }
     }
 };
 
@@ -64,7 +64,7 @@ const AJUSTES_RAZA = {
                 rbc: { inferior: 1.15, superior: 1.15 },
                 hgb: { inferior: 1.12, superior: 1.12 },
                 hct: { inferior: 1.12, superior: 1.12 },
-                platelets: { inferior: 0.75, superior: 0.75 }
+                plt: { inferior: 0.75, superior: 0.75 }
             }
         },
         {
@@ -83,7 +83,7 @@ const AJUSTES_RAZA = {
 
 const AJUSTES_SEXO = {
     felino: {
-        Macho: { creatinine: { superior: 1.15 } }
+        Macho: { creat: { superior: 1.15 } }
     }
 };
 
@@ -140,12 +140,12 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     // Serie roja
 
     if (esBajo('hct') || esBajo('hgb') || esBajo('rbc')) {
-        const tipoPorVcm = !presente('mcv') ? '' :
-            esBajo('mcv') ? 'microcítica' :
-            esAlto('mcv') ? 'macrocítica' : 'normocítica';
+        const tipoPorVcm = !presente('vcm') ? '' :
+            esBajo('vcm') ? 'microcítica' :
+            esAlto('vcm') ? 'macrocítica' : 'normocítica';
 
-        const etKey = esBajo('mcv') ? 'ferropenia' :
-                      esAlto('mcv') ? 'macrocitica' :
+        const etKey = esBajo('vcm') ? 'ferropenia' :
+                      esAlto('vcm') ? 'macrocitica' :
                       tipoPorVcm === 'normocítica' ? 'normocitica' : null;
         const etiologia = etKey ? alt.anemia.etiologias?.[etKey] ?? '' : '';
 
@@ -153,7 +153,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
             nombre: `${alt.anemia.nombre}${tipoPorVcm ? ` ${tipoPorVcm}` : ''}`,
             descripcion: [alt.anemia.prefijo, etiologia].filter(Boolean).join(' '),
             gravedad: gravedadDe('hct', 'hgb', 'rbc'),
-            parametros: ['hct', 'hgb', 'rbc', 'mcv'].filter(presente)
+            parametros: ['hct', 'hgb', 'rbc', 'vcm'].filter(presente)
         });
     }
 
@@ -168,21 +168,21 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     // Serie blanca
 
     if (esAlto('wbc')) {
-        const neutrofilia = esAlto('neutrophils');
-        const linfocitosis = esAlto('lymphocytes');
+        const neutrofilia = esAlto('neutro');
+        const linfocitosis = esAlto('linfo');
 
         if (neutrofilia) agregar({
             nombre: alt.leucocitosis_neutrofilica.nombre,
             descripcion: alt.leucocitosis_neutrofilica.descripcion,
-            gravedad: gravedadDe('wbc', 'neutrophils'),
-            parametros: ['wbc', 'neutrophils'].filter(presente)
+            gravedad: gravedadDe('wbc', 'neutro'),
+            parametros: ['wbc', 'neutro'].filter(presente)
         });
 
         if (linfocitosis) agregar({
             nombre: alt.leucocitosis_linfocitica.nombre,
             descripcion: alt.leucocitosis_linfocitica.descripcion,
-            gravedad: gravedadDe('wbc', 'lymphocytes'),
-            parametros: ['wbc', 'lymphocytes'].filter(presente)
+            gravedad: gravedadDe('wbc', 'linfo'),
+            parametros: ['wbc', 'linfo'].filter(presente)
         });
 
         if (!neutrofilia && !linfocitosis) agregar({
@@ -200,42 +200,42 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['wbc']
     });
 
-    if (esBajo('neutrophils')) agregar({
+    if (esBajo('neutro')) agregar({
         nombre: alt.neutropenia.nombre,
         descripcion: alt.neutropenia.descripcion,
-        gravedad: gravedadDe('neutrophils'),
-        parametros: ['neutrophils']
+        gravedad: gravedadDe('neutro'),
+        parametros: ['neutro']
     });
 
-    if (esBajo('lymphocytes')) agregar({
+    if (esBajo('linfo')) agregar({
         nombre: alt.linfopenia.nombre,
         descripcion: alt.linfopenia.descripcion,
-        gravedad: gravedadDe('lymphocytes'),
-        parametros: ['lymphocytes']
+        gravedad: gravedadDe('linfo'),
+        parametros: ['linfo']
     });
 
-    if (esAlto('eosinophils')) agregar({
+    if (esAlto('eosino')) agregar({
         nombre: alt.eosinofilia.nombre,
         descripcion: alt.eosinofilia.descripcion,
-        gravedad: gravedadDe('eosinophils'),
-        parametros: ['eosinophils']
+        gravedad: gravedadDe('eosino'),
+        parametros: ['eosino']
     });
 
 
     // Plaquetas
 
-    if (esBajo('platelets')) agregar({
+    if (esBajo('plt')) agregar({
         nombre: alt.trombocitopenia.nombre,
         descripcion: alt.trombocitopenia.descripcion,
-        gravedad: gravedadDe('platelets'),
-        parametros: ['platelets']
+        gravedad: gravedadDe('plt'),
+        parametros: ['plt']
     });
 
-    if (esAlto('platelets')) agregar({
+    if (esAlto('plt')) agregar({
         nombre: alt.trombocitosis.nombre,
         descripcion: alt.trombocitosis.descripcion,
-        gravedad: gravedadDe('platelets'),
-        parametros: ['platelets']
+        gravedad: gravedadDe('plt'),
+        parametros: ['plt']
     });
 
 
@@ -254,28 +254,28 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['alt']
     });
 
-    if (esAlto('alp')) agregar({
+    if (esAlto('fal')) agregar({
         nombre: alt.patron_colestasico.nombre,
         descripcion: alt.patron_colestasico.descripcion[especie] ?? alt.patron_colestasico.descripcion.canino,
-        gravedad: gravedadDe('alp'),
-        parametros: ['alp']
+        gravedad: gravedadDe('fal'),
+        parametros: ['fal']
     });
 
-    if (esAlto('total_bilirubin')) agregar({
+    if (esAlto('bili')) agregar({
         nombre: alt.hiperbilirrubinemia.nombre,
         descripcion: alt.hiperbilirrubinemia.descripcion,
-        gravedad: gravedadDe('total_bilirubin'),
-        parametros: ['total_bilirubin']
+        gravedad: gravedadDe('bili'),
+        parametros: ['bili']
     });
 
 
     // Riñón
 
-    if (esAlto('bun') && esAlto('creatinine')) agregar({
+    if (esAlto('bun') && esAlto('creat')) agregar({
         nombre: alt.azotemia.nombre,
         descripcion: alt.azotemia.descripcion,
-        gravedad: gravedadDe('creatinine', 'bun'),
-        parametros: ['bun', 'creatinine'].filter(presente)
+        gravedad: gravedadDe('creat', 'bun'),
+        parametros: ['bun', 'creat'].filter(presente)
     });
     else if (esAlto('bun')) agregar({
         nombre: alt.hiperuremia_bun.nombre,
@@ -283,11 +283,11 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         gravedad: gravedadDe('bun'),
         parametros: ['bun']
     });
-    else if (esAlto('creatinine')) agregar({
+    else if (esAlto('creat')) agregar({
         nombre: alt.creatinina_aislada.nombre,
         descripcion: alt.creatinina_aislada.descripcion,
-        gravedad: gravedadDe('creatinine'),
-        parametros: ['creatinine']
+        gravedad: gravedadDe('creat'),
+        parametros: ['creat']
     });
 
     if (esBajo('bun')) agregar({
@@ -300,46 +300,46 @@ const detectarPatrones = (hallazgos, especie, alt) => {
 
     // Glucosa
 
-    if (esAlto('glucose')) agregar({
+    if (esAlto('gluc')) agregar({
         nombre: alt.hiperglucemia.nombre,
         descripcion: alt.hiperglucemia.descripcion[especie] ?? alt.hiperglucemia.descripcion.canino,
-        gravedad: gravedadDe('glucose'),
-        parametros: ['glucose']
+        gravedad: gravedadDe('gluc'),
+        parametros: ['gluc']
     });
 
-    if (esBajo('glucose')) agregar({
+    if (esBajo('gluc')) agregar({
         nombre: alt.hipoglucemia.nombre,
         descripcion: alt.hipoglucemia.descripcion,
-        gravedad: gravedadDe('glucose'),
-        parametros: ['glucose']
+        gravedad: gravedadDe('gluc'),
+        parametros: ['gluc']
     });
 
 
     // Proteínas
 
-    if (esAlto('total_protein')) agregar({
+    if (esAlto('prot')) agregar({
         nombre: alt.hiperproteinemia.nombre,
         descripcion: alt.hiperproteinemia.descripcion,
-        gravedad: gravedadDe('total_protein'),
-        parametros: ['total_protein']
+        gravedad: gravedadDe('prot'),
+        parametros: ['prot']
     });
 
-    if (esBajo('albumin')) {
-        const hipoproteinemia = esBajo('total_protein');
+    if (esBajo('alb')) {
+        const hipoproteinemia = esBajo('prot');
         const altKey = hipoproteinemia ? 'hipoproteinemia_hipoalbuminemia' : 'hipoalbuminemia';
         agregar({
             nombre: alt[altKey].nombre,
             descripcion: alt[altKey].descripcion,
-            gravedad: gravedadDe('albumin'),
-            parametros: ['albumin', ...(hipoproteinemia ? ['total_protein'] : [])].filter(presente)
+            gravedad: gravedadDe('alb'),
+            parametros: ['alb', ...(hipoproteinemia ? ['prot'] : [])].filter(presente)
         });
     }
 
 
     // Electrolitos 
 
-    const valSodio = valor('sodium');
-    const valPotasio = valor('potassium');
+    const valSodio = valor('sodio');
+    const valPotasio = valor('potasio');
 
     if (valSodio !== null && valPotasio !== null && valPotasio > 0) {
         const ratioNaK = valSodio / valPotasio;
@@ -347,57 +347,57 @@ const detectarPatrones = (hallazgos, especie, alt) => {
             nombre: alt.ratio_nak.nombre,
             descripcion: alt.ratio_nak.descripcion.replace('{ratio}', ratioNaK.toFixed(1)),
             gravedad: ratioNaK < 20 ? 'grave' : ratioNaK < 24 ? 'moderado' : 'leve',
-            parametros: ['sodium', 'potassium'].filter(presente)
+            parametros: ['sodio', 'potasio'].filter(presente)
         });
     }
 
-    if (esAlto('sodium')) agregar({
+    if (esAlto('sodio')) agregar({
         nombre: alt.hipernatremia.nombre,
         descripcion: alt.hipernatremia.descripcion,
-        gravedad: gravedadDe('sodium'),
-        parametros: ['sodium']
+        gravedad: gravedadDe('sodio'),
+        parametros: ['sodio']
     });
 
-    if (esBajo('sodium')) agregar({
+    if (esBajo('sodio')) agregar({
         nombre: alt.hiponatremia.nombre,
         descripcion: alt.hiponatremia.descripcion,
-        gravedad: gravedadDe('sodium'),
-        parametros: ['sodium']
+        gravedad: gravedadDe('sodio'),
+        parametros: ['sodio']
     });
 
-    if (esAlto('calcium')) agregar({
+    if (esAlto('calc')) agregar({
         nombre: alt.hipercalcemia.nombre,
         descripcion: alt.hipercalcemia.descripcion,
-        gravedad: gravedadDe('calcium'),
-        parametros: ['calcium']
+        gravedad: gravedadDe('calc'),
+        parametros: ['calc']
     });
 
-    if (esBajo('calcium')) agregar({
+    if (esBajo('calc')) agregar({
         nombre: alt.hipocalcemia.nombre,
         descripcion: alt.hipocalcemia.descripcion,
-        gravedad: gravedadDe('calcium'),
-        parametros: ['calcium']
+        gravedad: gravedadDe('calc'),
+        parametros: ['calc']
     });
 
-    if (esBajo('potassium')) agregar({
+    if (esBajo('potasio')) agregar({
         nombre: alt.hipopotasemia.nombre,
         descripcion: alt.hipopotasemia.descripcion,
-        gravedad: gravedadDe('potassium'),
-        parametros: ['potassium']
+        gravedad: gravedadDe('potasio'),
+        parametros: ['potasio']
     });
 
-    if (esAlto('potassium')) agregar({
+    if (esAlto('potasio')) agregar({
         nombre: alt.hiperpotasemia.nombre,
         descripcion: alt.hiperpotasemia.descripcion,
-        gravedad: gravedadDe('potassium'),
-        parametros: ['potassium']
+        gravedad: gravedadDe('potasio'),
+        parametros: ['potasio']
     });
 
-    if (esAlto('phosphorus')) agregar({
+    if (esAlto('fosf')) agregar({
         nombre: alt.hiperfosforemia.nombre,
         descripcion: alt.hiperfosforemia.descripcion,
-        gravedad: gravedadDe('phosphorus'),
-        parametros: ['phosphorus']
+        gravedad: gravedadDe('fosf'),
+        parametros: ['fosf']
     });
 
 
@@ -440,31 +440,31 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         nombre: alt.hiperadrenocorticismo.nombre,
         descripcion: alt.hiperadrenocorticismo.descripcion[especie] ?? alt.hiperadrenocorticismo.descripcion.canino,
         gravedad: gravedadDe('cortisol_acth'),
-        parametros: ['cortisol_acth', ...(presente('cortisol_basal') ? ['cortisol_basal'] : [])]
+        parametros: ['cortisol_acth', ...(presente('cortisol_bas') ? ['cortisol_bas'] : [])]
     });
 
     if (esBajo('cortisol_acth')) agregar({
         nombre: alt.hipoadrenocorticismo_cortisol.nombre,
         descripcion: alt.hipoadrenocorticismo_cortisol.descripcion,
         gravedad: gravedadDe('cortisol_acth'),
-        parametros: ['cortisol_acth', ...(presente('cortisol_basal') ? ['cortisol_basal'] : [])]
+        parametros: ['cortisol_acth', ...(presente('cortisol_bas') ? ['cortisol_bas'] : [])]
     });
 
-    if (esBajo('cortisol_basal') && !presente('cortisol_acth')) agregar({
+    if (esBajo('cortisol_bas') && !presente('cortisol_acth')) agregar({
         nombre: alt.cortisol_basal_bajo.nombre,
         descripcion: alt.cortisol_basal_bajo.descripcion,
         gravedad: 'moderado',
-        parametros: ['cortisol_basal']
+        parametros: ['cortisol_bas']
     });
 
 
     // Insulina
 
-    if (esBajo('insulina') && esAlto('glucose')) agregar({
+    if (esBajo('insulina') && esAlto('gluc')) agregar({
         nombre: alt.deficit_insulina.nombre,
         descripcion: alt.deficit_insulina.descripcion,
         gravedad: 'moderado',
-        parametros: ['insulina', 'glucose'].filter(presente)
+        parametros: ['insulina', 'gluc'].filter(presente)
     });
 
     return patrones;

@@ -47,24 +47,6 @@ const cargarAlteraciones = async () => {
 cargarReferencias();
 cargarAlteraciones();
 
-// Mapeo de inputs
-
-const INPUT_A_CLAVE = {
-    rbc: 'rbc', hgb: 'hgb', hct: 'hct', vcm: 'mcv', hcm: 'mch',
-    wbc: 'wbc', neutro: 'neutrophils', linfo: 'lymphocytes', eosino: 'eosinophils', baso: 'basophils', plt: 'platelets',
-    alt: 'alt', ast: 'ast', fal: 'alp', bun: 'bun', creat: 'creatinine',
-    gluc: 'glucose', prot: 'total_protein', alb: 'albumin', bili: 'total_bilirubin',
-    fosf: 'phosphorus', calc: 'calcium', sodio: 'sodium', potasio: 'potassium', cloro: 'chloride',
-    usg: 'usg', ph: 'urine_ph',
-    'cortisol-bas': 'cortisol_basal', 'cortisol-acth': 'cortisol_acth',
-    't4-total': 't4_total', insulina: 'insulina'
-};
-
-const CLAVE_A_INPUT = Object.entries(INPUT_A_CLAVE).reduce((acc, [nombre, clave]) => {
-    acc[clave] = nombre;
-    return acc;
-}, {});
-
 // Colección de datos de formulario
 
 const obtenerDatosPaciente = () => {
@@ -85,8 +67,7 @@ const obtenerDatosPaciente = () => {
 const obtenerValoresFormulario = () => {
     const valores = {};
     document.querySelectorAll('input[type="number"]').forEach(input => {
-        const clave = INPUT_A_CLAVE[input.name];
-        if (clave && input.value !== '') valores[clave] = parseFloat(input.value);
+        if (input.name && input.value !== '') valores[input.name] = parseFloat(input.value);
     });
     return valores;
 };
@@ -111,7 +92,7 @@ const actualizarClasesInputs = (hallazgos) => {
         }
     });
     hallazgos.forEach(h => {
-        const input = document.querySelector(`input[name="${CLAVE_A_INPUT[h.clave]}"]`);
+        const input = document.querySelector(`input[name="${h.clave}"]`);
         if (!input) return;
         input.classList.add(h.direccion);
         const span = input.previousElementSibling;

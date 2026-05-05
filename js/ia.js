@@ -89,16 +89,12 @@ function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUlti
     Proporciona una interpretación clínica breve (6-8 oraciones) destacando los hallazgos más significativos y las recomendaciones diagnósticas inmediatas.`;
         }
 
-// Strips MedGemma chain-of-thought tokens and chat template markers
 function limpiarRespuesta(text) {
-    // If closing tag is present, take everything after it (clean split)
     if (text.includes('<unused95>')) {
         text = text.split('<unused95>').slice(1).join('');
     } else if (text.includes('<unused94>')) {
-        // Opening tag without closing — strip from tag to end (thinking swallows response)
         text = text.slice(0, text.indexOf('<unused94>'));
     }
-    // Remove any remaining unused tokens and Gemma chat markers
     text = text.replace(/<unused\d+>/g, '');
     text = text.replace(/<start_of_turn>\w+\n?/g, '').replace(/<end_of_turn>/g, '');
     return text.trim();
@@ -219,7 +215,6 @@ async function _llamarHuggingFace(salidaEl, obtenerDatosPaciente, obtenerValores
             const imagen = imagenes.find(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img)) ?? null;
             const imageInput = imagen ? { url: imagen } : null;
 
-            // Step 1: submit job
             const submitRes = await fetch(`${SPACE}/call/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
@@ -231,7 +226,6 @@ async function _llamarHuggingFace(salidaEl, obtenerDatosPaciente, obtenerValores
             }
             const { event_id } = await submitRes.json();
 
-            // Step 2: stream SSE result
             const streamRes = await fetch(`${SPACE}/call/analyze/${event_id}`, {
                 headers: { 'Authorization': `Bearer ${apiKey}` },
             });
