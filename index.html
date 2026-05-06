@@ -413,7 +413,7 @@
                     <span class="num-paso" aria-hidden="true">2</span>
                     <div>
                         <strong>Exámenes</strong>
-                        <p>Transcribe los valores del hemograma, bioquímica, urianálisis y perfil endocrino disponibles. Los campos se colorean en tiempo real según el rango de referencia. No es necesario completar todos.</p>
+                        <p>Transcribe los valores del analíticas disponibles. Los campos se colorean en tiempo real según el rango de referencia. No es necesario completar todos.</p>
                     </div>
                 </li>
                 <li>
@@ -426,7 +426,7 @@
                 <li>
                     <span class="num-paso" aria-hidden="true">4</span>
                     <div>
-                        <strong>Resultados e IA</strong>
+                        <strong>Interpretación</strong>
                         <p>Morphos detecta patrones automáticamente. Presiona <em>Análisis IA</em> para obtener una interpretación clínica completa. Usa el chat para hacer preguntas adicionales al modelo sobre el caso.</p>
                     </div>
                 </li>
@@ -442,7 +442,7 @@
         <!-- IMÁGENES / CITOLOGÍA -->
         <div class="subpanel" id="subpanel-citologia">
         <h2 class="panel-cabecera">
-            Imágenes / Citología
+            Citologías
         </h2>
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-citologia">
             <div class="zonas-imagen">
@@ -548,7 +548,7 @@
 
     <!-- RESULTADOS -->
     <section class="panel" id="panel-resultados">
-        <h2 class="panel-cabecera">Resultados / IA</h2>
+        <h2 class="panel-cabecera">Interpretación</h2>
         <div class="panel-cuerpo">
 
             <div class="seccion-resultado seccion-patrones" id="seccion-patrones">
@@ -570,8 +570,8 @@
                 <h3 class="titulo-seccion-resultado">Interpretación IA</h3>
                 <div id="salida-ia">Los valores ingresados sugieren una alteración leve en el subgrupo 1. Se recomienda correlacionar con la clínica del paciente y repetir en 7 días si persiste la tendencia.</div>
                 <div class="ia-backend-config">
-                    <span class="ia-backend-label">Backend</span>
-                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local"> Local (Ollama)</label>
+                    <span class="ia-backend-label">Entorno IA</span>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local"> Local medGemma (Ollama)</label>
                     <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf"> HuggingFace</label>
                     <div class="ia-ollama-fields" id="ia-ollama-fields">
                         <input type="url" id="ia-ollama-url" class="ia-text-input" placeholder="http://localhost:11434" value="http://localhost:11434" aria-label="URL de Ollama">
@@ -635,7 +635,7 @@
             <circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
         </svg>
-        <span>Imágenes</span>
+        <span>Citologías</span>
     </button>
     <button class="tab-nav" data-target="panel-resultados" aria-selected="false">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -644,7 +644,7 @@
             <line x1="6" y1="20" x2="6" y2="14"/>
             <line x1="2" y1="20" x2="22" y2="20"/>
         </svg>
-        <span>Resultados</span>
+        <span>Interpretación</span>
     </button>
     </nav>
 </footer>
