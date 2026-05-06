@@ -53,14 +53,6 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
         </button>
-<button class="boton boton-iniciar-sesion" id="btn-auth" type="button">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                <polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
-            Login
-        </button>
     </div>
 </header>
 
@@ -572,18 +564,10 @@
                 <div class="ia-backend-config">
                     <span class="ia-backend-label">Entorno IA</span>
                     <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local"> Local medGemma (Ollama)</label>
-                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf"> HuggingFace</label>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf">HugginFace</label>
                     <div class="ia-ollama-fields" id="ia-ollama-fields">
                         <input type="url" id="ia-ollama-url" class="ia-text-input" placeholder="http://localhost:11434" value="http://localhost:11434" aria-label="URL de Ollama">
                         <input type="text" id="ia-ollama-model" class="ia-text-input ia-model-input" placeholder="medgemma1.5:latest" value="medgemma1.5:latest" aria-label="Modelo Ollama">
-                    </div>
-                    <div class="ia-hf-fields" id="ia-hf-fields">
-                        <select id="ia-hf-model" class="ia-select" aria-label="Modelo HuggingFace">
-                            <option value="unsloth/medgemma-27b-it">MedGemma 27B (Unsloth)</option>
-                            <option value="unsloth/medgemma-4b-it">MedGemma 4B (Unsloth)</option>
-                            <option value="unsloth/medgemma-1.5-4b-it">MedGemma 1.5 4B (Unsloth)</option>
-                            <option value="blackmistcode/morphos_medGemma">MedGemma 1.5 (Space)</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -649,68 +633,6 @@
     </nav>
 </footer>
 
-<!-- MODAL DE AUTENTICACIÓN -->
-<div class="modal-overlay" id="modal-auth" hidden role="dialog" aria-modal="true">
-    <div class="modal-card">
-        <button class="modal-cerrar" id="btn-modal-cerrar" aria-label="Cerrar">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-        </button>
-
-        <div class="modal-tabs" role="tablist">
-            <button class="modal-tab activo" data-tab="login" role="tab" aria-selected="true">Login</button>
-            <button class="modal-tab" data-tab="registro" role="tab" aria-selected="false">Registrarse</button>
-        </div>
-
-        <!-- LOGIN -->
-        <form class="modal-form" id="form-login" novalidate>
-            <div class="campo-form">
-                <label for="login-email">Correo electrónico</label>
-                <input type="email" id="login-email" name="email" autocomplete="email" placeholder="nombre@ejemplo.com" required>
-                <span class="error-campo" id="err-login-email"></span>
-            </div>
-            <div class="campo-form">
-                <label for="login-pass">Contraseña</label>
-                <input type="password" id="login-pass" name="password" autocomplete="current-password" required>
-                <span class="error-campo" id="err-login-pass"></span>
-            </div>
-            <div class="mensaje-form" id="msg-login" hidden></div>
-            <button type="submit" class="modal-submit">Login</button>
-        </form>
-
-        <!-- REGISTRO -->
-        <form class="modal-form" id="form-registro" hidden novalidate>
-            <div class="campo-form">
-                <label for="reg-nombre">Nombre</label>
-                <input type="text" id="reg-nombre" name="nombre" autocomplete="name" placeholder="Tu nombre" required>
-                <span class="error-campo" id="err-reg-nombre"></span>
-            </div>
-            <div class="campo-form">
-                <label for="reg-email">Correo electrónico</label>
-                <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="nombre@ejemplo.com" required>
-                <span class="error-campo" id="err-reg-email"></span>
-            </div>
-            <div class="campo-form">
-                <label for="reg-pass">Contraseña</label>
-                <input type="password" id="reg-pass" name="password" autocomplete="new-password" required>
-                <span class="error-campo" id="err-reg-pass"></span>
-            </div>
-            <div class="campo-form">
-                <label for="reg-pass2">Confirmar contraseña</label>
-                <input type="password" id="reg-pass2" name="password2" autocomplete="new-password" required>
-                <span class="error-campo" id="err-reg-pass2"></span>
-            </div>
-            <div class="campo-form">
-                <label for="reg-hfkey">API Key HuggingFace</label>
-                <input type="password" id="reg-hfkey" name="hf_key" autocomplete="off" placeholder="hf_…" required>
-                <span class="error-campo" id="err-reg-hfkey"></span>
-            </div>
-            <div class="mensaje-form" id="msg-registro" hidden></div>
-            <button type="submit" class="modal-submit">Crear cuenta</button>
-        </form>
-    </div>
-</div>
 
 <script type="module" src="js/main.js"></script>
 

@@ -1,5 +1,4 @@
 import { analizarResultados } from './analisis.js';
-import './auth.js';
 import { colapsarPatrones, initMobSync } from './ui.js';
 import { llamarIA, initBackendConfig } from './ia.js';
 
