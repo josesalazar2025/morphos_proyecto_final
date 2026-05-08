@@ -497,6 +497,85 @@ main {
     padding: 12px 1rem;
 }
 
+/*  BOTÓN LIMPIAR PANEL  */
+.btn-limpiar-panel {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-4);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-limpiar-panel:hover {
+    background: var(--alto-bg);
+    color: var(--alto);
+}
+
+/*  BOTÓN IMPORTAR PDF  */
+.btn-importar-pdf {
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-4);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-importar-pdf:hover {
+    background: var(--border-1);
+    color: var(--accent);
+}
+
+.btn-importar-pdf + .btn-colapsar-subpanel {
+    margin-left: 2px;
+}
+
+/*  TOAST NOTIFICACIÓN PDF  */
+.pdf-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: var(--surface-1);
+    color: var(--text-1);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 9999;
+    white-space: nowrap;
+}
+
+.pdf-toast--show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.pdf-toast--error {
+    border-color: var(--alto);
+    color: var(--alto);
+}
+
 /*  BOTÓN COLAPSAR SUBPANEL  */
 .btn-colapsar-subpanel {
     margin-left: auto;
@@ -1656,5 +1735,9 @@ main {
     .btn-colapsar-flujo,
     .btn-colapsar-patrones {
         display: none;
+    }
+
+    .pdf-toast {
+        bottom: 5rem;
     }
 }

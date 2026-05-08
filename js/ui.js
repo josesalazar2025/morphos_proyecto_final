@@ -226,8 +226,9 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
         if (!isFill) { anim.offsetHeight; anim.style.transition = ''; }
     }
 
-    btn.closest('.panel-cabecera').addEventListener('click', () => {
+    btn.closest('.panel-cabecera').addEventListener('click', (e) => {
         if (!isDesktopGrid()) return;
+        if (e.target.closest('.btn-importar-pdf')) return;
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
         if (collapsed) {

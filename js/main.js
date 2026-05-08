@@ -1,6 +1,7 @@
 import { analizarResultados } from './analisis.js';
 import { colapsarPatrones, initMobSync } from './ui.js';
 import { llamarIA, initBackendConfig } from './ia.js';
+import { initPdfParser } from './pdf-parser.js';
 
 // Tema oscuro/claro
 
@@ -152,6 +153,28 @@ document.getElementById('pt-sexo').addEventListener('change', evaluar);
 
 initMobSync(evaluar);
 initBackendConfig();
+initPdfParser(evaluar);
+
+document.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-limpiar-panel');
+    if (!btn) return;
+    const panel = document.getElementById(`panel-${btn.dataset.panel}`);
+    if (!panel) return;
+    panel.querySelectorAll('input[type="number"], input[type="text"], input[type="url"], select').forEach(el => {
+        if (el.tagName === 'SELECT') {
+            el.selectedIndex = 0;
+        } else {
+            el.value = '';
+            el.classList.remove('alto', 'bajo', 'max-chars');
+            const span = el.previousElementSibling;
+            if (span?.classList.contains('estado-campo')) {
+                span.textContent = '';
+                span.className = 'estado-campo';
+            }
+        }
+    });
+    evaluar();
+});
 
 document.querySelector('.boton-analizar').addEventListener('click', () => {
     colapsarPatrones(true);

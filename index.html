@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
     
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 
@@ -107,10 +108,26 @@
     <section class="panel subpanel" id="panel-hema">
         <h2 class="panel-cabecera">
             Hematología
+            <input type="file" id="pdf-input-hema" class="pdf-input" accept=".pdf" hidden>
+            <button class="btn-limpiar-panel" type="button" data-panel="hema" aria-label="Limpiar campos Hematología" title="Limpiar campos">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M8 6V4h8v2"/>
+                    <rect x="5" y="6" width="14" height="14" rx="1"/>
+                    <line x1="10" y1="10" x2="10" y2="16"/>
+                    <line x1="14" y1="10" x2="14" y2="16"/>
+                </svg>
+            </button>
+            <button class="btn-importar-pdf" type="button" data-panel="hema" aria-label="Importar PDF Hematología" title="Importar PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
             <button class="btn-colapsar-subpanel" type="button"
                     aria-expanded="true" aria-controls="cuerpo-hema" aria-label="Colapsar Hematología">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
+                    <polyline points="6 4 12 10 18 4"/>
+                    <polyline points="6 13 12 19 18 13"/>
                 </svg>
             </button>
         </h2>
@@ -191,10 +208,26 @@
     <section class="panel subpanel" id="panel-endo">
         <h2 class="panel-cabecera">
             Perfil Endocrino
+            <input type="file" id="pdf-input-endo" class="pdf-input" accept=".pdf" hidden>
+            <button class="btn-limpiar-panel" type="button" data-panel="endo" aria-label="Limpiar campos Perfil Endocrino" title="Limpiar campos">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M8 6V4h8v2"/>
+                    <rect x="5" y="6" width="14" height="14" rx="1"/>
+                    <line x1="10" y1="10" x2="10" y2="16"/>
+                    <line x1="14" y1="10" x2="14" y2="16"/>
+                </svg>
+            </button>
+            <button class="btn-importar-pdf" type="button" data-panel="endo" aria-label="Importar PDF Perfil Endocrino" title="Importar PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
             <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
                     aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
+                    <polyline points="6 4 12 10 18 4"/>
+                    <polyline points="6 13 12 19 18 13"/>
                 </svg>
             </button>
         </h2>
@@ -231,10 +264,26 @@
     <section class="panel subpanel" id="panel-bioquim">
         <h2 class="panel-cabecera">
             Bioquímica sanguínea
+            <input type="file" id="pdf-input-bioquim" class="pdf-input" accept=".pdf" hidden>
+            <button class="btn-limpiar-panel" type="button" data-panel="bioquim" aria-label="Limpiar campos Bioquímica" title="Limpiar campos">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M8 6V4h8v2"/>
+                    <rect x="5" y="6" width="14" height="14" rx="1"/>
+                    <line x1="10" y1="10" x2="10" y2="16"/>
+                    <line x1="14" y1="10" x2="14" y2="16"/>
+                </svg>
+            </button>
+            <button class="btn-importar-pdf" type="button" data-panel="bioquim" aria-label="Importar PDF Bioquímica" title="Importar PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
             <button class="btn-colapsar-subpanel" type="button"
                     aria-expanded="true" aria-controls="cuerpo-bioquim" aria-label="Colapsar Bioquímica">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
+                    <polyline points="6 4 12 10 18 4"/>
+                    <polyline points="6 13 12 19 18 13"/>
                 </svg>
             </button>
         </h2>
@@ -333,10 +382,26 @@
     <section class="panel subpanel" id="panel-uri">
         <h2 class="panel-cabecera">
             Urianálisis
+            <input type="file" id="pdf-input-uri" class="pdf-input" accept=".pdf" hidden>
+            <button class="btn-limpiar-panel" type="button" data-panel="uri" aria-label="Limpiar campos Urianálisis" title="Limpiar campos">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M8 6V4h8v2"/>
+                    <rect x="5" y="6" width="14" height="14" rx="1"/>
+                    <line x1="10" y1="10" x2="10" y2="16"/>
+                    <line x1="14" y1="10" x2="14" y2="16"/>
+                </svg>
+            </button>
+            <button class="btn-importar-pdf" type="button" data-panel="uri" aria-label="Importar PDF Urianálisis" title="Importar PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
             <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
                     aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
+                    <polyline points="6 4 12 10 18 4"/>
+                    <polyline points="6 13 12 19 18 13"/>
                 </svg>
             </button>
         </h2>
@@ -388,7 +453,8 @@
             <button class="btn-colapsar-flujo" id="btn-colapsar-flujo" type="button"
                     aria-expanded="true" aria-controls="cuerpo-flujo" aria-label="Colapsar panel">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"/>
+                    <polyline points="6 4 12 10 18 4"/>
+                    <polyline points="6 13 12 19 18 13"/>
                 </svg>
             </button>
         </h2>
@@ -549,7 +615,8 @@
                     <button class="btn-colapsar-patrones" id="btn-colapsar-patrones" type="button"
                             aria-expanded="true" aria-controls="patrones-anim" aria-label="Colapsar patrones">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"/>
+                            <polyline points="6 4 12 10 18 4"/>
+                            <polyline points="6 13 12 19 18 13"/>
                         </svg>
                     </button>
                 </h3>
@@ -563,8 +630,8 @@
                 <div id="salida-ia">Los valores ingresados sugieren una alteración leve en el subgrupo 1. Se recomienda correlacionar con la clínica del paciente y repetir en 7 días si persiste la tendencia.</div>
                 <div class="ia-backend-config">
                     <span class="ia-backend-label">Entorno IA</span>
-                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local"> Local medGemma (Ollama)</label>
-                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf">HugginFace</label>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="hf" id="ia-backend-hf" checked>HugginFace</label>
+                    <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local">Local</label>
                     <div class="ia-ollama-fields" id="ia-ollama-fields">
                         <input type="url" id="ia-ollama-url" class="ia-text-input" placeholder="http://localhost:11434" value="http://localhost:11434" aria-label="URL de Ollama">
                         <input type="text" id="ia-ollama-model" class="ia-text-input ia-model-input" placeholder="medgemma1.5:latest" value="medgemma1.5:latest" aria-label="Modelo Ollama">
@@ -574,7 +641,7 @@
 
         </div>
         <div class="chat-area">
-            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional a la I.A medGemma..."></textarea>
+            <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional a medGemma..."></textarea>
         </div>
         <div class="panel-pie-acciones">
             <button class="boton boton-exportar-pdf" type="button">Exportar PDF</button>
