@@ -5,20 +5,20 @@ const OLLAMA_URL_KEY = 'mx-ia-ollama-url';
 const OLLAMA_MOD_KEY = 'mx-ia-ollama-model';
 
 export function initBackendConfig() {
-    const localRadio  = document.getElementById('ia-backend-local');
-    const hfRadio     = document.getElementById('ia-backend-hf');
-    const urlInput    = document.getElementById('ia-ollama-url');
-    const modelInput  = document.getElementById('ia-ollama-model');
+    const localRadio = document.getElementById('ia-backend-local');
+    const hfRadio = document.getElementById('ia-backend-hf');
+    const urlInput = document.getElementById('ia-ollama-url');
+    const modelInput = document.getElementById('ia-ollama-model');
     const ollamaFields = document.getElementById('ia-ollama-fields');
 
     const savedBackend = localStorage.getItem(BACKEND_KEY) ?? 'hf';
     if (savedBackend === 'local') localRadio.checked = true;
     else hfRadio.checked = true;
 
-    const savedUrl    = localStorage.getItem(OLLAMA_URL_KEY);
+    const savedUrl = localStorage.getItem(OLLAMA_URL_KEY);
     const savedOllMod = localStorage.getItem(OLLAMA_MOD_KEY);
-    if (savedUrl)    urlInput.value    = savedUrl;
-    if (savedOllMod) modelInput.value  = savedOllMod;
+    if (savedUrl) urlInput.value = savedUrl;
+    if (savedOllMod) modelInput.value = savedOllMod;
 
     function applyBackend(val) {
         ollamaFields.hidden = val !== 'local';
@@ -31,7 +31,7 @@ export function initBackendConfig() {
         applyBackend(val);
     }));
 
-    urlInput.addEventListener('input',   () => localStorage.setItem(OLLAMA_URL_KEY, urlInput.value.trim()));
+    urlInput.addEventListener('input', () => localStorage.setItem(OLLAMA_URL_KEY, urlInput.value.trim()));
     modelInput.addEventListener('input', () => localStorage.setItem(OLLAMA_MOD_KEY, modelInput.value.trim()));
 }
 
@@ -45,14 +45,14 @@ function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUlti
     const refEspecie = paciente.especie ? (getReferencias()[paciente.especie] || {}) : {};
 
     const lineasValores = Object.entries(valores).map(([clave, valor]) => {
-        const ref    = refEspecie[clave];
+        const ref = refEspecie[clave];
         const nombre = ref?.nombre || clave;
         const unidad = ref?.unidad || '';
-        const rango  = ref ? ` [ref: ${ref.inferior}-${ref.superior}]` : '';
-        const h      = hallazgos.find(h => h.clave === clave);
-        const flag   = h ? ` ← ${h.direccion === 'alto' ? 'ELEVADO' : 'BAJO'} (${h.gravedad})` : '';
+        const rango = ref ? ` [ref: ${ref.inferior}-${ref.superior}]` : '';
+        const h = hallazgos.find(h => h.clave === clave);
+        const flag = h ? ` ← ${h.direccion === 'alto' ? 'ELEVADO' : 'BAJO'} (${h.gravedad})` : '';
         return `  ${nombre}: ${valor} ${unidad}${rango}${flag}`;
-    }).join('\n') || '  Sin valores ingresados';
+    }).join('\n') || 'Sin valores ingresados';
 
     const lineasPatrones = patrones.length > 0
         ? patrones.map(p => `  - ${p.nombre}: ${p.descripcion}`).join('\n')
@@ -94,7 +94,7 @@ function limpiarRespuesta(text) {
 
 export async function llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const salidaEl = document.getElementById('salida-ia');
-    const backend  = document.querySelector('input[name="ia-backend"]:checked')?.value ?? 'hf';
+    const backend = document.querySelector('input[name="ia-backend"]:checked')?.value ?? 'hf';
 
     salidaEl.textContent = 'Consultando al modelo de I.A…';
     salidaEl.classList.add('cargando');
@@ -157,9 +157,9 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
 // Morphos AI Space
 
 async function _llamarSpace(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
-    const prompt   = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
+    const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
     const imagenes = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
-    const imagen   = imagenes.find(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img)) ?? null;
+    const imagen = imagenes.find(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img)) ?? null;
 
     try {
         const res = await fetch('api/hf_proxy.php', {

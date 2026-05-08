@@ -4,7 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit; }
 
 $hfKey = '';
-foreach (file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
+foreach (file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
     if (str_starts_with($line, 'HF_API_KEY=')) { $hfKey = trim(substr($line, 11)); break; }
 
 if (!$hfKey) { http_response_code(503); echo json_encode(['error' => 'Servicio no configurado.']); exit; }
