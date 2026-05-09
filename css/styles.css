@@ -1304,13 +1304,13 @@ footer {
     min-width: 7.5rem;
 }
 
-.boton-exportar-pdf {
+.boton-papers {
     background: var(--surface-1);
     color: var(--text-accent);
     border-color: var(--accent);
 }
 
-.boton-exportar-pdf:hover:not(:disabled) {
+.boton-papers:hover:not(:disabled) {
     background: var(--surface-2);
 }
 
@@ -2117,5 +2117,192 @@ main {
 
 .boton-primario:disabled {
     opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════
+   MODAL DE PAPERS
+═══════════════════════════════════════ */
+
+.modal-papers {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -44%);
+    z-index: 101;
+    width: min(720px, calc(100vw - 2rem));
+    max-height: calc(100vh - 4rem);
+    background: var(--surface-1);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-md);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-base), transform var(--dur-base);
+}
+
+.modal-papers.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+}
+
+.modal-papers-cabecera {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-5) var(--space-3);
+    border-bottom: 1px solid var(--border-1);
+    flex-shrink: 0;
+}
+
+.modal-papers-cabecera .modal-titulo {
+    margin: 0;
+}
+
+.papers-consulta-label {
+    font-size: 0.78rem;
+    color: var(--text-3);
+    margin: 4px 0 0;
+}
+
+.papers-consulta-label span {
+    color: var(--text-accent);
+    font-style: italic;
+}
+
+.papers-lista {
+    overflow-y: auto;
+    flex: 1;
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.paper-tarjeta {
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.paper-meta {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.paper-anio {
+    font-size: 0.75rem;
+    color: var(--text-3);
+    background: var(--surface-3);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+.paper-revista {
+    font-size: 0.75rem;
+    color: var(--text-accent);
+    font-style: italic;
+}
+
+.paper-pdf-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--on-accent, #fff);
+    background: var(--accent);
+    border-radius: 3px;
+    padding: 1px 5px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+}
+
+.paper-titulo {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-1);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.paper-titulo a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.paper-titulo a:hover {
+    text-decoration: underline;
+}
+
+.paper-autores {
+    font-size: 0.78rem;
+    color: var(--text-3);
+    margin: 0;
+}
+
+.paper-resumen {
+    font-size: 0.8rem;
+    color: var(--text-2);
+    margin: 4px 0 0;
+    line-height: 1.55;
+}
+
+.papers-cargando,
+.papers-vacio,
+.papers-error {
+    text-align: center;
+    padding: var(--space-6) 0;
+    color: var(--text-3);
+    font-size: 0.9rem;
+}
+
+.papers-error {
+    color: var(--rojo, #e05);
+}
+
+.papers-paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: var(--space-3) var(--space-5) var(--space-4);
+    border-top: 1px solid var(--border-1);
+    flex-shrink: 0;
+}
+
+.papers-pag-btn {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text-2);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.papers-pag-btn:hover:not(:disabled):not(.activo) {
+    background: var(--surface-3);
+    color: var(--text-1);
+}
+
+.papers-pag-btn.activo {
+    background: var(--accent);
+    color: var(--on-accent, #fff);
+    border-color: var(--accent);
+    font-weight: 600;
+}
+
+.papers-pag-btn:disabled {
+    opacity: 0.35;
     cursor: not-allowed;
 }

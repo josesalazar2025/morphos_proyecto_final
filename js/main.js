@@ -4,6 +4,7 @@ import { colapsarPatrones, inicializarSincMob } from './ui.js';
 import { llamarIA, inicializarConfigBackend } from './ia.js';
 import { inicializarParserPdf } from './pdf-parser.js';
 import { verificarAuth, abrirModalAuth } from './auth.js';
+import { abrirModalPapers, inicializarModalPapers } from './papers.js';
 
 // Tema oscuro/claro
 
@@ -156,6 +157,7 @@ document.getElementById('pt-sexo').addEventListener('change', evaluar);
 inicializarSincMob(evaluar);
 inicializarConfigBackend();
 inicializarParserPdf(evaluar);
+inicializarModalPapers();
 
 document.addEventListener('click', e => {
     const btn = e.target.closest('.btn-limpiar-panel');
@@ -189,4 +191,8 @@ document.querySelector('.boton-analizar').addEventListener('click', async () => 
     }
     colapsarPatrones(true);
     llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, () => ultimoAnalisis, () => referencias);
+});
+
+document.querySelector('.boton-papers').addEventListener('click', () => {
+    abrirModalPapers(ultimoAnalisis.patrones);
 });
