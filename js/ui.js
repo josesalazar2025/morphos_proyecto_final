@@ -5,80 +5,80 @@ const paneles = document.querySelectorAll('main > .panel, .col3-wrapper > .panel
 const examenesSubtabsBar = document.getElementById('examenes-subtabs-bar');
 
 const EXAMENES_SUBTAB_PANELS = new Set(['panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo']);
-let activeExamenPanel = 'panel-hema';
-let activePanel = 'panel-flujo';
+let panelExamenActivo = 'panel-hema';
+let panelActivo = 'panel-flujo';
 
 const SWIPE_ORDER = ['panel-flujo', 'panel-paciente', 'panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo', 'panel-imagenes', 'panel-resultados'];
 
-export function activateTab(targetId) {
-    const isExamenesSubPanel = EXAMENES_SUBTAB_PANELS.has(targetId);
-    const isExamenesTab = targetId === 'examenes';
-    const showExamenes = isExamenesTab || isExamenesSubPanel;
+export function activarTab(targetId) {
+    const esSubpanelExamenes = EXAMENES_SUBTAB_PANELS.has(targetId);
+    const esTabExamenes = targetId === 'examenes';
+    const mostrarExamenes = esTabExamenes || esSubpanelExamenes;
 
-    let actualPanelId;
-    if (isExamenesTab) {
-        actualPanelId = activeExamenPanel;
-    } else if (isExamenesSubPanel) {
-        activeExamenPanel = targetId;
-        actualPanelId = targetId;
+    let idPanelActual;
+    if (esTabExamenes) {
+        idPanelActual = panelExamenActivo;
+    } else if (esSubpanelExamenes) {
+        panelExamenActivo = targetId;
+        idPanelActual = targetId;
     } else {
-        actualPanelId = targetId;
+        idPanelActual = targetId;
     }
 
     tabs.forEach(tab => {
-        const isActive = showExamenes
+        const estaActivo = mostrarExamenes
             ? tab.dataset.target === 'examenes'
             : tab.dataset.target === targetId;
-        tab.classList.toggle('activo', isActive);
-        tab.setAttribute('aria-selected', String(isActive));
+        tab.classList.toggle('activo', estaActivo);
+        tab.setAttribute('aria-selected', String(estaActivo));
     });
 
-    if (examenesSubtabsBar) examenesSubtabsBar.hidden = !showExamenes;
+    if (examenesSubtabsBar) examenesSubtabsBar.hidden = !mostrarExamenes;
 
-    if (showExamenes) {
+    if (mostrarExamenes) {
         document.querySelectorAll('.tab-examenes').forEach(btn => {
-            btn.classList.toggle('activo', btn.dataset.subtabTarget === activeExamenPanel);
+            btn.classList.toggle('activo', btn.dataset.subtabTarget === panelExamenActivo);
         });
     }
 
     paneles.forEach(panel => {
-        panel.classList.toggle('activo', panel.id === actualPanelId);
+        panel.classList.toggle('activo', panel.id === idPanelActual);
     });
 
-    activePanel = actualPanelId;
-    if (targetId === 'panel-paciente') syncMobPatientFromCanon();
+    panelActivo = idPanelActual;
+    if (targetId === 'panel-paciente') sincronizarPacienteMob();
 }
 
 tabs.forEach(tab => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.target));
+    tab.addEventListener('click', () => activarTab(tab.dataset.target));
 });
 
 document.querySelectorAll('.tab-examenes').forEach(btn => {
-    btn.addEventListener('click', () => activateTab(btn.dataset.subtabTarget));
+    btn.addEventListener('click', () => activarTab(btn.dataset.subtabTarget));
 });
 
 // Swipe para navegar entre secciones
 
-let swipeStartX = 0;
-let swipeStartY = 0;
+let inicioSwipeX = 0;
+let inicioSwipeY = 0;
 
 document.querySelector('main').addEventListener('touchstart', e => {
-    swipeStartX = e.touches[0].clientX;
-    swipeStartY = e.touches[0].clientY;
+    inicioSwipeX = e.touches[0].clientX;
+    inicioSwipeY = e.touches[0].clientY;
 }, { passive: true });
 
 document.querySelector('main').addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - swipeStartX;
-    const dy = e.changedTouches[0].clientY - swipeStartY;
+    const dx = e.changedTouches[0].clientX - inicioSwipeX;
+    const dy = e.changedTouches[0].clientY - inicioSwipeY;
     if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
-    const idx = SWIPE_ORDER.indexOf(activePanel);
-    const next = dx < 0 ? SWIPE_ORDER[idx + 1] : SWIPE_ORDER[idx - 1];
-    if (next) activateTab(next);
+    const indice = SWIPE_ORDER.indexOf(panelActivo);
+    const siguiente = dx < 0 ? SWIPE_ORDER[indice + 1] : SWIPE_ORDER[indice - 1];
+    if (siguiente) activarTab(siguiente);
 }, { passive: true });
 
 // Sincronizacón de datos de pacientes en mobile
 
-const MOB_TO_CANON_MAP = {
+const MAPA_MOB_CANON = {
     'mob-pt-especie': 'pt-especie',
     'mob-pt-raza': 'pt-raza',
     'mob-pt-edad': 'pt-edad',
@@ -86,20 +86,20 @@ const MOB_TO_CANON_MAP = {
     'mob-pt-sexo': 'pt-sexo'
 };
 
-function syncMobPatientFromCanon() {
-    Object.entries(MOB_TO_CANON_MAP).forEach(([mobId, canonId]) => {
+function sincronizarPacienteMob() {
+    Object.entries(MAPA_MOB_CANON).forEach(([mobId, canonId]) => {
         const mobEl = document.getElementById(mobId);
         const canonEl = document.getElementById(canonId);
         if (mobEl && canonEl) mobEl.value = canonEl.value;
     });
 }
 
-export function initMobSync(evaluar) {
-    Object.entries(MOB_TO_CANON_MAP).forEach(([mobId, canonId]) => {
+export function inicializarSincMob(evaluar) {
+    Object.entries(MAPA_MOB_CANON).forEach(([mobId, canonId]) => {
         const mobEl = document.getElementById(mobId);
         if (!mobEl) return;
-        const eventType = mobEl.tagName === 'SELECT' ? 'change' : 'input';
-        mobEl.addEventListener(eventType, () => {
+        const tipoEvento = mobEl.tagName === 'SELECT' ? 'change' : 'input';
+        mobEl.addEventListener(tipoEvento, () => {
             const canonEl = document.getElementById(canonId);
             if (canonEl) canonEl.value = mobEl.value;
             evaluar();
@@ -113,64 +113,64 @@ const panelFlujo = document.getElementById('panel-flujo');
 const btnColapsar = document.getElementById('btn-colapsar-flujo');
 const mainEl = document.querySelector('main');
 
-let collapsedRow = '';
-let expandedRow = '';
+let filaColapsada = '';
+let filaExpandida = '';
 
-export const isDesktopGrid = () => window.innerWidth > 1100;
+export const esGridEscritorio = () => window.innerWidth > 1100;
 
-function initGridRows() {
-    if (!isDesktopGrid()) return;
+function inicializarFilasGrid() {
+    if (!esGridEscritorio()) return;
     mainEl.style.gridTemplateRows = '1fr auto auto';
 
-    const panelH = panelFlujo.getBoundingClientRect().height;
-    const headerH = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
-    if (panelH > 0) expandedRow = `${panelH}px`;
-    if (headerH > 0) collapsedRow = `${headerH}px`;
+    const alturaPanel = panelFlujo.getBoundingClientRect().height;
+    const alturaEncabezado = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
+    if (alturaPanel > 0) filaExpandida = `${alturaPanel}px`;
+    if (alturaEncabezado > 0) filaColapsada = `${alturaEncabezado}px`;
 
-    mainEl.style.gridTemplateRows = `1fr auto ${expandedRow || 'auto'}`;
+    mainEl.style.gridTemplateRows = `1fr auto ${filaExpandida || 'auto'}`;
 }
 
-function setGridRows(collapsed, animate) {
-    if (!isDesktopGrid()) return;
-    if (!animate) mainEl.style.transition = 'none';
-    mainEl.style.gridTemplateRows = collapsed
-        ? `1fr auto ${collapsedRow}`
-        : `1fr auto ${expandedRow}`;
-    if (!animate) {
+function establecerFilasGrid(colapsado, animar) {
+    if (!esGridEscritorio()) return;
+    if (!animar) mainEl.style.transition = 'none';
+    mainEl.style.gridTemplateRows = colapsado
+        ? `1fr auto ${filaColapsada}`
+        : `1fr auto ${filaExpandida}`;
+    if (!animar) {
         mainEl.offsetHeight;
         mainEl.style.transition = '';
     }
 }
 
-initGridRows();
+inicializarFilasGrid();
 
-const startCollapsed = localStorage.getItem('mx-flujo-collapsed') === '1';
-if (startCollapsed) {
+const inicioColapsado = localStorage.getItem('mx-flujo-collapsed') === '1';
+if (inicioColapsado) {
     panelFlujo.classList.add('collapsed');
     btnColapsar.setAttribute('aria-expanded', 'false');
-    setGridRows(true, false);
+    establecerFilasGrid(true, false);
 }
 
 btnColapsar.addEventListener('click', () => {
-    const collapsed = panelFlujo.classList.toggle('collapsed');
-    btnColapsar.setAttribute('aria-expanded', String(!collapsed));
-    setGridRows(collapsed, true);
-    localStorage.setItem('mx-flujo-collapsed', collapsed ? '1' : '0');
-    if (!collapsed) {
+    const colapsado = panelFlujo.classList.toggle('collapsed');
+    btnColapsar.setAttribute('aria-expanded', String(!colapsado));
+    establecerFilasGrid(colapsado, true);
+    localStorage.setItem('mx-flujo-collapsed', colapsado ? '1' : '0');
+    if (!colapsado) {
         ['panel-endo', 'panel-uri'].forEach(id => {
             const sp = document.getElementById(id);
-            if (sp) setSubpanelCollapsed(sp, true);
+            if (sp) establecerSubpanelColapsado(sp, true);
         });
     }
 });
 
 window.addEventListener('resize', () => {
-    if (isDesktopGrid()) {
-        if (!panelFlujo.classList.contains('collapsed')) initGridRows();
+    if (esGridEscritorio()) {
+        if (!panelFlujo.classList.contains('collapsed')) inicializarFilasGrid();
     } else {
-        document.querySelectorAll('.subpanel-anim').forEach(anim => {
-            anim.style.height = '';
-            anim.style.transition = '';
+        document.querySelectorAll('.subpanel-anim').forEach(animEl => {
+            animEl.style.height = '';
+            animEl.style.transition = '';
         });
         document.getElementById('subpanel-citologia')
             ?.querySelector('.subpanel-anim')
@@ -180,75 +180,80 @@ window.addEventListener('resize', () => {
 
 // Paneles colapsables
 
-function setSubpanelCollapsed(subpanel, shouldCollapse) {
-    if (!isDesktopGrid()) return;
-    const anim = subpanel.querySelector('.subpanel-anim');
+function establecerSubpanelColapsado(subpanel, debeColapsar) {
+    if (!esGridEscritorio()) return;
+    const animEl = subpanel.querySelector('.subpanel-anim');
     const btn = subpanel.querySelector('.btn-colapsar-subpanel');
-    const isFill = subpanel.id === 'subpanel-citologia';
-    if (shouldCollapse === subpanel.classList.contains('collapsed')) return;
-    subpanel.classList.toggle('collapsed', shouldCollapse);
-    if (btn) btn.setAttribute('aria-expanded', String(!shouldCollapse));
-    if (shouldCollapse) {
-        anim.style.height = `${anim.offsetHeight}px`;
-        anim.offsetHeight;
-        anim.style.height = '0px';
+    const esRelleno = subpanel.id === 'subpanel-citologia';
+    if (debeColapsar === subpanel.classList.contains('collapsed')) return;
+    subpanel.classList.toggle('collapsed', debeColapsar);
+    if (btn) btn.setAttribute('aria-expanded', String(!debeColapsar));
+    if (debeColapsar) {
+        animEl.style.height = `${animEl.offsetHeight}px`;
+        animEl.offsetHeight;
+        animEl.style.height = '0px';
     } else {
-        anim.style.height = `${anim.scrollHeight}px`;
-        if (isFill) {
-            anim.addEventListener('transitionend', () => { anim.style.height = ''; }, { once: true });
+        animEl.style.height = `${animEl.scrollHeight}px`;
+        if (esRelleno) {
+            animEl.addEventListener('transitionend', () => {
+                animEl.style.height = '';
+            }, { once: true });
         }
     }
-    localStorage.setItem(`mx-${subpanel.id}-collapsed`, shouldCollapse ? '1' : '0');
+    localStorage.setItem(`mx-${subpanel.id}-collapsed`, debeColapsar ? '1' : '0');
 }
 
-const LINKED_SUBPANEL_IDS = ['panel-endo', 'panel-uri'];
+const GRUPOS_VINCULADOS = [
+    ['panel-endo', 'panel-uri'],
+];
 
 document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const subpanel = btn.closest('.subpanel');
-    const anim = subpanel.querySelector('.subpanel-anim');
-    const storageKey = `mx-${subpanel.id}-collapsed`;
-    const isFill = subpanel.id === 'subpanel-citologia';
+    const animEl = subpanel.querySelector('.subpanel-anim');
+    const claveAlmacenamiento = `mx-${subpanel.id}-collapsed`;
+    const esRelleno = subpanel.id === 'subpanel-citologia';
 
-    if (isDesktopGrid()) {
-        if (!isFill) {
-            anim.style.transition = 'none';
-            anim.style.height = `${anim.scrollHeight}px`;
+    if (esGridEscritorio()) {
+        if (!esRelleno) {
+            animEl.style.transition = 'none';
+            animEl.style.height = `${animEl.scrollHeight}px`;
         }
 
-        if (localStorage.getItem(storageKey) === '1') {
+        if (localStorage.getItem(claveAlmacenamiento) === '1') {
             subpanel.classList.add('collapsed');
             btn.setAttribute('aria-expanded', 'false');
-            if (isFill) anim.style.transition = 'none';
-            anim.style.height = '0px';
-            if (isFill) { anim.offsetHeight; anim.style.transition = ''; }
+            if (esRelleno) animEl.style.transition = 'none';
+            animEl.style.height = '0px';
+            if (esRelleno) { animEl.offsetHeight; animEl.style.transition = ''; }
         }
 
-        if (!isFill) { anim.offsetHeight; anim.style.transition = ''; }
+        if (!esRelleno) { animEl.offsetHeight; animEl.style.transition = ''; }
     }
 
-    btn.addEventListener('click', (e) => {
-        if (!isDesktopGrid()) return;
-        const collapsed = subpanel.classList.toggle('collapsed');
-        btn.setAttribute('aria-expanded', String(!collapsed));
-        if (collapsed) {
-            anim.style.height = `${anim.offsetHeight}px`;
-            anim.offsetHeight;
-            anim.style.height = '0px';
+    btn.addEventListener('click', () => {
+        if (!esGridEscritorio()) return;
+        const colapsado = subpanel.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', String(!colapsado));
+        if (colapsado) {
+            animEl.style.height = `${animEl.offsetHeight}px`;
+            animEl.offsetHeight;
+            animEl.style.height = '0px';
         } else {
-            anim.style.height = `${anim.scrollHeight}px`;
-            if (isFill) {
-                anim.addEventListener('transitionend', () => {
-                    anim.style.height = '';
+            animEl.style.height = `${animEl.scrollHeight}px`;
+            if (esRelleno) {
+                animEl.addEventListener('transitionend', () => {
+                    animEl.style.height = '';
                 }, { once: true });
             }
         }
-        localStorage.setItem(storageKey, collapsed ? '1' : '0');
+        localStorage.setItem(claveAlmacenamiento, colapsado ? '1' : '0');
 
-        if (LINKED_SUBPANEL_IDS.includes(subpanel.id)) {
-            LINKED_SUBPANEL_IDS.forEach(id => {
+        const grupo = GRUPOS_VINCULADOS.find(g => g.includes(subpanel.id));
+        if (grupo) {
+            grupo.forEach(id => {
                 if (id !== subpanel.id) {
-                    const partner = document.getElementById(id);
-                    if (partner) setSubpanelCollapsed(partner, collapsed);
+                    const asociado = document.getElementById(id);
+                    if (asociado) establecerSubpanelColapsado(asociado, colapsado);
                 }
             });
         }
@@ -260,17 +265,17 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
 const btnColapsarPatrones = document.getElementById('btn-colapsar-patrones');
 const patronesAnim = document.getElementById('patrones-anim');
 
-export function colapsarPatrones(shouldCollapse) {
-    if (!isDesktopGrid()) return;
-    const isExpanded = btnColapsarPatrones.getAttribute('aria-expanded') === 'true';
-    const collapse = shouldCollapse ?? isExpanded;
+export function colapsarPatrones(debeColapsar) {
+    if (!esGridEscritorio()) return;
+    const estaExpandido = btnColapsarPatrones.getAttribute('aria-expanded') === 'true';
+    const colapsado = debeColapsar ?? estaExpandido;
 
-    if (collapse && isExpanded) {
+    if (colapsado && estaExpandido) {
         patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
         patronesAnim.offsetHeight;
         patronesAnim.style.height = '0px';
         btnColapsarPatrones.setAttribute('aria-expanded', 'false');
-    } else if (!collapse && !isExpanded) {
+    } else if (!colapsado && !estaExpandido) {
         patronesAnim.style.height = `${patronesAnim.scrollHeight}px`;
         patronesAnim.addEventListener('transitionend', () => {
             if (btnColapsarPatrones.getAttribute('aria-expanded') === 'true') {
@@ -286,14 +291,14 @@ btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
 // Imágenes
 
 export const imagenesDataUrl = [null, null];
-export const microscopioCaptures = [];
-const MAX_MICRO_CAPTURES = 4;
+export const capturasMicroscopio = [];
+const MAX_CAPTURAS_MICRO = 4;
 
 document.querySelectorAll('.zona-imagen').forEach(zona => {
-    const idx = parseInt(zona.dataset.zona);
+    const indice = parseInt(zona.dataset.zona);
     const input = zona.querySelector('.input-zona');
     const vacia = zona.querySelector('.zona-vacia');
-    const preview = zona.querySelector('.zona-img-preview');
+    const vistaPrevia = zona.querySelector('.zona-img-preview');
     const btnQuitar = zona.querySelector('.btn-quitar-zona');
 
     zona.addEventListener('click', e => {
@@ -306,9 +311,9 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
-            imagenesDataUrl[idx] = ev.target.result;
-            preview.src = ev.target.result;
-            preview.hidden = false;
+            imagenesDataUrl[indice] = ev.target.result;
+            vistaPrevia.src = ev.target.result;
+            vistaPrevia.hidden = false;
             btnQuitar.hidden = false;
             vacia.hidden = true;
             zona.classList.add('con-imagen');
@@ -318,9 +323,9 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
 
     btnQuitar.addEventListener('click', e => {
         e.stopPropagation();
-        imagenesDataUrl[idx] = null;
-        preview.src = '';
-        preview.hidden = true;
+        imagenesDataUrl[indice] = null;
+        vistaPrevia.src = '';
+        vistaPrevia.hidden = true;
         btnQuitar.hidden = true;
         vacia.hidden = false;
         zona.classList.remove('con-imagen');
@@ -344,25 +349,25 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
     const galeriaEl = zona.querySelector('.micro-galeria');
 
     let stream = null;
-    let galeriaVisible = false;
+    let galeriaEsVisible = false;
 
-    function stopStream() {
+    function detenerStream() {
         if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
     }
 
-    function updateBadge() {
-        const n = microscopioCaptures.length;
+    function actualizarInsignia() {
+        const n = capturasMicroscopio.length;
         badge.textContent = n;
         badge.hidden = n === 0;
-        btnCapturar.disabled = n >= MAX_MICRO_CAPTURES;
+        btnCapturar.disabled = n >= MAX_CAPTURAS_MICRO;
     }
 
-    function renderGaleria() {
-        if (microscopioCaptures.length === 0) {
+    function renderizarGaleria() {
+        if (capturasMicroscopio.length === 0) {
             galeriaEl.innerHTML = '<span class="micro-galeria-vacia">Sin capturas</span>';
             return;
         }
-        galeriaEl.innerHTML = microscopioCaptures.map((src, i) => `
+        galeriaEl.innerHTML = capturasMicroscopio.map((src, i) => `
             <div class="micro-thumb">
                 <img src="${src}" alt="Captura ${i + 1}">
                 <button class="micro-thumb-quitar" type="button" data-capture-idx="${i}" aria-label="Eliminar captura ${i + 1}">
@@ -376,22 +381,22 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
             btn.addEventListener('click', e => {
                 e.stopPropagation();
                 const i = parseInt(btn.dataset.captureIdx);
-                microscopioCaptures.splice(i, 1);
-                updateBadge();
-                renderGaleria();
-                if (microscopioCaptures.length === 0 && galeriaVisible) toggleGaleria();
+                capturasMicroscopio.splice(i, 1);
+                actualizarInsignia();
+                renderizarGaleria();
+                if (capturasMicroscopio.length === 0 && galeriaEsVisible) alternarGaleria();
             });
         });
     }
 
-    function toggleGaleria() {
-        galeriaVisible = !galeriaVisible;
-        galeriaEl.hidden = !galeriaVisible;
-        if (galeriaVisible) renderGaleria();
-        btnGaleria.style.color = galeriaVisible ? 'var(--accent)' : '';
+    function alternarGaleria() {
+        galeriaEsVisible = !galeriaEsVisible;
+        galeriaEl.hidden = !galeriaEsVisible;
+        if (galeriaEsVisible) renderizarGaleria();
+        btnGaleria.style.color = galeriaEsVisible ? 'var(--accent)' : '';
     }
 
-    async function openCamera() {
+    async function abrirCamara() {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 } }
@@ -400,44 +405,44 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
             video.hidden = false;
             micVacia.hidden = true;
             controles.hidden = false;
-            updateBadge();
+            actualizarInsignia();
         } catch {
-            // permission denied or unavailable — no fallback needed
+            // Permiso denegado o cámara no disponible — no se requiere fallback
         }
     }
 
     zona.addEventListener('click', e => {
         if (controles.contains(e.target) || galeriaEl.contains(e.target)) return;
-        if (!stream) openCamera();
+        if (!stream) abrirCamara();
     });
 
     btnGaleria.addEventListener('click', e => {
         e.stopPropagation();
-        toggleGaleria();
+        alternarGaleria();
     });
 
     btnCapturar.addEventListener('click', e => {
         e.stopPropagation();
-        if (microscopioCaptures.length >= MAX_MICRO_CAPTURES) return;
+        if (capturasMicroscopio.length >= MAX_CAPTURAS_MICRO) return;
         const canvas = document.createElement('canvas');
-        const MAX_PX = 1024;
-        const scale = Math.min(MAX_PX / video.videoWidth, MAX_PX / video.videoHeight, 1);
+        const MAX_PIXELES = 1024;
+        const scale = Math.min(MAX_PIXELES / video.videoWidth, MAX_PIXELES / video.videoHeight, 1);
         canvas.width = Math.round(video.videoWidth * scale);
         canvas.height = Math.round(video.videoHeight * scale);
         canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        microscopioCaptures.push(canvas.toDataURL('image/jpeg', 0.85));
-        updateBadge();
-        if (galeriaVisible) renderGaleria();
+        capturasMicroscopio.push(canvas.toDataURL('image/jpeg', 0.85));
+        actualizarInsignia();
+        if (galeriaEsVisible) renderizarGaleria();
     });
 
     btnCerrar.addEventListener('click', e => {
         e.stopPropagation();
-        stopStream();
+        detenerStream();
         video.hidden = true;
         video.srcObject = null;
         controles.hidden = true;
         galeriaEl.hidden = true;
-        galeriaVisible = false;
+        galeriaEsVisible = false;
         micVacia.hidden = false;
     });
 })();

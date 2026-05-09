@@ -1,5 +1,5 @@
 
-// Gravedad 
+// Gravedad
 // La desviación se mide en múltiplos del ancho del rango de referencia.
 // Ej: rango WBC 6-17 (ancho = 11). WBC = 28 → desviación = 11/11 = 1.0 → moderado.
 
@@ -16,9 +16,7 @@ const clasificarGravedad = (valor, ref) => {
     return 'grave';
 };
 
-
-// Edad 
-
+// Edad
 
 const categorizarEdad = (edadMeses, especie) => {
     if (edadMeses === null) return 'adulto';
@@ -37,7 +35,7 @@ const categorizarEdad = (edadMeses, especie) => {
 };
 
 
-// Ajustes por edad 
+// Ajustes por edad
 
 const AJUSTES_EDAD = {
     canino: {
@@ -53,8 +51,7 @@ const AJUSTES_EDAD = {
     }
 };
 
-
-// Ajustes por raza 
+// Ajustes por raza
 
 const AJUSTES_RAZA = {
     canino: [
@@ -79,7 +76,7 @@ const AJUSTES_RAZA = {
 };
 
 
-// Ajustes por sexo 
+// Ajustes por sexo
 
 const AJUSTES_SEXO = {
     felino: {
@@ -87,13 +84,11 @@ const AJUSTES_SEXO = {
     }
 };
 
-
 const obtenerAjustesRaza = (raza, especie) => {
     const razaNorm = raza?.toLowerCase().trim() ?? '';
     const grupos = AJUSTES_RAZA[especie] ?? [];
     return grupos.find(g => g.razas.some(r => razaNorm.includes(r)))?.ajustes ?? {};
 };
-
 
 // Ajuste de referencias
 
@@ -104,21 +99,20 @@ const ajustarReferencias = (refsEspecie, paciente) => {
     const ajSexo = AJUSTES_SEXO[paciente.especie]?.[paciente.sexo] ?? {};
 
     return Object.entries(refsEspecie).reduce((acc, [clave, ref]) => {
-        const fEdad = ajEdad[clave] ?? {};
-        const fRaza = ajRaza[clave] ?? {};
-        const fSexo = ajSexo[clave] ?? {};
+        const factorEdad = ajEdad[clave] ?? {};
+        const factorRaza = ajRaza[clave] ?? {};
+        const factorSexo = ajSexo[clave] ?? {};
 
         acc[clave] = {
             ...ref,
-            inferior: ref.inferior * (fEdad.inferior ?? 1) * (fRaza.inferior ?? 1) * (fSexo.inferior ?? 1),
-            superior: ref.superior * (fEdad.superior ?? 1) * (fRaza.superior ?? 1) * (fSexo.superior ?? 1)
+            inferior: ref.inferior * (factorEdad.inferior ?? 1) * (factorRaza.inferior ?? 1) * (factorSexo.inferior ?? 1),
+            superior: ref.superior * (factorEdad.superior ?? 1) * (factorRaza.superior ?? 1) * (factorSexo.superior ?? 1)
         };
         return acc;
     }, {});
 };
 
-
-// Detección de patrones clínicos 
+// Detección de patrones clínicos
 
 const detectarPatrones = (hallazgos, especie, alt) => {
     const mapa = hallazgos.reduce((acc, h) => { acc[h.clave] = h; return acc; }, {});
@@ -136,7 +130,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     const patrones = [];
     const agregar = (patron) => patrones.push(patron);
 
-
     // Serie roja
 
     if (esBajo('hct') || esBajo('hgb') || esBajo('rbc')) {
@@ -144,10 +137,10 @@ const detectarPatrones = (hallazgos, especie, alt) => {
             esBajo('vcm') ? 'microcítica' :
             esAlto('vcm') ? 'macrocítica' : 'normocítica';
 
-        const etKey = esBajo('vcm') ? 'ferropenia' :
+        const claveEtiologia = esBajo('vcm') ? 'ferropenia' :
                       esAlto('vcm') ? 'macrocitica' :
                       tipoPorVcm === 'normocítica' ? 'normocitica' : null;
-        const etiologia = etKey ? alt.anemia.etiologias?.[etKey] ?? '' : '';
+        const etiologia = claveEtiologia ? alt.anemia.etiologias?.[claveEtiologia] ?? '' : '';
 
         agregar({
             nombre: `${alt.anemia.nombre}${tipoPorVcm ? ` ${tipoPorVcm}` : ''}`,
@@ -163,7 +156,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         gravedad: gravedadDe('hct', 'rbc'),
         parametros: ['hct', 'rbc', 'hgb'].filter(presente)
     });
-
 
     // Serie blanca
 
@@ -268,7 +260,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['bili']
     });
 
-
     // Riñón
 
     if (esAlto('bun') && esAlto('creat')) agregar({
@@ -297,7 +288,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['bun']
     });
 
-
     // Glucosa
 
     if (esAlto('gluc')) agregar({
@@ -314,7 +304,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['gluc']
     });
 
-
     // Proteínas
 
     if (esAlto('prot')) agregar({
@@ -326,17 +315,16 @@ const detectarPatrones = (hallazgos, especie, alt) => {
 
     if (esBajo('alb')) {
         const hipoproteinemia = esBajo('prot');
-        const altKey = hipoproteinemia ? 'hipoproteinemia_hipoalbuminemia' : 'hipoalbuminemia';
+        const claveAlteracion = hipoproteinemia ? 'hipoproteinemia_hipoalbuminemia' : 'hipoalbuminemia';
         agregar({
-            nombre: alt[altKey].nombre,
-            descripcion: alt[altKey].descripcion,
+            nombre: alt[claveAlteracion].nombre,
+            descripcion: alt[claveAlteracion].descripcion,
             gravedad: gravedadDe('alb'),
             parametros: ['alb', ...(hipoproteinemia ? ['prot'] : [])].filter(presente)
         });
     }
 
-
-    // Electrolitos 
+    // Electrolitos
 
     const valSodio = valor('sodio');
     const valPotasio = valor('potasio');
@@ -400,7 +388,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['fosf']
     });
 
-
     // Urianálisis
 
     const valUsg = valor('usg');
@@ -417,7 +404,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['usg']
     });
 
-    // Tiroides 
+    // Tiroides
 
     if (especie === 'canino' && esBajo('t4_total')) agregar({
         nombre: alt.hipotiroidismo.nombre,
@@ -433,8 +420,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['t4_total'].filter(presente)
     });
 
-
-    // Suprarrenal / Cortisol 
+    // Suprarrenal / Cortisol
 
     if (esAlto('cortisol_acth')) agregar({
         nombre: alt.hiperadrenocorticismo.nombre,
@@ -457,7 +443,6 @@ const detectarPatrones = (hallazgos, especie, alt) => {
         parametros: ['cortisol_bas']
     });
 
-
     // Insulina
 
     if (esBajo('insulina') && esAlto('gluc')) agregar({
@@ -470,8 +455,7 @@ const detectarPatrones = (hallazgos, especie, alt) => {
     return patrones;
 };
 
-
-// Exportación principal 
+// Exportación principal
 
 export const analizarResultados = (valoresInput, paciente, referencias, alteraciones) => {
     const refsEspecie = referencias[paciente.especie];
@@ -481,10 +465,10 @@ export const analizarResultados = (valoresInput, paciente, referencias, alteraci
     const hallazgos = [];
 
     for (const [clave, ref] of Object.entries(refsAjustadas)) {
-        const raw = valoresInput[clave];
-        if (raw === null || raw === undefined || raw === '') continue;
+        const crudo = valoresInput[clave];
+        if (crudo === null || crudo === undefined || crudo === '') continue;
 
-        const valorNum = parseFloat(raw);
+        const valorNum = parseFloat(crudo);
         if (isNaN(valorNum)) continue;
 
         if (valorNum > ref.superior) {

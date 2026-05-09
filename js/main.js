@@ -1,20 +1,21 @@
 import { analizarResultados } from './analisis.js';
-import { colapsarPatrones, initMobSync } from './ui.js';
-import { llamarIA, initBackendConfig } from './ia.js';
-import { initPdfParser } from './pdf-parser.js';
+import { colapsarPatrones, inicializarSincMob } from './ui.js';
+import { llamarIA, inicializarConfigBackend } from './ia.js';
+import { inicializarParserPdf } from './pdf-parser.js';
+import { verificarAuth, abrirModalAuth } from './auth.js';
 
 // Tema oscuro/claro
 
-const saved = localStorage.getItem('mx-theme');
-const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-document.documentElement.dataset.theme = saved || preferred;
+const temaGuardado = localStorage.getItem('mx-theme');
+const temaPreferido = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+document.documentElement.dataset.theme = temaGuardado || temaPreferido;
 
 const btnTema = document.getElementById('btn-tema');
 if (btnTema) {
     btnTema.addEventListener('click', () => {
-        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
-        localStorage.setItem('mx-theme', next);
+        const siguienteTema = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = siguienteTema;
+        localStorage.setItem('mx-theme', siguienteTema);
     });
 }
 
@@ -50,14 +51,14 @@ cargarAlteraciones();
 // Colección de datos de formulario
 
 const obtenerDatosPaciente = () => {
-    const especieRaw = document.getElementById('pt-especie').value;
-    const edadVal = document.getElementById('pt-edad').value;
+    const especieCruda = document.getElementById('pt-especie').value;
+    const valorEdad = document.getElementById('pt-edad').value;
     const edadUnidad = document.getElementById('pt-edad-unidad').value;
-    const edadMeses = edadVal === '' ? null
-        : edadUnidad === 'meses' ? parseFloat(edadVal)
-        : parseFloat(edadVal) * 12;
+    const edadMeses = valorEdad === '' ? null
+        : edadUnidad === 'meses' ? parseFloat(valorEdad)
+        : parseFloat(valorEdad) * 12;
     return {
-        especie: especieRaw === 'Canino' ? 'canino' : especieRaw === 'Felino' ? 'felino' : null,
+        especie: especieCruda === 'Canino' ? 'canino' : especieCruda === 'Felino' ? 'felino' : null,
         raza: document.getElementById('pt-raza').value,
         edadMeses,
         sexo: document.getElementById('pt-sexo').value
@@ -151,9 +152,9 @@ document.getElementById('pt-edad').addEventListener('input', evaluar);
 document.getElementById('pt-edad-unidad').addEventListener('change', evaluar);
 document.getElementById('pt-sexo').addEventListener('change', evaluar);
 
-initMobSync(evaluar);
-initBackendConfig();
-initPdfParser(evaluar);
+inicializarSincMob(evaluar);
+inicializarConfigBackend();
+inicializarParserPdf(evaluar);
 
 document.addEventListener('click', e => {
     const btn = e.target.closest('.btn-limpiar-panel');
@@ -176,7 +177,15 @@ document.addEventListener('click', e => {
     evaluar();
 });
 
-document.querySelector('.boton-analizar').addEventListener('click', () => {
+document.querySelector('.boton-analizar').addEventListener('click', async () => {
+    const autenticado = await verificarAuth();
+    if (!autenticado) {
+        abrirModalAuth(() => {
+            colapsarPatrones(true);
+            llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, () => ultimoAnalisis, () => referencias);
+        });
+        return;
+    }
     colapsarPatrones(true);
     llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, () => ultimoAnalisis, () => referencias);
 });

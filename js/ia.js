@@ -1,34 +1,39 @@
-import { imagenesDataUrl, microscopioCaptures } from './ui.js';
+import { imagenesDataUrl, capturasMicroscopio } from './ui.js';
 
 const BACKEND_KEY   = 'mx-ia-backend';
 const OLLAMA_URL_KEY = 'mx-ia-ollama-url';
 const OLLAMA_MOD_KEY = 'mx-ia-ollama-model';
 
-export function initBackendConfig() {
-    const localRadio = document.getElementById('ia-backend-local');
-    const hfRadio = document.getElementById('ia-backend-hf');
+export function inicializarConfigBackend() {
+    const radioLocal = document.getElementById('ia-backend-local');
+    const radioHF = document.getElementById('ia-backend-hf');
     const urlInput = document.getElementById('ia-ollama-url');
     const modelInput = document.getElementById('ia-ollama-model');
-    const ollamaFields = document.getElementById('ia-ollama-fields');
+    const camposOllama = document.getElementById('ia-ollama-fields');
 
-    const savedBackend = localStorage.getItem(BACKEND_KEY) ?? 'hf';
-    if (savedBackend === 'local') localRadio.checked = true;
-    else hfRadio.checked = true;
+    const backendGuardado = localStorage.getItem(BACKEND_KEY) ?? 'hf';
+    if (backendGuardado === 'local') radioLocal.checked = true;
+    else radioHF.checked = true;
 
-    const savedUrl = localStorage.getItem(OLLAMA_URL_KEY);
-    const savedOllMod = localStorage.getItem(OLLAMA_MOD_KEY);
-    if (savedUrl) urlInput.value = savedUrl;
-    if (savedOllMod) modelInput.value = savedOllMod;
-
-    function applyBackend(val) {
-        ollamaFields.hidden = val !== 'local';
+    const urlGuardada = localStorage.getItem(OLLAMA_URL_KEY);
+    let modeloGuardado = localStorage.getItem(OLLAMA_MOD_KEY);
+    // Migrar valor por defecto obsoleto
+    if (modeloGuardado === 'medgemma:latest') {
+        modeloGuardado = 'medgemma1.5:latest';
+        localStorage.setItem(OLLAMA_MOD_KEY, modeloGuardado);
     }
-    applyBackend(savedBackend);
+    if (urlGuardada) urlInput.value = urlGuardada;
+    if (modeloGuardado) modelInput.value = modeloGuardado;
 
-    [localRadio, hfRadio].forEach(r => r.addEventListener('change', () => {
+    function aplicarBackend(val) {
+        camposOllama.hidden = val !== 'local';
+    }
+    aplicarBackend(backendGuardado);
+
+    [radioLocal, radioHF].forEach(r => r.addEventListener('change', () => {
         const val = document.querySelector('input[name="ia-backend"]:checked').value;
         localStorage.setItem(BACKEND_KEY, val);
-        applyBackend(val);
+        aplicarBackend(val);
     }));
 
     urlInput.addEventListener('input', () => localStorage.setItem(OLLAMA_URL_KEY, urlInput.value.trim()));
@@ -89,7 +94,7 @@ function limpiarRespuesta(text) {
     if (text.includes('<unused95>')) {
         text = text.split('<unused95>').slice(1).join('');
     } else if (text.includes('<unused94>')) {
-        // Thinking block present but no answer token — model ran out of tokens
+        // Bloque de razonamiento presente pero sin token de respuesta — el modelo agotó los tokens
         const afterThinking = text.split('<unused94>').slice(2).join('');
         if (afterThinking.trim()) {
             text = afterThinking;
@@ -125,20 +130,20 @@ export async function llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, g
 // Ollama
 
 async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
-    const baseUrl = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
-    const model   = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma:latest';
+    const urlBase = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
+    const model   = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma1.5:latest';
     const prompt  = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
-    const images  = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
+    const imagenes  = [...imagenesDataUrl.filter(Boolean), ...capturasMicroscopio];
 
     const contenido = [];
-    for (const img of images) {
+    for (const img of imagenes) {
         if (typeof img === 'string' && img.startsWith('data:image/'))
             contenido.push({ type: 'image_url', image_url: { url: img } });
     }
     contenido.push({ type: 'text', text: prompt });
 
     try {
-        const res = await fetch(`${baseUrl}/v1/chat/completions`, {
+        const res = await fetch(`${urlBase}/v1/chat/completions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -162,7 +167,7 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
             salidaEl.textContent = limpiarRespuesta(data?.choices?.[0]?.message?.content ?? 'Sin respuesta del modelo.');
         }
     } catch {
-        salidaEl.textContent = `No se pudo conectar con Ollama en ${baseUrl}. Verifica que esté ejecutándose con "ollama serve".`;
+        salidaEl.textContent = `No se pudo conectar con Ollama en ${urlBase}. Verifica que esté ejecutándose con "ollama serve".`;
     }
 }
 
@@ -170,7 +175,7 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
 
 async function _llamarSpace(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
-    const imagenes = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures]
+    const imagenes = [...imagenesDataUrl.filter(Boolean), ...capturasMicroscopio]
         .filter(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img))
         .slice(0, 4);
 
