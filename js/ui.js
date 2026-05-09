@@ -292,6 +292,10 @@ btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
 
 export const imagenesDataUrl = [null, null];
 export const capturasMicroscopio = [];
+
+let _callbackImagenAgregada = null;
+export function registrarCallbackImagen(fn) { _callbackImagenAgregada = fn; }
+function notificarImagenAgregada() { _callbackImagenAgregada?.(); }
 const MAX_CAPTURAS_MICRO = 4;
 
 document.querySelectorAll('.zona-imagen').forEach(zona => {
@@ -317,6 +321,7 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
             btnQuitar.hidden = false;
             vacia.hidden = true;
             zona.classList.add('con-imagen');
+            notificarImagenAgregada();
         };
         reader.readAsDataURL(file);
     });
@@ -433,6 +438,7 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
         capturasMicroscopio.push(canvas.toDataURL('image/jpeg', 0.85));
         actualizarInsignia();
         if (galeriaEsVisible) renderizarGaleria();
+        notificarImagenAgregada();
     });
 
     btnCerrar.addEventListener('click', e => {
@@ -446,3 +452,4 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
         micVacia.hidden = false;
     });
 })();
+

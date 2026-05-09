@@ -43,19 +43,19 @@
         </select>
     </div>
     <div class="acciones-cabecera">
-        <button class="boton boton-tema" id="btn-tema" type="button" aria-label="Cambiar tema">
+        <button class="boton boton-tema" id="btn-tema" type="button" aria-label="Cambiar tema" data-tooltip="Cambiar tema">
             <svg class="icono-sol" viewBox="0 -960 960 960" aria-hidden="true"><path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></svg>
             <svg class="icono-luna" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/></svg>
         </button>
-        <button class="boton boton-usuario" id="btn-usuario" type="button">Login</button>
+        <button class="boton boton-usuario" id="btn-usuario" type="button" data-tooltip="Iniciar sesión">Login</button>
     </div>
 </header>
 
 <div id="examenes-subtabs-bar" hidden>
-    <button class="tab-examenes activo" data-subtab-target="panel-hema">Hemat.</button>
-    <button class="tab-examenes" data-subtab-target="panel-bioquim">Bioq.</button>
-    <button class="tab-examenes" data-subtab-target="panel-uri">Uri.</button>
-    <button class="tab-examenes" data-subtab-target="panel-endo">Endo.</button>
+    <button class="tab-examenes activo" data-subtab-target="panel-hema" data-tooltip="Hematología">Hemat.</button>
+    <button class="tab-examenes" data-subtab-target="panel-bioquim" data-tooltip="Bioquímica sanguínea">Bioq.</button>
+    <button class="tab-examenes" data-subtab-target="panel-uri" data-tooltip="Urianálisis">Uri.</button>
+    <button class="tab-examenes" data-subtab-target="panel-endo" data-tooltip="Perfil endocrino">Endo.</button>
 </div>
 
 <!-- GRID -->
@@ -606,7 +606,7 @@
                         <span>Muestra 1</span>
                     </div>
                     <img class="zona-img-preview" src="" alt="Citología 1" hidden>
-                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" data-tooltip="Quitar imagen" hidden>
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
                     </button>
                 </div>
@@ -617,7 +617,7 @@
                         <span>Muestra 2</span>
                     </div>
                     <img class="zona-img-preview" src="" alt="Citología 2" hidden>
-                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" data-tooltip="Quitar imagen" hidden>
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
                     </button>
                 </div>
@@ -628,7 +628,7 @@
                         <span>Muestra 3</span>
                     </div>
                     <img class="zona-img-preview" src="" alt="Citología 3" hidden>
-                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" data-tooltip="Quitar imagen" hidden>
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
                     </button>
                 </div>
@@ -639,26 +639,26 @@
                         <span>Muestra 4</span>
                     </div>
                     <img class="zona-img-preview" src="" alt="Citología 4" hidden>
-                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" hidden>
+                    <button class="btn-quitar-zona" type="button" aria-label="Quitar imagen" data-tooltip="Quitar imagen" hidden>
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
                     </button>
                 </div>
             </div>
-            <div class="zona-microscopio" data-zona="4">
+            <div class="zona-microscopio" data-zona="4" data-tooltip="Conectar cámara de microscopio">
                 <div class="micro-vacia">
                     <svg class="zona-vacia-icono" viewBox="0 -960 960 960" aria-hidden="true"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm182.5-377.5Q400-595 400-620t-17.5-42.5Q365-680 340-680t-42.5 17.5Q280-645 280-620t17.5 42.5Q315-560 340-560t42.5-17.5Z"/></svg>
                     <span>Microscopio</span>
                 </div>
                 <video class="micro-video" autoplay playsinline muted hidden></video>
                 <div class="micro-controles" hidden>
-                    <button class="micro-btn micro-btn-galeria" type="button" aria-label="Galería">
+                    <button class="micro-btn micro-btn-galeria" type="button" aria-label="Galería" data-tooltip="Galería de capturas">
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm182.5-377.5Q400-595 400-620t-17.5-42.5Q365-680 340-680t-42.5 17.5Q280-645 280-620t17.5 42.5Q315-560 340-560t42.5-17.5Z"/></svg>
                         <span class="micro-badge" hidden>0</span>
                     </button>
-                    <button class="micro-btn micro-btn-capturar" type="button" aria-label="Capturar foto">
+                    <button class="micro-btn micro-btn-capturar" type="button" aria-label="Capturar foto" data-tooltip="Capturar foto">
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-260q75 0 127.5-52.5T660-440q0-75-52.5-127.5T480-620q-75 0-127.5 52.5T300-440q0 75 52.5 127.5T480-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM160-120q-33 0-56.5-23.5T80-200v-480q0-33 23.5-56.5T160-760h126l74-80h240l74 80h126q33 0 56.5 23.5T880-680v480q0 33-23.5 56.5T800-120H160Zm0-80h640v-480H638l-73-80H395l-73 80H160v480Zm320-240Z"/></svg>
                     </button>
-                    <button class="micro-btn micro-btn-cerrar" type="button" aria-label="Cerrar cámara">
+                    <button class="micro-btn micro-btn-cerrar" type="button" aria-label="Cerrar cámara" data-tooltip="Cerrar cámara">
                         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
                     </button>
                 </div>
@@ -708,8 +708,8 @@
             <textarea id="signos-clinicos" name="signos-clinicos" placeholder="Aporta información adicional a medGemma..."></textarea>
         </div>
         <div class="panel-pie-acciones">
-            <button class="boton boton-exportar-pdf" type="button">Exportar PDF</button>
-            <button class="boton boton-analizar" type="button">Análisis IA</button>
+            <button class="boton boton-exportar-pdf" type="button" data-tooltip="Exportar a PDF">Exportar PDF</button>
+            <button class="boton boton-analizar" type="button" data-tooltip="Análisis IA completo">Análisis IA</button>
         </div>
     </section>
 
@@ -723,23 +723,23 @@
 
     <!-- NAV INFERIOR -->
     <nav class="nav-inferior" id="nav-inferior" aria-label="Secciones">
-    <button class="tab-nav activo" data-target="panel-flujo" aria-selected="true">
+    <button class="tab-nav activo" data-target="panel-flujo" aria-selected="true" data-tooltip="Guía de uso">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
         <span>Flujo</span>
     </button>
-    <button class="tab-nav" data-target="panel-paciente" aria-selected="false">
+    <button class="tab-nav" data-target="panel-paciente" aria-selected="false" data-tooltip="Datos del paciente">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
         <span>Paciente</span>
     </button>
-    <button class="tab-nav" data-target="examenes" aria-selected="false">
+    <button class="tab-nav" data-target="examenes" aria-selected="false" data-tooltip="Exámenes de laboratorio">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M320-280v-80h87q-5 20-6.5 40t.5 40h-81Zm0 200q-83 0-141.5-58.5T120-280v-360q-33 0-56.5-23.5T40-720v-80q0-33 23.5-56.5T120-880h400q33 0 56.5 23.5T600-800v80q0 33-23.5 56.5T520-640v121q-24 15-44 35t-35 44H320v-80h120v-120H200v360q0 50 35 85t85 35q30 0 54.5-13t41.5-36q8 20 18 38t24 35q-27 26-62 41t-76 15ZM120-720h400v-80H120v80Zm611 491q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-40 756-148q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-300q0-75 52.5-127.5T660-480q75 0 127.5 52.5T840-300q0 26-7 50t-21 46L920-96l-56 56ZM120-720v-80 80Z"/></svg>
         <span>Exámenes</span>
     </button>
-    <button class="tab-nav" data-target="panel-imagenes" aria-selected="false">
+    <button class="tab-nav" data-target="panel-imagenes" aria-selected="false" data-tooltip="Imágenes y citologías">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M200-120v-80h200v-80q-83 0-141.5-58.5T200-480q0-61 33.5-111t90.5-73q8-34 35.5-55t62.5-21l-22-62 38-14-14-36 76-28 12 38 38-14 110 300-38 14 14 38-76 28-12-38-38 14-24-66q-15 14-34.5 21t-39.5 5q-22-2-41-13.5T338-582q-27 16-42.5 43T280-480q0 50 35 85t85 35h320v80H520v80h240v80H200Zm346-458 36-14-68-188-38 14 70 188Zm-97.5-33.5Q460-623 460-640t-11.5-28.5Q437-680 420-680t-28.5 11.5Q380-657 380-640t11.5 28.5Q403-600 420-600t28.5-11.5ZM546-578Zm-126-62Zm0 0Z"/></svg>
         <span>Citologías</span>
     </button>
-    <button class="tab-nav" data-target="panel-resultados" aria-selected="false">
+    <button class="tab-nav" data-target="panel-resultados" aria-selected="false" data-tooltip="Resultados e interpretación IA">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M323-160q-11 0-20.5-5.5T288-181l-78-139h58l40 80h92v-40h-68l-40-80H188l-57-100q-2-5-3.5-10t-1.5-10q0-4 5-20l57-100h104l40-80h68v-40h-92l-40 80h-58l78-139q5-10 14.5-15.5T323-800h97q17 0 28.5 11.5T460-760v160h-60l-40 40h100v120h-88l-40-80h-92l-40 40h108l40 80h112v200q0 17-11.5 28.5T420-160h-97Zm217 0q-17 0-28.5-11.5T500-200v-200h112l40-80h108l-40-40h-92l-40 80h-88v-120h100l-40-40h-60v-160q0-17 11.5-28.5T540-800h97q11 0 20.5 5.5T672-779l78 139h-58l-40-80h-92v40h68l40 80h104l57 100q2 5 3.5 10t1.5 10q0 4-5 20l-57 100H668l-40 80h-68v40h92l40-80h58l-78 139q-5 10-14.5 15.5T637-160h-97Z"/></svg>
         <span>Interpretación</span>
     </button>
@@ -750,7 +750,7 @@
 <!-- MODAL DE AUTENTICACIÓN -->
 <div id="modal-auth-overlay" class="modal-overlay" aria-hidden="true"></div>
 <div id="modal-auth" class="modal-auth" role="dialog" aria-modal="true" aria-labelledby="modal-auth-titulo" hidden>
-    <button id="modal-auth-cerrar" class="modal-cerrar" type="button" aria-label="Cerrar">
+    <button id="modal-auth-cerrar" class="modal-cerrar" type="button" aria-label="Cerrar" data-tooltip="Cerrar">
         <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>
     </button>
     <h2 id="modal-auth-titulo" class="modal-titulo">Acceso a Morphos</h2>

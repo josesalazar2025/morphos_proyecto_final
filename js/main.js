@@ -1,3 +1,4 @@
+import './tooltip.js';
 import { analizarResultados } from './analisis.js';
 import { colapsarPatrones, inicializarSincMob } from './ui.js';
 import { llamarIA, inicializarConfigBackend } from './ia.js';

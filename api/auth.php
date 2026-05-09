@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode([
         'autenticado' => isset($_SESSION['morphos_usuario']),
-        'nombre'      => $_SESSION['morphos_nombre'] ?? null,
+        'nombre' => $_SESSION['morphos_nombre'] ?? null,
     ]);
     exit;
 }
@@ -32,7 +32,7 @@ $accion = $cuerpo['accion'] ?? '';
 switch ($accion) {
 
     case 'login':
-        $email    = trim($cuerpo['email'] ?? '');
+        $email = trim($cuerpo['email'] ?? '');
         $password = $cuerpo['password'] ?? '';
 
         if (!$email || !$password) {
@@ -48,7 +48,7 @@ switch ($accion) {
 
         if ($usuario && password_verify($password, $usuario['password'])) {
             $_SESSION['morphos_usuario'] = $usuario['email'];
-            $_SESSION['morphos_nombre']  = $usuario['nombre'];
+            $_SESSION['morphos_nombre'] = $usuario['nombre'];
             echo json_encode(['ok' => true, 'nombre' => $usuario['nombre']]);
         } else {
             http_response_code(401);
@@ -57,9 +57,9 @@ switch ($accion) {
         break;
 
     case 'registro':
-        $nombre   = trim($cuerpo['nombre'] ?? '');
+        $nombre = trim($cuerpo['nombre'] ?? '');
         $apellido = trim($cuerpo['apellido'] ?? '');
-        $email    = trim($cuerpo['email'] ?? '');
+        $email = trim($cuerpo['email'] ?? '');
         $password = $cuerpo['password'] ?? '';
 
         if (!$nombre || !$apellido || !$email || !$password) {
@@ -93,14 +93,14 @@ switch ($accion) {
         $stmt = $conexion->prepare(
             "INSERT INTO usuarios (nombre, apellido, email, password) VALUES (:nombre, :apellido, :email, :password)"
         );
-        $stmt->bindParam(':nombre',   $nombre);
+        $stmt->bindParam(':nombre', $nombre);
         $stmt->bindParam(':apellido', $apellido);
-        $stmt->bindParam(':email',    $email);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $hash);
         $stmt->execute();
 
         $_SESSION['morphos_usuario'] = $email;
-        $_SESSION['morphos_nombre']  = $nombre;
+        $_SESSION['morphos_nombre'] = $nombre;
         echo json_encode(['ok' => true, 'nombre' => $nombre]);
         break;
 

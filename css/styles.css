@@ -1,104 +1,104 @@
 @charset "utf-8";
 
 :root {
-    --surface-page:    #F4F6F9;
-    --surface-1:       #FFFFFF;
-    --surface-2:       #E3EAF2;
-    --surface-3:       #D6E0EB;
-    --surface-input:   #FFFFFF;
+    --surface-page: #F4F6F9;
+    --surface-1: #FFFFFF;
+    --surface-2: #E3EAF2;
+    --surface-3: #D6E0EB;
+    --surface-input: #FFFFFF;
 
-    --text-1:          #0F1923;
-    --text-2:          #2D3E50;
-    --text-3:          #3D5470;
-    --text-4:          #6B7F90;
-    --text-accent:     #0B6158;
-    --text-on-accent:  #FFFFFF;
+    --text-1: #0F1923;
+    --text-2: #2D3E50;
+    --text-3: #3D5470;
+    --text-4: #6B7F90;
+    --text-accent: #0B6158;
+    --text-on-accent: #FFFFFF;
 
-    --border-1:        #D0DAE4;
-    --border-2:        #B8C6D4;
-    --border-focus:    #0F7A6B;
+    --border-1: #D0DAE4;
+    --border-2: #B8C6D4;
+    --border-focus: #0F7A6B;
 
-    --accent:          #0F7A6B;
-    --accent-hover:    #0B6158;
-    --accent-dim:      #8DCCBE;
-    --focus-ring:      rgba(15, 122, 107, 0.15);
+    --accent: #0F7A6B;
+    --accent-hover: #0B6158;
+    --accent-dim: #8DCCBE;
+    --focus-ring: rgba(15, 122, 107, 0.15);
 
-    --alto:            #B8372C;
-    --alto-bg:         rgba(184, 55, 44, 0.10);
-    --alto-border:     rgba(184, 55, 44, 0.35);
-    --alto-strong:     #8C271E;
+    --alto: #B8372C;
+    --alto-bg: rgba(184, 55, 44, 0.10);
+    --alto-border: rgba(184, 55, 44, 0.35);
+    --alto-strong: #8C271E;
 
-    --bajo:            #2F6FB5;
-    --bajo-bg:         rgba(47, 111, 181, 0.10);
-    --bajo-border:     rgba(47, 111, 181, 0.35);
-    --bajo-strong:     #21548D;
+    --bajo: #2F6FB5;
+    --bajo-bg: rgba(47, 111, 181, 0.10);
+    --bajo-border: rgba(47, 111, 181, 0.35);
+    --bajo-strong: #21548D;
 
-    --urgent:          #A21E1E;
-    --monitor:         #B5791A;
-    --monitor-bg:      rgba(181, 121, 26, 0.12);
+    --urgent: #A21E1E;
+    --monitor: #B5791A;
+    --monitor-bg: rgba(181, 121, 26, 0.12);
 
-    --radius-sm:       4px;
-    --radius-md:       8px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
 
-    --space-1:         4px;
-    --space-2:         8px;
-    --space-3:         12px;
-    --space-4:         16px;
-    --space-6:         24px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
 
-    --dur-fast:        120ms;
-    --dur-base:        180ms;
+    --dur-fast: 120ms;
+    --dur-base: 180ms;
 
-    --font-sans:       'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --font-mono:       'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
-    --fs-xs:           clamp(11px, 10.7px + 0.09vw, 12px);
-    --fs-sm:           clamp(13px, 12.6px + 0.09vw, 14px);
-    --fs-ui:           clamp(14px, 13.8px + 0.09vw, 15px);
-    --fs-base:         clamp(16px, 15.7px + 0.09vw, 17px);
-    --fs-xl:           clamp(22px, 21.3px + 0.18vw, 1.5rem);
-    --lh-snug:         1.4;
-    --lh-normal:       1.5;
-    --tracking-wide:   1px;
-    --tracking-wider:  0.1em;
+    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+    --fs-xs: clamp(11px, 10.7px + 0.09vw, 12px);
+    --fs-sm: clamp(13px, 12.6px + 0.09vw, 14px);
+    --fs-ui: clamp(14px, 13.8px + 0.09vw, 15px);
+    --fs-base: clamp(16px, 15.7px + 0.09vw, 17px);
+    --fs-xl: clamp(22px, 21.3px + 0.18vw, 1.5rem);
+    --lh-snug: 1.4;
+    --lh-normal: 1.5;
+    --tracking-wide: 1px;
+    --tracking-wider: 0.1em;
     --tracking-widest: 4px;
 }
 
 :root[data-theme="dark"] {
-    --surface-page:    #0E1011;
-    --surface-1:       #16191B;
-    --surface-2:       #1E2224;
-    --surface-3:       #262B2E;
-    --surface-input:   #121517;
+    --surface-page: #0E1011;
+    --surface-1: #16191B;
+    --surface-2: #1E2224;
+    --surface-3: #262B2E;
+    --surface-input: #121517;
 
-    --text-1:          #ECECE8;
-    --text-2:          #BFC0BC;
-    --text-3:          #8E9290;
-    --text-4:          #6B6F6D;
-    --text-accent:     #5ECDB8;
-    --text-on-accent:  #062520;
+    --text-1: #ECECE8;
+    --text-2: #BFC0BC;
+    --text-3: #8E9290;
+    --text-4: #6B6F6D;
+    --text-accent: #5ECDB8;
+    --text-on-accent: #062520;
 
-    --border-1:        #2A2E31;
-    --border-2:        #363B3E;
-    --border-focus:    #5ECDB8;
+    --border-1: #2A2E31;
+    --border-2: #363B3E;
+    --border-focus: #5ECDB8;
 
-    --accent:          #5ECDB8;
-    --accent-hover:    #7BDAC7;
-    --accent-dim:      #2A5A52;
-    --focus-ring:      rgba(94, 205, 184, 0.15);
+    --accent: #5ECDB8;
+    --accent-hover: #7BDAC7;
+    --accent-dim: #2A5A52;
+    --focus-ring: rgba(94, 205, 184, 0.15);
 
-    --alto:            #F08478;
-    --alto-bg:         rgba(240, 132, 120, 0.14);
-    --alto-border:     rgba(240, 132, 120, 0.32);
-    --alto-strong:     #F5A59B;
+    --alto: #F08478;
+    --alto-bg: rgba(240, 132, 120, 0.14);
+    --alto-border: rgba(240, 132, 120, 0.32);
+    --alto-strong: #F5A59B;
 
-    --bajo:            #7EB8F0;
-    --bajo-bg:         rgba(126, 184, 240, 0.14);
-    --bajo-border:     rgba(126, 184, 240, 0.32);
-    --bajo-strong:     #A3CDF5;
+    --bajo: #7EB8F0;
+    --bajo-bg: rgba(126, 184, 240, 0.14);
+    --bajo-border: rgba(126, 184, 240, 0.32);
+    --bajo-strong: #A3CDF5;
 
-    --urgent:          #F08478;
-    --monitor:         #E5B261;
-    --monitor-bg:      rgba(229, 178, 97, 0.14);
+    --urgent: #F08478;
+    --monitor: #E5B261;
+    --monitor-bg: rgba(229, 178, 97, 0.14);
 }
 
 *,
@@ -508,17 +508,9 @@ main {
     padding: 12px 1rem;
 }
 
-/*  TOOLTIPS DE BOTONES EN CABECERA  */
-[data-tooltip] {
-    position: relative;
-}
-
-[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
+/*  TOOLTIP GLOBAL  */
+#tooltip-global {
+    position: fixed;
     background: var(--surface-0, #1a1a1a);
     color: #fff;
     border: 1px solid var(--border-1);
@@ -530,13 +522,12 @@ main {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.15s;
-    z-index: 100;
+    z-index: 10000;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
-[data-tooltip]:hover::after {
+#tooltip-global.visible {
     opacity: 1;
-    transition-delay: 0.4s;
 }
 
 /*  BOTÓN LIMPIAR PANEL  */
@@ -1616,7 +1607,7 @@ main {
     border-bottom-color: var(--accent);
 }
 
-/*  DESKTOP ONLY: oculta elementos de mobile  */
+/*  SOLO DESKTOP */
 @media (min-width: 1101px) {
     .cabecera-columnas--mobile-only {
         display: none;
@@ -1633,6 +1624,11 @@ main {
 
     .subpanel > .panel-cabecera,
     #panel-flujo > .panel-cabecera {
+        cursor: default;
+    }
+
+    .subpanel > .panel-cabecera button,
+    #panel-flujo > .panel-cabecera button {
         cursor: pointer;
     }
 
@@ -1903,7 +1899,7 @@ main {
     }
 }
 
-/* ── Indicador de usuario ──────────────────────────────────────────────────── */
+/* Indicador de usuario */
 
 .boton-usuario {
     font-size: var(--fs-sm);
@@ -1928,7 +1924,7 @@ main {
 }
 
 
-/* ── Modal overlay ─────────────────────────────────────────────────────────── */
+/* Modal overlay  */
 
 .modal-overlay {
     position: fixed;
@@ -1946,13 +1942,12 @@ main {
     pointer-events: auto;
 }
 
-/* La overlay está antes del modal en el DOM, así que usamos JS para manejarla */
 .modal-overlay.activo {
     opacity: 1;
     pointer-events: auto;
 }
 
-/* ── Modal ─────────────────────────────────────────────────────────────────── */
+/* Modal*/
 
 .modal-auth {
     position: fixed;
@@ -2010,7 +2005,7 @@ main {
     margin: 0 0 var(--space-4);
 }
 
-/* ── Tabs del modal ────────────────────────────────────────────────────────── */
+/*Tabs del modal */
 
 .modal-tabs {
     display: flex;
@@ -2043,7 +2038,7 @@ main {
     border-bottom-color: var(--accent);
 }
 
-/* ── Campos del formulario ─────────────────────────────────────────────────── */
+/* Campos del formulario */
 
 .modal-campo {
     display: flex;

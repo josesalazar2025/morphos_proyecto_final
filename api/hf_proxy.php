@@ -9,9 +9,9 @@ foreach (file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) 
 
 if (!$hfKey) { http_response_code(503); echo json_encode(['error' => 'Servicio no configurado.']); exit; }
 
-$body  = json_decode(file_get_contents('php://input'), true);
+$body = json_decode(file_get_contents('php://input'), true);
 $SPACE = 'https://blackmistcode-morphos-medgemma.hf.space/gradio_api';
-$auth  = ['Content-Type: application/json', "Authorization: Bearer $hfKey"];
+$auth = ['Content-Type: application/json', "Authorization: Bearer $hfKey"];
 
 set_time_limit(120);
 

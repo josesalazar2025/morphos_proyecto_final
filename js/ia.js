@@ -1,6 +1,6 @@
 import { imagenesDataUrl, capturasMicroscopio } from './ui.js';
 
-const BACKEND_KEY   = 'mx-ia-backend';
+const BACKEND_KEY = 'mx-ia-backend';
 const OLLAMA_URL_KEY = 'mx-ia-ollama-url';
 const OLLAMA_MOD_KEY = 'mx-ia-ollama-model';
 
@@ -17,7 +17,6 @@ export function inicializarConfigBackend() {
 
     const urlGuardada = localStorage.getItem(OLLAMA_URL_KEY);
     let modeloGuardado = localStorage.getItem(OLLAMA_MOD_KEY);
-    // Migrar valor por defecto obsoleto
     if (modeloGuardado === 'medgemma:latest') {
         modeloGuardado = 'medgemma1.5:latest';
         localStorage.setItem(OLLAMA_MOD_KEY, modeloGuardado);
@@ -44,7 +43,7 @@ export function inicializarConfigBackend() {
 
 function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const paciente = obtenerDatosPaciente();
-    const valores  = obtenerValoresFormulario();
+    const valores = obtenerValoresFormulario();
     const { hallazgos, patrones } = getUltimoAnalisis();
     const signosText = document.getElementById('signos-clinicos').value.trim();
     const refEspecie = paciente.especie ? (getReferencias()[paciente.especie] || {}) : {};
@@ -70,7 +69,7 @@ function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUlti
     return `IMPORTANTE: Responde ÚNICAMENTE en español. Do not write in English under any circumstance.
 
     Eres un médico veterinario especialista en patología clínica. Sólo responderás consultas asociadas a ésta área de conocimiento y basado en la evidencia proporcionada.
-    Si te envían imágenes de citología debes hacer una revisión exhaustiva de la morfología celular, identificar lesiones, patrones anormales, presencia de hemoparásitos intracelulares y extracelulares (Anaplasma, Babesia, Ehrlichia, Hepatozoon, Piroplasma, Mycoplasma, etc)  o inclusiones citoplasmáticas.
+    Si te envían imágenes de citología debes hacer una revisión exhaustiva de la morfología celular, identificar lesiones, patrones anormales, presencia de hemoparásitos intracelulares y extracelulares (Anaplasma, Babesia, Ehrlichia, Hepatozoon, Piroplasma, Mycoplasma, etc) o inclusiones citoplasmáticas.
     Analiza los resultados y proporciona una interpretación clínica concisa.
 
     Paciente: ${paciente.especie || 'desconocido'}, raza: ${paciente.raza || 'NE'}, edad: ${edadTexto}, sexo: ${paciente.sexo || 'NE'}
@@ -92,18 +91,39 @@ function limpiarRespuesta(text) {
         text = text.slice(0, text.indexOf('<end_of_turn>'));
     }
     if (text.includes('<unused95>')) {
-        text = text.split('<unused95>').slice(1).join('');
+        // Formato normal: <unused94>pensamiento<unused95>respuesta
+        text = text.split('<unused95>').pop();
     } else if (text.includes('<unused94>')) {
-        // Bloque de razonamiento presente pero sin token de respuesta — el modelo agotó los tokens
-        const afterThinking = text.split('<unused94>').slice(2).join('');
-        if (afterThinking.trim()) {
-            text = afterThinking;
-        } else {
-            return 'El modelo agotó los tokens durante el razonamiento. Intenta de nuevo o usa menos imágenes.';
-        }
+        // El modelo agotó tokens en el razonamiento — mostrar el pensamiento como respuesta
+        text = text.split('<unused94>').slice(1).join('').trim();
     }
     text = text.replace(/<unused\d+>/g, '');
     text = text.replace(/<start_of_turn>\w+\n?/g, '');
+
+    // Quitar prefijos de rol que el modelo a veces antepone
+    text = text.replace(/^\d+\s+(medical assistant|assistant|model)\s*/i, '');
+
+    // Quitar LaTeX
+    text = text.replace(/\$\\boxed\{[^}]*\}\$/g, '');
+    text = text.replace(/\\begin\{[^}]+\}[\s\S]*?\\end\{[^}]+\}/g, '');
+    text = text.replace(/\\[a-zA-Z]+(\{[^}]*\})?/g, '');
+    text = text.replace(/\$[^$]*\$/g, '');
+
+    // Colapsar líneas vacías múltiples
+    text = text.replace(/\n{3,}/g, '\n\n').trim();
+
+    // Cortar al primer párrafo que se repite (loop del modelo)
+    const parrafos = text.split(/\n\n+/);
+    const vistos = new Set();
+    const sinRepetidos = [];
+    for (const p of parrafos) {
+        const clave = p.trim().slice(0, 80);
+        if (vistos.has(clave)) break;
+        vistos.add(clave);
+        sinRepetidos.push(p);
+    }
+    text = sinRepetidos.join('\n\n');
+
     return text.trim() || 'Sin respuesta del modelo.';
 }
 
@@ -131,9 +151,9 @@ export async function llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, g
 
 async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const urlBase = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
-    const model   = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma1.5:latest';
-    const prompt  = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
-    const imagenes  = [...imagenesDataUrl.filter(Boolean), ...capturasMicroscopio];
+    const model = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma1.5:latest';
+    const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
+    const imagenes = [...imagenesDataUrl.filter(Boolean), ...capturasMicroscopio];
 
     const contenido = [];
     for (const img of imagenes) {

@@ -20,16 +20,16 @@ export async function verificarAuth() {
 
 // ── Modal ──────────────────────────────────────────────────────────────────────
 
-const modal         = document.getElementById('modal-auth');
-const overlay       = document.getElementById('modal-auth-overlay');
-const btnCerrar     = document.getElementById('modal-auth-cerrar');
-const tabLogin      = document.getElementById('auth-tab-login');
-const tabRegistro   = document.getElementById('auth-tab-registro');
-const panelLogin    = document.getElementById('auth-panel-login');
+const modal = document.getElementById('modal-auth');
+const overlay = document.getElementById('modal-auth-overlay');
+const btnCerrar = document.getElementById('modal-auth-cerrar');
+const tabLogin = document.getElementById('auth-tab-login');
+const tabRegistro = document.getElementById('auth-tab-registro');
+const panelLogin = document.getElementById('auth-panel-login');
 const panelRegistro = document.getElementById('auth-panel-registro');
-const formLogin     = document.getElementById('form-login');
-const formRegistro  = document.getElementById('form-registro');
-const errorLogin    = document.getElementById('auth-error-login');
+const formLogin = document.getElementById('form-login');
+const formRegistro = document.getElementById('form-registro');
+const errorLogin = document.getElementById('auth-error-login');
 const errorRegistro = document.getElementById('auth-error-registro');
 
 function abrirModal() {
@@ -59,7 +59,7 @@ function activarTab(cual) {
     const esLogin = cual === 'login';
     tabLogin.classList.toggle('activo', esLogin);
     tabRegistro.classList.toggle('activo', !esLogin);
-    panelLogin.hidden    = !esLogin;
+    panelLogin.hidden = !esLogin;
     panelRegistro.hidden = esLogin;
 }
 
@@ -73,11 +73,15 @@ export function abrirModalAuth(callbackExito) {
 const btnUsuario = document.getElementById('btn-usuario');
 
 function actualizarBtnUsuario(nombre) {
-    if (btnUsuario) btnUsuario.textContent = nombre ?? 'Login';
+    if (!btnUsuario) return;
+    btnUsuario.textContent = nombre ?? 'Login';
+    btnUsuario.dataset.tooltip = 'Cerrar sesión';
 }
 
 function resetearBtnUsuario() {
-    if (btnUsuario) btnUsuario.textContent = 'Login';
+    if (!btnUsuario) return;
+    btnUsuario.textContent = 'Login';
+    btnUsuario.dataset.tooltip = 'Iniciar sesión';
 }
 
 // ── Validación en tiempo real ──────────────────────────────────────────────────
@@ -87,7 +91,7 @@ function esEmailValido(v) {
 }
 
 function marcarCampo(input, valido) {
-    input.classList.toggle('campo-valido',   valido);
+    input.classList.toggle('campo-valido', valido);
     input.classList.toggle('campo-invalido', !valido);
 }
 
@@ -102,30 +106,30 @@ function activarValidacionCampo(input, reglaDeFalso) {
 }
 
 function inicializarValidacionLogin() {
-    const email    = formLogin.querySelector('[name="email"]');
+    const email = formLogin.querySelector('[name="email"]');
     const password = formLogin.querySelector('[name="password"]');
-    activarValidacionCampo(email,    () => !esEmailValido(email.value));
+    activarValidacionCampo(email, () => !esEmailValido(email.value));
     activarValidacionCampo(password, () => password.value.length < 1);
 }
 
 function inicializarValidacionRegistro() {
-    const nombre    = formRegistro.querySelector('[name="nombre"]');
-    const apellido  = formRegistro.querySelector('[name="apellido"]');
-    const email     = formRegistro.querySelector('[name="email"]');
-    const password  = formRegistro.querySelector('[name="password"]');
+    const nombre = formRegistro.querySelector('[name="nombre"]');
+    const apellido = formRegistro.querySelector('[name="apellido"]');
+    const email = formRegistro.querySelector('[name="email"]');
+    const password = formRegistro.querySelector('[name="password"]');
     const password2 = formRegistro.querySelector('[name="password2"]');
 
-    activarValidacionCampo(nombre,   () => nombre.value.trim().length < 1);
+    activarValidacionCampo(nombre, () => nombre.value.trim().length < 1);
     activarValidacionCampo(apellido, () => apellido.value.trim().length < 1);
-    activarValidacionCampo(email,    () => !esEmailValido(email.value));
+    activarValidacionCampo(email, () => !esEmailValido(email.value));
     activarValidacionCampo(password, () => password.value.length < 6);
 
     // password2 depende del valor de password, se re-evalúa en ambos
     let tocadoP2 = false;
     const validarP2 = () => password.value === password2.value && password2.value.length > 0;
-    password2.addEventListener('blur',  () => { tocadoP2 = true; marcarCampo(password2, validarP2()); });
+    password2.addEventListener('blur', () => { tocadoP2 = true; marcarCampo(password2, validarP2()); });
     password2.addEventListener('input', () => { if (tocadoP2) marcarCampo(password2, validarP2()); });
-    password.addEventListener('input',  () => { if (tocadoP2) marcarCampo(password2, validarP2()); });
+    password.addEventListener('input', () => { if (tocadoP2) marcarCampo(password2, validarP2()); });
 }
 
 inicializarValidacionLogin();
@@ -136,9 +140,9 @@ inicializarValidacionRegistro();
 async function enviarFormAuth(accion, campos) {
     try {
         const resp = await fetch('api/auth.php', {
-            method:  'POST',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ accion, ...campos }),
+            body: JSON.stringify({ accion, ...campos }),
         });
         return await resp.json();
     } catch {
@@ -154,7 +158,7 @@ formLogin.addEventListener('submit', async e => {
     btn.textContent = 'Ingresando…';
 
     const datos = await enviarFormAuth('login', {
-        email:    formLogin.querySelector('[name="email"]').value,
+        email: formLogin.querySelector('[name="email"]').value,
         password: formLogin.querySelector('[name="password"]').value,
     });
 
@@ -177,7 +181,7 @@ formRegistro.addEventListener('submit', async e => {
     btn.disabled = true;
     btn.textContent = 'Registrando…';
 
-    const password  = formRegistro.querySelector('[name="password"]').value;
+    const password = formRegistro.querySelector('[name="password"]').value;
     const password2 = formRegistro.querySelector('[name="password2"]').value;
 
     if (password !== password2) {
@@ -188,9 +192,9 @@ formRegistro.addEventListener('submit', async e => {
     }
 
     const datos = await enviarFormAuth('registro', {
-        nombre:   formRegistro.querySelector('[name="nombre"]').value,
+        nombre: formRegistro.querySelector('[name="nombre"]').value,
         apellido: formRegistro.querySelector('[name="apellido"]').value,
-        email:    formRegistro.querySelector('[name="email"]').value,
+        email: formRegistro.querySelector('[name="email"]').value,
         password,
     });
 
@@ -220,9 +224,9 @@ btnUsuario?.addEventListener('click', async () => {
         abrirModal();
     } else {
         await fetch('api/auth.php', {
-            method:  'POST',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ accion: 'logout' }),
+            body: JSON.stringify({ accion: 'logout' }),
         });
         estadoAuth = false;
         resetearBtnUsuario();
