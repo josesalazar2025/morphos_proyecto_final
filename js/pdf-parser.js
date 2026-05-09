@@ -5,7 +5,7 @@ const PDFJS_WORKER = 'assets/lib/pdfjs/pdf.worker.min.js';
 // Cada entrada: nombre de campo (coincide con input[name="…"]) → regex + claveConv opcional
 // claveConv → sobreescribe la clave de conversión (permite reglas distintas para el mismo campo)
 const DEFS_ANALITOS = [
-    // ── Hematología: Serie Roja ──────────────────────────────────────────────
+    // Hematología: Serie Roja
     { campo: 'rbc', re: /\b(?:eritrocit\w*|gl[oó]bulos?\s+rojos?|r\.?b\.?c\.?|eri)\b/i },
     { campo: 'hgb', re: /\b(?:hemoglobin[ao]?\w*|hgb|hb)\b(?!a\d)/i },
     { campo: 'hct', re: /\b(?:hematocrit[oo]?\w*|hct|pcv)\b/i },
@@ -18,7 +18,7 @@ const DEFS_ANALITOS = [
     { campo: 'reti_abs', re: /\b(?:reti\w*\s*#|ret\.?\s*#)\b/i },
     { campo: 'nrbc', re: /\b(?:n\.?r\.?b\.?c\.?|eritrocit\w+\s+nucle\w+|nucleat\w+\s+r\.?b\.?c\.?|nrbc)\b/i },
 
-    // ── Hematología: Serie Blanca ─────────────────────────────────────────────
+    // Hematología: Serie Blanca
     { campo: 'wbc', re: /\b(?:leucocit\w*|w\.?b\.?c\.?|white\s+blood\s+cell|leu)\b/i },
     { campo: 'neutro_abs', re: /\bgran?#/i },
     // gran?(?!#) y similares: evitan coincidir con abreviaturas "GRA#"/"LYM#"/"EOS#"
@@ -34,30 +34,30 @@ const DEFS_ANALITOS = [
     { campo: 'baso_abs', re: /\bbas\w*#/i },
     { campo: 'baso', re: /\b(?:bas[oó]fil\w*|bas(?!#))\b/i },
 
-    // ── Hematología: Plaquetas ────────────────────────────────────────────────
+    // Hematología: Plaquetas
     { campo: 'plt', re: /\b(?:plaqueta\w*|platelet\w*|plt\b|trc\b)\b/i },
     { campo: 'mpv', re: /\b(?:m\.?p\.?v\.?|vol(?:umen)?\s+plaquetario\s+medio)\b/i },
     { campo: 'pct', re: /\b(?:p\.?c\.?t\.?\b|plaquetocrit\w*)\b/i },
 
-    // ── Bioquímica: Enzimas Hepáticas ─────────────────────────────────────────
+    // Bioquímica: Enzimas Hepáticas
     { campo: 'alt', re: /\b(?:alt\b|gpt\b|alanin[ao]?\s+amino\w*)\b/i },
     { campo: 'ast', re: /\b(?:ast\b|got\b|aspart\w*)\b/i },
     { campo: 'fal', re: /\b(?:fal\b|alp\b|fosfatasa\s+alcalin\w*|alkaline\s+phosph\w*)\b/i },
     { campo: 'ggt', re: /\b(?:g\.?g\.?t\.?|gamma\s*glutamil\w*|gama\s*glutamil\w*)\b/i },
 
-    // ── Bioquímica: Función Hepática ──────────────────────────────────────────
+    // Bioquímica: Función Hepática
     { campo: 'bili', re: /\b(?:bilirrub\w*\s+total|total\s+bilirubin\w*|tbil\b)\b/i },
     { campo: 'bili', re: /\b(?:bilirrub\w*|bilirubin\w*|bili\b)\b/i },   // alternativa si no hubo coincidencia previa
     { campo: 'bili_dir', re: /\b(?:bilirrub\w*\s+direct\w*|direct\w*\s+bilirubin\w*|bili\s*dir\b)\b/i },
     { campo: 'acidos_bil', re: /\b(?:[aá]cid\w*\s+biliares?|bile\s+acids?|ácidos?\s+bil\w*)\b/i },
 
-    // ── Bioquímica: Función Renal ─────────────────────────────────────────────
+    // Bioquímica: Función Renal
     { campo: 'bun', claveConv: 'bun', re: /\b(?:bun\b|nitr[oó]geno\s+ureico)\b/i },
     { campo: 'bun', claveConv: 'urea', re: /\burea\b/i },
     { campo: 'creat', re: /\b(?:creatinin[ao]?\w*|crea\b)\b/i },
     { campo: 'sdma', re: /\b(?:sdma\b|dimetilargin\w*|symmetric\s+dime\w*)\b/i },
 
-    // ── Bioquímica: Metabolitos ───────────────────────────────────────────────
+    // Bioquímica: Metabolitos
     { campo: 'gluc', re: /\b(?:gluco(?:sa|se)\b|glucemia\b|glu\b)\b/i },
     { campo: 'prot', re: /\b(?:prote[íi]nas?\s+totales?|prot\s+total|tp)\b/i },
     { campo: 'alb', re: /\b(?:alb[úu]min[ao]?\w*|alb\b)\b/i },
@@ -66,27 +66,27 @@ const DEFS_ANALITOS = [
     { campo: 'calc', re: /\b(?:calcio\b|calcium\b|ca\b)\b/i },
     { campo: 'fruc', re: /\b(?:fructosamina\b|fructosamine\b|fruc\b)\b/i },
 
-    // ── Bioquímica: Electrolitos ──────────────────────────────────────────────
+    // Bioquímica: Electrolitos
     { campo: 'sodio', re: /\b(?:sodio\b|sodium\b)\b/i },
     { campo: 'potasio', re: /\b(?:potasio\b|potassium\b)\b/i },
     { campo: 'cloro', re: /\b(?:clor[ou]\w*|chloride\w*)\b/i },
     { campo: 'tco2', re: /\b(?:tco2\b|t\.?co\.?2\b|bicarbonat\w*|co2\s+total)\b/i },
 
-    // ── Bioquímica: Lípidos ───────────────────────────────────────────────────
+    // Bioquímica: Lípidos
     { campo: 'colest', re: /\b(?:colesterol\b|cholesterol\b|chol\b)\b/i },
     { campo: 'trigli', re: /\b(?:triglicérid\w*|triglic[eé]rid\w*|trig\b)\b/i },
 
-    // ── Bioquímica: Enzimas ───────────────────────────────────────────────────
+    // Bioquímica: Enzimas
     { campo: 'lipasa', re: /\b(?:lipas[ae]\b|lipa\b)\b/i },
     { campo: 'ck', re: /\b(?:c\.?k\.?\b|creatina?\s+kinas[ae]|creatine\s+kinas[ae])\b/i },
 
-    // ── Perfil Endocrino ──────────────────────────────────────────────────────
+    // Perfil Endocrino
     { campo: 'cortisol_bas', re: /\b(?:cortisol\s+bas[ae]?l?)\b/i },
     { campo: 'cortisol_acth', re: /\b(?:cortisol\s+(?:post[-\s]?acth|post)\b)/i },
     { campo: 't4_total', re: /\b(?:t4\s+total|t4\s+libre|tiroxin\w*|thyroxin\w*)\b/i },
     { campo: 'insulina', re: /\b(?:insulin[ao]?\w*)\b/i },
 
-    // ── Urianálisis — numérico ────────────────────────────────────────────────
+    // Urianálisis
     { campo: 'usg', re: /\b(?:usg\b|densidad\s+(?:urin|orin)\w*|gravedad\s+esp\w*)\b/i },
     { campo: 'ph', re: /\b(?:ph\s+(?:urin|orin)\w*|ph\s+orina)\b/i },
 ];
@@ -273,7 +273,7 @@ function parsearTextoLab(textoCrudo) {
     return resultados;
 }
 
-// ── Detección de información del paciente ─────────────────────────────────────
+// Detección de información del paciente
 
 const RAZAS_CANINO = [
     'labrador', 'golden retriever', 'golden', 'pastor alemán', 'pastor aleman', 'pastor',

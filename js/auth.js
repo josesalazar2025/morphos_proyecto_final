@@ -1,8 +1,7 @@
-// Estado de autenticación (null = no verificado aún)
 let estadoAuth = null;
 let accionPendiente = null;
 
-// ── Verificación de sesión ─────────────────────────────────────────────────────
+// Verificación de sesión 
 
 export async function verificarAuth() {
     if (estadoAuth !== null) return estadoAuth;
@@ -18,7 +17,7 @@ export async function verificarAuth() {
     return estadoAuth;
 }
 
-// ── Modal ──────────────────────────────────────────────────────────────────────
+// Modal
 
 const modal = document.getElementById('modal-auth');
 const overlay = document.getElementById('modal-auth-overlay');
@@ -68,7 +67,7 @@ export function abrirModalAuth(callbackExito) {
     abrirModal();
 }
 
-// ── Botón de usuario en header ─────────────────────────────────────────────────
+// Botón de usuario en header 
 
 const btnUsuario = document.getElementById('btn-usuario');
 
@@ -87,7 +86,7 @@ function resetearBtnUsuario() {
     btnUsuario.dataset.tooltip = 'Iniciar sesión';
 }
 
-// ── Validación en tiempo real ──────────────────────────────────────────────────
+// Validación en tiempo real 
 
 function esEmailValido(v) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -138,7 +137,7 @@ function inicializarValidacionRegistro() {
 inicializarValidacionLogin();
 inicializarValidacionRegistro();
 
-// ── Manejo de formularios ──────────────────────────────────────────────────────
+// Manejo de formularios
 
 async function enviarFormAuth(accion, campos) {
     try {
@@ -213,7 +212,7 @@ formRegistro.addEventListener('submit', async e => {
     accionPendiente = null;
 });
 
-// ── Eventos de UI ──────────────────────────────────────────────────────────────
+// Eventos de UI
 
 tabLogin.addEventListener('click', () => activarTab('login'));
 tabRegistro.addEventListener('click', () => activarTab('registro'));
@@ -236,5 +235,4 @@ btnUsuario?.addEventListener('click', async () => {
     }
 });
 
-// Verificar sesión al cargar para mostrar el estado si ya había sesión activa
 verificarAuth();
