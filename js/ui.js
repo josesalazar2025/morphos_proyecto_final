@@ -151,7 +151,7 @@ if (startCollapsed) {
     setGridRows(true, false);
 }
 
-panelFlujo.querySelector('.panel-cabecera').addEventListener('click', () => {
+btnColapsar.addEventListener('click', () => {
     const collapsed = panelFlujo.classList.toggle('collapsed');
     btnColapsar.setAttribute('aria-expanded', String(!collapsed));
     setGridRows(collapsed, true);
@@ -226,9 +226,8 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
         if (!isFill) { anim.offsetHeight; anim.style.transition = ''; }
     }
 
-    btn.closest('.panel-cabecera').addEventListener('click', (e) => {
+    btn.addEventListener('click', (e) => {
         if (!isDesktopGrid()) return;
-        if (e.target.closest('.btn-importar-pdf')) return;
         const collapsed = subpanel.classList.toggle('collapsed');
         btn.setAttribute('aria-expanded', String(!collapsed));
         if (collapsed) {
@@ -282,7 +281,7 @@ export function colapsarPatrones(shouldCollapse) {
     }
 }
 
-btnColapsarPatrones.closest('.titulo-patrones').addEventListener('click', () => colapsarPatrones());
+btnColapsarPatrones.addEventListener('click', () => colapsarPatrones());
 
 // Imágenes
 

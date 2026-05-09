@@ -80,14 +80,26 @@ function construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUlti
 }
 
 function limpiarRespuesta(text) {
+    if (text.includes('<start_of_turn>model')) {
+        text = text.split('<start_of_turn>model').pop();
+    }
+    if (text.includes('<end_of_turn>')) {
+        text = text.slice(0, text.indexOf('<end_of_turn>'));
+    }
     if (text.includes('<unused95>')) {
         text = text.split('<unused95>').slice(1).join('');
     } else if (text.includes('<unused94>')) {
-        text = text.slice(0, text.indexOf('<unused94>'));
+        // Thinking block present but no answer token — model ran out of tokens
+        const afterThinking = text.split('<unused94>').slice(2).join('');
+        if (afterThinking.trim()) {
+            text = afterThinking;
+        } else {
+            return 'El modelo agotó los tokens durante el razonamiento. Intenta de nuevo o usa menos imágenes.';
+        }
     }
     text = text.replace(/<unused\d+>/g, '');
-    text = text.replace(/<start_of_turn>\w+\n?/g, '').replace(/<end_of_turn>/g, '');
-    return text.trim();
+    text = text.replace(/<start_of_turn>\w+\n?/g, '');
+    return text.trim() || 'Sin respuesta del modelo.';
 }
 
 // Llamado a IA
@@ -114,7 +126,7 @@ export async function llamarIA(obtenerDatosPaciente, obtenerValoresFormulario, g
 
 async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const baseUrl = (document.getElementById('ia-ollama-url')?.value ?? 'http://localhost:11434').replace(/\/$/, '');
-    const model   = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma1.5:latest';
+    const model   = document.getElementById('ia-ollama-model')?.value?.trim() || 'medgemma:latest';
     const prompt  = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
     const images  = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
 
@@ -158,14 +170,15 @@ async function _llamarOllama(salidaEl, obtenerDatosPaciente, obtenerValoresFormu
 
 async function _llamarSpace(salidaEl, obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias) {
     const prompt = construirPrompt(obtenerDatosPaciente, obtenerValoresFormulario, getUltimoAnalisis, getReferencias);
-    const imagenes = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures];
-    const imagen = imagenes.find(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img)) ?? null;
+    const imagenes = [...imagenesDataUrl.filter(Boolean), ...microscopioCaptures]
+        .filter(img => typeof img === 'string' && /^data:image\/(jpeg|png|gif|webp);base64,/.test(img))
+        .slice(0, 4);
 
     try {
         const res = await fetch('api/hf_proxy.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: imagen, prompt }),
+            body: JSON.stringify({ images: imagenes, prompt }),
         });
 
         const data = await res.json();

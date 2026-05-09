@@ -22,8 +22,12 @@ function hf_get(string $url, array $headers, ?string $post = null): array {
     return [curl_exec($ch), curl_getinfo($ch, CURLINFO_HTTP_CODE)];
 }
 
-[$submitBody, $code] = hf_get("$SPACE/call/analyze", $auth,
-    json_encode(['data' => [isset($body['image']) ? ['url' => $body['image']] : null, $body['prompt'] ?? '']]));
+$images = array_slice(array_values($body['images'] ?? []), 0, 4);
+while (count($images) < 4) $images[] = null;
+$data = array_map(fn($img) => $img ? ['url' => $img] : null, $images);
+$data[] = $body['prompt'] ?? '';
+
+[$submitBody, $code] = hf_get("$SPACE/call/analyze", $auth, json_encode(['data' => $data]));
 
 if ($code >= 400) { http_response_code(502); echo json_encode(['error' => "Error Space: HTTP $code"]); exit; }
 

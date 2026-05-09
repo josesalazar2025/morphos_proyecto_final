@@ -109,7 +109,7 @@
         <h2 class="panel-cabecera">
             Hematología
             <input type="file" id="pdf-input-hema" class="pdf-input" accept=".pdf" hidden>
-            <button class="btn-limpiar-panel" type="button" data-panel="hema" aria-label="Limpiar campos Hematología" title="Limpiar campos">
+            <button class="btn-limpiar-panel" type="button" data-panel="hema" aria-label="Limpiar campos Hematología" data-tooltip="Limpiar formulario">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <path d="M8 6V4h8v2"/>
@@ -118,13 +118,13 @@
                     <line x1="14" y1="10" x2="14" y2="16"/>
                 </svg>
             </button>
-            <button class="btn-importar-pdf" type="button" data-panel="hema" aria-label="Importar PDF Hematología" title="Importar PDF">
+            <button class="btn-importar-pdf" type="button" data-panel="hema" aria-label="Importar PDF Hematología" data-tooltip="Adjuntar PDF">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                 </svg>
             </button>
             <button class="btn-colapsar-subpanel" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-hema" aria-label="Colapsar Hematología">
+                    aria-expanded="true" aria-controls="cuerpo-hema" aria-label="Colapsar Hematología" data-tooltip="Contraer / Expandir">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <polyline points="6 4 12 10 18 4"/>
                     <polyline points="6 13 12 19 18 13"/>
@@ -134,8 +134,20 @@
         <div class="subpanel-anim"><div class="panel-cuerpo" id="cuerpo-hema">
             <div class="cabecera-columnas" aria-hidden="true">
                 <span></span>
-                <span>Valor</span>
-                <span>Unidad</span>
+                <span class="cabecera-col-label">Valor</span>
+                <span class="cabecera-col-label">Unidad</span>
+                <div class="cabecera-col-btns">
+                    <button class="btn-limpiar-panel" type="button" data-panel="hema" aria-label="Limpiar campos Hematología" data-tooltip="Limpiar formulario">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="3" y1="6" x2="21" y2="6"/><path d="M8 6V4h8v2"/><rect x="5" y="6" width="14" height="14" rx="1"/><line x1="10" y1="10" x2="10" y2="16"/><line x1="14" y1="10" x2="14" y2="16"/>
+                        </svg>
+                    </button>
+                    <button class="btn-importar-pdf" type="button" data-panel="hema" aria-label="Importar PDF Hematología" data-tooltip="Adjuntar PDF">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="grupo-campo">
                 <h3 class="titulo-grupo">Serie Roja</h3>
@@ -209,7 +221,7 @@
         <h2 class="panel-cabecera">
             Perfil Endocrino
             <input type="file" id="pdf-input-endo" class="pdf-input" accept=".pdf" hidden>
-            <button class="btn-limpiar-panel" type="button" data-panel="endo" aria-label="Limpiar campos Perfil Endocrino" title="Limpiar campos">
+            <button class="btn-limpiar-panel" type="button" data-panel="endo" aria-label="Limpiar campos Perfil Endocrino" data-tooltip="Limpiar formulario">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <path d="M8 6V4h8v2"/>
@@ -218,13 +230,13 @@
                     <line x1="14" y1="10" x2="14" y2="16"/>
                 </svg>
             </button>
-            <button class="btn-importar-pdf" type="button" data-panel="endo" aria-label="Importar PDF Perfil Endocrino" title="Importar PDF">
+            <button class="btn-importar-pdf" type="button" data-panel="endo" aria-label="Importar PDF Perfil Endocrino" data-tooltip="Adjuntar PDF">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                 </svg>
             </button>
             <button class="btn-colapsar-subpanel" id="btn-colapsar-endo" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino">
+                    aria-expanded="true" aria-controls="cuerpo-endo" aria-label="Colapsar Perfil Endocrino" data-tooltip="Contraer / Expandir">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <polyline points="6 4 12 10 18 4"/>
                     <polyline points="6 13 12 19 18 13"/>
@@ -234,8 +246,16 @@
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-endo">
             <div class="cabecera-columnas cabecera-columnas--mobile-only" aria-hidden="true">
                 <span></span>
-                <span>Valor</span>
-                <span>Unidad</span>
+                <button class="btn-limpiar-panel" type="button" data-panel="endo" aria-label="Limpiar campos Perfil Endocrino" data-tooltip="Limpiar formulario">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"/><path d="M8 6V4h8v2"/><rect x="5" y="6" width="14" height="14" rx="1"/><line x1="10" y1="10" x2="10" y2="16"/><line x1="14" y1="10" x2="14" y2="16"/>
+                    </svg>
+                </button>
+                <button class="btn-importar-pdf" type="button" data-panel="endo" aria-label="Importar PDF Perfil Endocrino" data-tooltip="Adjuntar PDF">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </button>
             </div>
             <div class="fila-campo">
                 <label for="endo-cort-bas">Cortisol basal</label>
@@ -265,7 +285,7 @@
         <h2 class="panel-cabecera">
             Bioquímica sanguínea
             <input type="file" id="pdf-input-bioquim" class="pdf-input" accept=".pdf" hidden>
-            <button class="btn-limpiar-panel" type="button" data-panel="bioquim" aria-label="Limpiar campos Bioquímica" title="Limpiar campos">
+            <button class="btn-limpiar-panel" type="button" data-panel="bioquim" aria-label="Limpiar campos Bioquímica" data-tooltip="Limpiar formulario">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <path d="M8 6V4h8v2"/>
@@ -274,13 +294,13 @@
                     <line x1="14" y1="10" x2="14" y2="16"/>
                 </svg>
             </button>
-            <button class="btn-importar-pdf" type="button" data-panel="bioquim" aria-label="Importar PDF Bioquímica" title="Importar PDF">
+            <button class="btn-importar-pdf" type="button" data-panel="bioquim" aria-label="Importar PDF Bioquímica" data-tooltip="Adjuntar PDF">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                 </svg>
             </button>
             <button class="btn-colapsar-subpanel" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-bioquim" aria-label="Colapsar Bioquímica">
+                    aria-expanded="true" aria-controls="cuerpo-bioquim" aria-label="Colapsar Bioquímica" data-tooltip="Contraer / Expandir">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <polyline points="6 4 12 10 18 4"/>
                     <polyline points="6 13 12 19 18 13"/>
@@ -290,8 +310,20 @@
         <div class="subpanel-anim"><div class="panel-cuerpo" id="cuerpo-bioquim">
             <div class="cabecera-columnas" aria-hidden="true">
                 <span></span>
-                <span>Valor</span>
-                <span>Unidad</span>
+                <span class="cabecera-col-label">Valor</span>
+                <span class="cabecera-col-label">Unidad</span>
+                <div class="cabecera-col-btns">
+                    <button class="btn-limpiar-panel" type="button" data-panel="bioquim" aria-label="Limpiar campos Bioquímica" data-tooltip="Limpiar formulario">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="3" y1="6" x2="21" y2="6"/><path d="M8 6V4h8v2"/><rect x="5" y="6" width="14" height="14" rx="1"/><line x1="10" y1="10" x2="10" y2="16"/><line x1="14" y1="10" x2="14" y2="16"/>
+                        </svg>
+                    </button>
+                    <button class="btn-importar-pdf" type="button" data-panel="bioquim" aria-label="Importar PDF Bioquímica" data-tooltip="Adjuntar PDF">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="grupo-campo">
                 <h3 class="titulo-grupo">Enzimas Hepáticas</h3>
@@ -383,7 +415,7 @@
         <h2 class="panel-cabecera">
             Urianálisis
             <input type="file" id="pdf-input-uri" class="pdf-input" accept=".pdf" hidden>
-            <button class="btn-limpiar-panel" type="button" data-panel="uri" aria-label="Limpiar campos Urianálisis" title="Limpiar campos">
+            <button class="btn-limpiar-panel" type="button" data-panel="uri" aria-label="Limpiar campos Urianálisis" data-tooltip="Limpiar formulario">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <path d="M8 6V4h8v2"/>
@@ -392,13 +424,13 @@
                     <line x1="14" y1="10" x2="14" y2="16"/>
                 </svg>
             </button>
-            <button class="btn-importar-pdf" type="button" data-panel="uri" aria-label="Importar PDF Urianálisis" title="Importar PDF">
+            <button class="btn-importar-pdf" type="button" data-panel="uri" aria-label="Importar PDF Urianálisis" data-tooltip="Adjuntar PDF">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                 </svg>
             </button>
             <button class="btn-colapsar-subpanel" id="btn-colapsar-uri" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis">
+                    aria-expanded="true" aria-controls="cuerpo-uri" aria-label="Colapsar Urianálisis" data-tooltip="Contraer / Expandir">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <polyline points="6 4 12 10 18 4"/>
                     <polyline points="6 13 12 19 18 13"/>
@@ -408,8 +440,16 @@
         <div class="subpanel-anim"><div class="subpanel-cuerpo" id="cuerpo-uri">
             <div class="cabecera-columnas cabecera-columnas--mobile-only" aria-hidden="true">
                 <span></span>
-                <span>Valor</span>
-                <span>Unidad</span>
+                <button class="btn-limpiar-panel" type="button" data-panel="uri" aria-label="Limpiar campos Urianálisis" data-tooltip="Limpiar formulario">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"/><path d="M8 6V4h8v2"/><rect x="5" y="6" width="14" height="14" rx="1"/><line x1="10" y1="10" x2="10" y2="16"/><line x1="14" y1="10" x2="14" y2="16"/>
+                    </svg>
+                </button>
+                <button class="btn-importar-pdf" type="button" data-panel="uri" aria-label="Importar PDF Urianálisis" data-tooltip="Adjuntar PDF">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </button>
             </div>
             <div class="fila-campo">
                 <label for="uri-usg">Densidad (USG)</label>
@@ -451,7 +491,7 @@
         <h2 class="panel-cabecera">
             Flujo de trabajo
             <button class="btn-colapsar-flujo" id="btn-colapsar-flujo" type="button"
-                    aria-expanded="true" aria-controls="cuerpo-flujo" aria-label="Colapsar panel">
+                    aria-expanded="true" aria-controls="cuerpo-flujo" aria-label="Colapsar panel" data-tooltip="Contraer / Expandir">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                     <polyline points="6 4 12 10 18 4"/>
                     <polyline points="6 13 12 19 18 13"/>
@@ -613,7 +653,7 @@
                 <h3 class="titulo-seccion-resultado titulo-patrones">
                     Patrones detectados
                     <button class="btn-colapsar-patrones" id="btn-colapsar-patrones" type="button"
-                            aria-expanded="true" aria-controls="patrones-anim" aria-label="Colapsar patrones">
+                            aria-expanded="true" aria-controls="patrones-anim" aria-label="Colapsar patrones" data-tooltip="Contraer / Expandir">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                             <polyline points="6 4 12 10 18 4"/>
                             <polyline points="6 13 12 19 18 13"/>
@@ -634,7 +674,7 @@
                     <label class="ia-backend-opt"><input type="radio" name="ia-backend" value="local" id="ia-backend-local">Local</label>
                     <div class="ia-ollama-fields" id="ia-ollama-fields">
                         <input type="url" id="ia-ollama-url" class="ia-text-input" placeholder="http://localhost:11434" value="http://localhost:11434" aria-label="URL de Ollama">
-                        <input type="text" id="ia-ollama-model" class="ia-text-input ia-model-input" placeholder="medgemma1.5:latest" value="medgemma1.5:latest" aria-label="Modelo Ollama">
+                        <input type="text" id="ia-ollama-model" class="ia-text-input ia-model-input" placeholder="medgemma:latest" value="medgemma:latest" aria-label="Modelo Ollama">
                     </div>
                 </div>
             </div>

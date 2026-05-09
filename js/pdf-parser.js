@@ -5,16 +5,20 @@ const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf
 // Each entry: field name (matches input[name="…"]) → regex that identifies the analyte in PDF text
 const ANALYTE_DEFS = [
     // Hematología
-    { field: 'rbc',           re: /\b(?:eritrocit\w*|gl[oó]bulos?\s+rojos?|r\.?b\.?c\.?)\b/i },
+    { field: 'rbc',           re: /\b(?:eritrocit\w*|gl[oó]bulos?\s+rojos?|r\.?b\.?c\.?|eri)\b/i },
     { field: 'hgb',           re: /\b(?:hemoglobin[ao]?\w*|hgb|hb)\b(?!a\d)/i },
     { field: 'hct',           re: /\b(?:hematocrit[oo]?\w*|hct|pcv)\b/i },
     { field: 'vcm',           re: /\b(?:v\.?c\.?m\.?|m\.?c\.?v\.?|vol(?:umen)?\s+corp\w*)\b/i },
     { field: 'hcm',           re: /\b(?:h\.?c\.?m\.?|m\.?c\.?h\.?)\b/i },
-    { field: 'wbc',           re: /\b(?:leucocit\w*|w\.?b\.?c\.?|white\s+blood\s+cell)\b/i },
-    { field: 'neutro',        re: /\b(?:neutr[oó]fil\w*|neut\b|neu\b)\b/i },
-    { field: 'linfo',         re: /\b(?:linf[oa]cit\w*|lymph\w*|linf\b)\b/i },
-    { field: 'eosino',        re: /\b(?:eosino\w*|eos\b)\b/i },
-    { field: 'baso',          re: /\b(?:bas[oó]fil\w*|baso\b)\b/i },
+    { field: 'wbc',    re: /\b(?:leucocit\w*|w\.?b\.?c\.?|white\s+blood\s+cell|leu)\b/i },
+    { field: 'neutro', re: /\bgran?#/i },                                              // absolute (GRA#, GRAN#)
+    { field: 'neutro', re: /\b(?:neutr[oó]fil\w*|neut\b|neu\b|gra)\b/i },            // fallback
+    { field: 'linfo',  re: /\blymp?#/i },                                             // absolute (LYM#, LYMP#)
+    { field: 'linfo',  re: /\b(?:linf[oa]cit\w*|lymph\w*|linf\b|lym)\b/i },         // fallback
+    { field: 'eosino', re: /\beos\w*#/i },                                            // absolute (EOS#, EOSI#)
+    { field: 'eosino', re: /\b(?:eosino\w*|eos\b)\b/i },                             // fallback
+    { field: 'baso',   re: /\bbas\w*#/i },                                            // absolute (BAS#, BASO#)
+    { field: 'baso',   re: /\b(?:bas[oó]fil\w*|baso\b)\b/i },                        // fallback
     { field: 'plt',           re: /\b(?:plaqueta\w*|platelet\w*|plt\b|trc\b)\b/i },
     // Bioquímica sanguínea
     { field: 'alt',           re: /\b(?:alt\b|gpt\b|alanin[ao]?\s+amino\w*)\b/i },
@@ -23,11 +27,11 @@ const ANALYTE_DEFS = [
     { field: 'bun',           re: /\b(?:bun\b|urea\b|nitr[oó]geno\s+ureico)\b/i },
     { field: 'creat',         re: /\b(?:creatinin[ao]?\w*|crea\b)\b/i },
     { field: 'gluc',          re: /\b(?:gluco(?:sa|se)\b|glucemia\b|glu\b)\b/i },
-    { field: 'prot',          re: /\b(?:prote[íi]nas?\s+totales?|prot\s+total)\b/i },
+    { field: 'prot',          re: /\b(?:prote[íi]nas?\s+totales?|prot\s+total|tp)\b/i },
     { field: 'alb',           re: /\b(?:alb[úu]min[ao]?\w*|alb\b)\b/i },
     { field: 'bili',          re: /\b(?:bilirrub\w*|bilirubin\w*|bili\b|tbil\b)\b/i },
     { field: 'fosf',          re: /\b(?:f[oó]sforo\b|phosph\w*|phos\b)\b/i },
-    { field: 'calc',          re: /\b(?:calcio\b|calcium\b)\b/i },
+    { field: 'calc',          re: /\b(?:calcio\b|calcium\b|ca)\b/i },
     { field: 'sodio',         re: /\b(?:sodio\b|sodium\b)\b/i },
     { field: 'potasio',       re: /\b(?:potasio\b|potassium\b)\b/i },
     { field: 'cloro',         re: /\b(?:clor[ou]\w*|chloride\w*)\b/i },
@@ -58,7 +62,7 @@ function parseSemiQuantitative(text) {
 }
 
 function extractFirstNumber(text) {
-    const m = text.match(/(?:^|[\s:=])(\d+(?:[.,]\d+)?)/);
+    const m = text.match(/[<>]?\s*(\d+(?:[.,]\d+)?)/);
     if (!m) return null;
     const v = parseFloat(m[1].replace(',', '.'));
     return isFinite(v) && v > 0 ? v : null;
