@@ -182,7 +182,7 @@ header {
 }
 
 header #logo {
-    color: var(--header-text);
+    color: var(--header-text-muted);
 }
 
 header .barra-paciente label {
@@ -203,12 +203,15 @@ header .barra-paciente input:focus {
 }
 
 #pt-especie:has(option[value=""]:checked),
-#mob-pt-especie:has(option[value=""]:checked),
 #pt-sexo:has(option[value=""]:checked),
-#mob-pt-sexo:has(option[value=""]:checked),
-#pt-edad-unidad,
-#mob-pt-edad-unidad {
+#pt-edad-unidad {
     color: var(--header-text-muted);
+}
+
+#mob-pt-especie:has(option[value=""]:checked),
+#mob-pt-sexo:has(option[value=""]:checked),
+#mob-pt-edad-unidad {
+    color: var(--color-placeholder);
 }
 
 select:has(option[value=""]:checked) {
@@ -452,7 +455,7 @@ main {
     font-weight: 600;
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    color: var(--text-4);
+    color: var(--color-placeholder);
 }
 
 .cabecera-columnas span:first-child {
@@ -925,7 +928,7 @@ main {
 /*  IA OUTPUT  */
 #salida-ia {
     font-size: var(--fs-ui);
-    color: var(--color-placeholder);
+    color: var(--text-3);
     line-height: 1.7;
     white-space: pre-wrap;
     background: var(--surface-2);
@@ -949,12 +952,77 @@ footer {
 #aviso {
     flex: 1;
     font-size: var(--fs-xs);
-    color: var(--text-4);
+    color: var(--color-placeholder);
     line-height: var(--lh-snug);
 }
 
 #aviso strong {
-    color: var(--text-3);
+    color: var(--color-placeholder);
+}
+
+.btn-adjuntar-mob {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    background: var(--accent);
+    color: var(--text-on-accent);
+    border-color: var(--accent);
+    min-width: 100px;
+}
+
+.btn-adjuntar-mob:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.btn-adjuntar-mob svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+#aviso-mob {
+    display: none;
+    font-size: var(--fs-xs);
+    color: var(--color-placeholder);
+    line-height: var(--lh-snug);
+    padding: var(--space-3) 0 var(--space-1);
+    margin-top: 3rem;
+}
+
+#aviso-mob strong {
+    color: var(--color-placeholder);
+}
+
+#creditos-mob {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
+    color: var(--color-placeholder);
+    white-space: nowrap;
+    padding: var(--space-3) 0;
+    margin-top: var(--space-2);
+    border-top: 1px solid var(--border-1);
+}
+
+#creditos-mob svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+#creditos-mob a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#creditos-mob a:hover {
+    color: var(--text-accent);
 }
 
 #creditos {
@@ -1185,7 +1253,7 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: var(--space-2);
-    color: var(--text-4);
+    color: var(--color-placeholder);
     pointer-events: none;
     font-size: var(--fs-xs);
 }
@@ -1218,7 +1286,7 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: var(--space-2);
-    color: var(--text-4);
+    color: var(--color-placeholder);
     font-size: var(--fs-xs);
     pointer-events: none;
 }
@@ -1643,8 +1711,8 @@ main {
 .panel-cuerpo--paciente {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    padding: var(--space-6) var(--space-4);
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
 }
 
 .fila-paciente {
@@ -1663,7 +1731,7 @@ main {
 .fila-paciente select,
 .fila-paciente input[type="text"],
 .fila-paciente input[type="number"] {
-    height: 44px;
+    height: 36px;
     padding: 0 var(--space-3);
     background: var(--surface-input);
     border: 1px solid var(--border-1);
@@ -1683,10 +1751,13 @@ main {
 }
 
 #pt-raza::placeholder,
-#pt-edad::placeholder,
+#pt-edad::placeholder {
+    color: var(--header-text-muted);
+}
+
 #mob-pt-raza::placeholder,
 #mob-pt-edad::placeholder {
-    color: var(--header-text-muted);
+    color: var(--color-placeholder);
 }
 
 .fila-paciente-edad {
@@ -1919,9 +1990,26 @@ main {
 
     footer {
         padding: 0;
+        flex-direction: column;
     }
 
     #aviso {
+        display: none;
+    }
+
+    .btn-adjuntar-mob {
+        display: flex;
+    }
+
+    #aviso-mob {
+        display: block;
+    }
+
+    #creditos-mob {
+        display: flex;
+    }
+
+    #creditos {
         display: none;
     }
 
@@ -1930,6 +2018,7 @@ main {
         height: 3.5rem;
         width: 100%;
         border-top: none;
+        order: -1;
     }
 
     main {
@@ -2023,7 +2112,7 @@ main {
     .btn-colapsar-subpanel,
     .btn-colapsar-flujo,
     .btn-colapsar-patrones {
-        display: none;
+        display: flex;
     }
 
     .pdf-toast {
@@ -2389,6 +2478,8 @@ main {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-2) transparent;
 }
 
 .paper-tarjeta {

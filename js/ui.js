@@ -266,7 +266,6 @@ const btnColapsarPatrones = document.getElementById('btn-colapsar-patrones');
 const patronesAnim = document.getElementById('patrones-anim');
 
 export function colapsarPatrones(debeColapsar) {
-    if (!esGridEscritorio()) return;
     const estaExpandido = btnColapsarPatrones.getAttribute('aria-expanded') === 'true';
     const colapsado = debeColapsar ?? estaExpandido;
 

@@ -103,6 +103,15 @@
                     <option value="Hembra">Hembra</option>
                 </select>
             </div>
+            <input type="file" id="pdf-input-paciente" class="pdf-input" accept=".pdf" hidden>
+            <button class="btn-importar-pdf btn-adjuntar-mob" type="button" data-panel="paciente" aria-label="Adjuntar PDF de exámenes">
+                <svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350V-700q0-42-29-71t-71-29q-42 0-71 29t-29 71v370q0 71 49.5 120.5T470-160q71 0 120.5-49.5T640-330v-390h80v390Z"/></svg>
+                Adjuntar Exámenes
+            </button>
+            <div id="aviso-mob">
+                <strong>Aviso:</strong> La información proporcionada por Morphos y medGemma es orientativa y no sustituye el criterio de un profesional, herramienta exclusivamente para apoyo diagnóstico.
+            </div>
+            <p id="creditos-mob"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg><a href="mailto:mvjose.salazar@gmail.com">Desarrollado por José Salazar &copy; 2026</a></p>
         </div>
     </section>
 
@@ -724,8 +733,6 @@
     <div id="aviso">
         <strong>Aviso:</strong> La información proporcionada por Morphos y medGemma es orientativa y no sustituye el criterio de un profesional, herramienta exclusivamente para apoyo diagnóstico.
     </div>
-    <p id="creditos"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg><a href="mailto:mvjose.salazar@gmail.com">Desarrollado por José Salazar &copy; 2026</a></p>
-
     <!-- NAV INFERIOR -->
     <nav class="nav-inferior" id="nav-inferior" aria-label="Secciones">
     <button class="tab-nav activo" data-target="panel-flujo" aria-current="true" data-tooltip="Guía de uso">
@@ -749,6 +756,7 @@
         <span>Interpretación</span>
     </button>
     </nav>
+    <p id="creditos"><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg><a href="mailto:mvjose.salazar@gmail.com">Desarrollado por José Salazar &copy; 2026</a></p>
 </footer>
 
 
