@@ -76,7 +76,8 @@ const SVG_LOGOUT = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBo
 
 function actualizarBtnUsuario(nombre) {
     if (!btnUsuario) return;
-    btnUsuario.innerHTML = `${SVG_LOGOUT} ${nombre ?? 'Usuario'}`;
+    btnUsuario.innerHTML = SVG_LOGOUT;
+    btnUsuario.append(' ', nombre ?? 'Usuario');
     btnUsuario.dataset.tooltip = 'Cerrar sesión';
 }
 

@@ -41,7 +41,7 @@ switch ($accion) {
             exit;
         }
 
-        $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE email = :email LIMIT 1");
+        $stmt = $conexion->prepare("SELECT id, nombre, email, password FROM usuarios WHERE email = :email LIMIT 1");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);

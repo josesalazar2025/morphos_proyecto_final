@@ -5,6 +5,9 @@ let todosLosPapers = [];
 let paginaActual = 0;
 let consultaActual = '';
 
+
+//Esto nos permite hacer búsquedas en la API de PubMed, sólo recibe texto en inglés
+
 const TERMINOS_EN = {
     'Anemia': 'anemia',
     'Eritrocitosis': 'erythrocytosis polycythemia',
@@ -42,6 +45,10 @@ const TERMINOS_EN = {
     'Hiperadrenocorticismo (Cushing)': 'hyperadrenocorticism Cushing',
     'Hipoadrenocorticismo (Addison)': 'hypoadrenocorticism Addison',
     'Ratio Na:K reducido — sospecha de hipoadrenocorticismo': 'hypoadrenocorticism sodium potassium ratio',
+    'Cortisol basal bajo — posible hipoadrenocorticismo': 'low basal cortisol hypoadrenocorticism',
+    'Hiposthenuria': 'hyposthenuria urine specific gravity',
+    'Isosthenuria': 'isosthenuria urine concentration renal',
+    'Posible déficit de insulina': 'insulin deficiency hyperglycemia diabetes mellitus',
 };
 
 const traducirPatron = (nombre) => {
@@ -73,30 +80,53 @@ const renderizarTarjetaPaper = (paper) => {
     const masAutores = (paper.authors?.length || 0) > 3 ? ' et al.' : '';
     const anio = paper.year || '—';
     const revista = paper.journal || '';
-    const resumen = paper.abstract
-        ? (paper.abstract.length > 280 ? paper.abstract.slice(0, 280) + '…' : paper.abstract)
-        : '';
 
-    const urlPdf = paper.pdf || null;
     const urlDoi = paper.doi ? `https://doi.org/${paper.doi}` : null;
     const urlPubmed = paper.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${paper.pmid}/` : null;
-    const urlPrincipal = urlPdf || urlDoi || urlPubmed;
+    const urlPrincipal = urlDoi || urlPubmed;
 
-    return `
-        <article class="paper-tarjeta">
-            <div class="paper-meta">
-                <span class="paper-anio">${anio}</span>
-                ${revista ? `<span class="paper-revista">${revista}</span>` : ''}
-                ${urlPdf ? `<a class="paper-pdf-badge" href="${urlPdf}" target="_blank" rel="noopener noreferrer">PDF</a>` : ''}
-            </div>
-            <h3 class="paper-titulo">
-                ${urlPrincipal
-                    ? `<a href="${urlPrincipal}" target="_blank" rel="noopener noreferrer">${titulo}</a>`
-                    : titulo}
-            </h3>
-            <p class="paper-autores">${autores}${masAutores}</p>
-            ${resumen ? `<p class="paper-resumen">${resumen}</p>` : ''}
-        </article>`;
+    const articulo = document.createElement('article');
+    articulo.className = 'paper-tarjeta';
+
+    const meta = document.createElement('div');
+    meta.className = 'paper-meta';
+
+    const spanAnio = document.createElement('span');
+    spanAnio.className = 'paper-anio';
+    spanAnio.textContent = anio;
+    meta.append(spanAnio);
+
+    if (revista) {
+        const spanRevista = document.createElement('span');
+        spanRevista.className = 'paper-revista';
+        spanRevista.textContent = revista;
+        meta.append(spanRevista);
+    }
+
+    articulo.append(meta);
+
+    const h3 = document.createElement('h3');
+    h3.className = 'paper-titulo';
+
+    if (urlPrincipal) {
+        const link = document.createElement('a');
+        link.href = urlPrincipal;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = titulo;
+        h3.append(link);
+    } else {
+        h3.textContent = titulo;
+    }
+
+    articulo.append(h3);
+
+    const pAutores = document.createElement('p');
+    pAutores.className = 'paper-autores';
+    pAutores.textContent = autores + masAutores;
+    articulo.append(pAutores);
+
+    return articulo;
 };
 
 const renderizarPaginacion = () => {
@@ -128,9 +158,16 @@ const renderizarPaginaActual = () => {
     const inicio = paginaActual * POR_PAGINA;
     const pagina = todosLosPapers.slice(inicio, inicio + POR_PAGINA);
 
-    lista.innerHTML = pagina.length === 0
-        ? '<p class="papers-vacio">No se encontraron artículos para esta búsqueda.</p>'
-        : pagina.map(renderizarTarjetaPaper).join('');
+    lista.replaceChildren();
+
+    if (pagina.length === 0) {
+        const vacio = document.createElement('p');
+        vacio.className = 'papers-vacio';
+        vacio.textContent = 'No se encontraron artículos para esta búsqueda.';
+        lista.append(vacio);
+    } else {
+        lista.append(...pagina.map(renderizarTarjetaPaper));
+    }
 
     renderizarPaginacion();
     lista.scrollTop = 0;
@@ -152,7 +189,11 @@ const mostrarEstadoCarga = () => {
 
 const mostrarError = (mensaje) => {
     const lista = document.getElementById('papers-lista');
-    if (lista) lista.innerHTML = `<p class="papers-error">${mensaje}</p>`;
+    if (!lista) return;
+    const p = document.createElement('p');
+    p.className = 'papers-error';
+    p.textContent = mensaje;
+    lista.replaceChildren(p);
 };
 
 export const abrirModalPapers = async (patrones) => {
@@ -184,12 +225,12 @@ export const abrirModalPapers = async (patrones) => {
         todosLosPapers = await buscarPapers(nuevaConsulta);
         renderizarPaginaActual();
     } catch (error) {
-        mostrarError(error.message || 'No se pudo conectar con Semantic Scholar. Intenta de nuevo más tarde.');
+        mostrarError(error.message || 'No se pudo conectar con PubMed. Intenta de nuevo más tarde.');
         console.error('Error buscando papers:', error);
     }
 };
 
-export const cerrarModalPapers = () => {
+const cerrarModalPapers = () => {
     const modal = document.getElementById('modal-papers');
     const overlay = document.getElementById('modal-papers-overlay');
     if (!modal || !overlay) return;
@@ -235,7 +276,7 @@ export const inicializarModalPapers = () => {
             todosLosPapers = await buscarPapers(termino);
             renderizarPaginaActual();
         } catch (error) {
-            mostrarError(error.message || 'No se pudo conectar con Semantic Scholar. Intenta de nuevo más tarde.');
+            mostrarError(error.message || 'No se pudo conectar con PubMed. Intenta de nuevo más tarde.');
             console.error('Error buscando papers:', error);
         }
     });

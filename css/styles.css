@@ -31,6 +31,7 @@
     --header-text: #FFFFFF;
     --header-text-muted: rgba(255, 255, 255, 0.75);
     --header-text-action: rgba(255, 255, 255, 0.85);
+    --header-text-hover: #000000;
     --header-input-bg: rgba(255, 255, 255, 0.12);
     --header-input-border: rgba(255, 255, 255, 0.25);
     --header-input-border-focus: rgba(255, 255, 255, 0.6);
@@ -102,6 +103,7 @@
     --header-text: var(--text-1);
     --header-text-muted: var(--text-3);
     --header-text-action: var(--text-2);
+    --header-text-hover: var(--header-text);
     --header-input-bg: var(--surface-input);
     --header-input-border: var(--border-1);
     --header-input-border-focus: var(--border-focus);
@@ -211,7 +213,7 @@ header .boton-usuario {
 
 header .boton-tema:hover,
 header .boton-usuario:hover {
-    color: var(--header-text);
+    color: var(--header-text-hover);
 }
 
 #logo {
