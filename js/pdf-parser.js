@@ -382,8 +382,20 @@ function aplicarPacienteAFormulario(patient) {
     return contador;
 }
 
+async function cargarPdfJs() {
+    if (window.pdfjsLib) return window.pdfjsLib;
+    await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'assets/lib/pdfjs/pdf.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+    return window.pdfjsLib;
+}
+
 async function extraerTextoPdf(file) {
-    const pdfjs = window.pdfjsLib;
+    const pdfjs = await cargarPdfJs();
     if (!pdfjs) throw new Error('PDF.js no cargado');
     pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
 

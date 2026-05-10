@@ -52,7 +52,7 @@ const traducirPatron = (nombre) => {
 };
 
 const construirQuery = (patrones) => {
-    if (!patrones || patrones.length === 0) return 'veterinary clinical diagnosis canine feline';
+    if (!patrones || patrones.length === 0) return 'veterinary clinical laboratory diagnosis canine feline';
     const terminos = [...new Set(patrones.map(p => traducirPatron(p.nombre)))].slice(0, 3);
     return `${terminos.join(' ')} canine OR feline veterinary`;
 };
@@ -112,11 +112,11 @@ const renderizarPaginacion = () => {
     const inicio = Math.max(0, paginaActual - 2);
     const fin = Math.min(totalPaginas, inicio + 5);
 
-    let html = `<button class="papers-pag-btn" data-pagina="${paginaActual - 1}" ${paginaActual === 0 ? 'disabled' : ''}>‹</button>`;
+    let html = `<button class="papers-pag-btn" data-pagina="${paginaActual - 1}" ${paginaActual === 0 ? 'disabled' : ''} aria-label="Página anterior"><img src="assets/icons/anterior.svg" alt="" aria-hidden="true" width="16" height="16"></button>`;
     for (let i = inicio; i < fin; i++) {
         html += `<button class="papers-pag-btn ${i === paginaActual ? 'activo' : ''}" data-pagina="${i}">${i + 1}</button>`;
     }
-    html += `<button class="papers-pag-btn" data-pagina="${paginaActual + 1}" ${paginaActual >= totalPaginas - 1 ? 'disabled' : ''}>›</button>`;
+    html += `<button class="papers-pag-btn" data-pagina="${paginaActual + 1}" ${paginaActual >= totalPaginas - 1 ? 'disabled' : ''} aria-label="Página siguiente"><img src="assets/icons/siguiente.svg" alt="" aria-hidden="true" width="16" height="16"></button>`;
 
     contenedor.innerHTML = html;
 };
@@ -215,5 +215,28 @@ export const inicializarModalPapers = () => {
         const btn = e.target.closest('.papers-pag-btn');
         if (!btn || btn.disabled) return;
         irAPagina(parseInt(btn.dataset.pagina, 10));
+    });
+
+    document.getElementById('papers-busqueda-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('papers-busqueda-input');
+        const termino = input?.value.trim();
+        if (!termino) return;
+
+        const etiquetaConsulta = document.getElementById('papers-consulta');
+        if (etiquetaConsulta) etiquetaConsulta.textContent = `"${termino}"`;
+
+        consultaActual = termino;
+        todosLosPapers = [];
+        paginaActual = 0;
+        mostrarEstadoCarga();
+
+        try {
+            todosLosPapers = await buscarPapers(termino);
+            renderizarPaginaActual();
+        } catch (error) {
+            mostrarError(error.message || 'No se pudo conectar con Semantic Scholar. Intenta de nuevo más tarde.');
+            console.error('Error buscando papers:', error);
+        }
     });
 };

@@ -30,7 +30,7 @@ export function activarTab(targetId) {
             ? tab.dataset.target === 'examenes'
             : tab.dataset.target === targetId;
         tab.classList.toggle('activo', estaActivo);
-        tab.setAttribute('aria-selected', String(estaActivo));
+        tab.setAttribute('aria-current', estaActivo ? 'true' : 'false');
     });
 
     if (examenesSubtabsBar) examenesSubtabsBar.hidden = !mostrarExamenes;
@@ -302,8 +302,12 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
     const indice = parseInt(zona.dataset.zona);
     const input = zona.querySelector('.input-zona');
     const vacia = zona.querySelector('.zona-vacia');
-    const vistaPrevia = zona.querySelector('.zona-img-preview');
     const btnQuitar = zona.querySelector('.btn-quitar-zona');
+    const vistaPrevia = document.createElement('img');
+    vistaPrevia.className = 'zona-img-preview';
+    vistaPrevia.alt = `Citología ${indice + 1}`;
+    vistaPrevia.hidden = true;
+    btnQuitar.before(vistaPrevia);
 
     zona.addEventListener('click', e => {
         if (btnQuitar.contains(e.target)) return;
