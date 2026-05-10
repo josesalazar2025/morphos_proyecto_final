@@ -217,6 +217,7 @@ La gravedad se calcula como la desviacion relativa al ancho del rango de referen
 * Incluir resultados de gasometría, coprologías, informes de histopatologías y tiempos de coagulación
 
 ## Retos
+* Por la diversidad de unidades de medición que utilizan los diferentes fabricantes de equipos de laboratorio se incorporó una detección de unidades para su conversión y normalización
 * El modelado del output de la I.A requirió muchísimas iteraciones de formateo del prompt y harness
 * Inicialmente quería usar proveedores de inferencia gratuita de medGemma (como featherless AI) pero fallaban continuamente, por eso decidí optar por hostear al modelo en Zero GPU de HF con la subscripción pro para la prueba de concepto
 * Incluir las librería de parseo de pdf y las fuentes en el directorio del proyecto con la intención de reducir dependencias externas estaba generando problemas con las métricas de velocidad de lighthouse que no lograba solucionar. Claude planteó implementación de caché en htacesss y pre carga de las fuentes, lo cual llevó la puntuación de 60 a 90/100 sin mayores cambios estructurales

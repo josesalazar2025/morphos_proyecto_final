@@ -30,6 +30,7 @@
     --surface-header: #0A4F45;
     --header-text: #FFFFFF;
     --header-text-muted: rgba(255, 255, 255, 0.75);
+    --color-placeholder: #747474;
     --header-text-action: rgba(255, 255, 255, 0.85);
     --header-text-hover: #000000;
     --header-input-bg: rgba(255, 255, 255, 0.12);
@@ -49,7 +50,7 @@
 
     --border-1: #D0DAE4;
     --border-2: #B8C6D4;
-    --border-focus: #0F7A6B;
+    --border-focus: var(--accent);
 
     --accent: #0F7A6B;
     --accent-hover: #0B6158;
@@ -201,6 +202,19 @@ header .barra-paciente input:focus {
     box-shadow: 0 0 0 3px var(--header-focus-ring);
 }
 
+#pt-especie:has(option[value=""]:checked),
+#mob-pt-especie:has(option[value=""]:checked),
+#pt-sexo:has(option[value=""]:checked),
+#mob-pt-sexo:has(option[value=""]:checked),
+#pt-edad-unidad,
+#mob-pt-edad-unidad {
+    color: var(--header-text-muted);
+}
+
+select:has(option[value=""]:checked) {
+    color: var(--color-placeholder);
+}
+
 header .barra-paciente select option {
     background: var(--surface-1);
     color: var(--text-1);
@@ -258,6 +272,11 @@ button {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--color-placeholder);
 }
 
 .barra-paciente select,
@@ -480,7 +499,7 @@ main {
 
 .fila-campo .unidad {
     font-size: var(--fs-xs);
-    color: var(--text-4);
+    color: var(--color-placeholder);
     white-space: nowrap;
     min-width: 50px;
     text-align: right;
@@ -732,15 +751,15 @@ main {
     fill: currentColor;
 }
 
-.btn-colapsar-subpanel .icono-expandir {
-    display: none;
-}
-
-.subpanel.collapsed .btn-colapsar-subpanel .icono-colapsar {
+.btn-colapsar-subpanel .icono-colapsar {
     display: none;
 }
 
 .subpanel.collapsed .btn-colapsar-subpanel .icono-expandir {
+    display: none;
+}
+
+.subpanel.collapsed .btn-colapsar-subpanel .icono-colapsar {
     display: block;
 }
 
@@ -839,15 +858,15 @@ main {
     fill: currentColor;
 }
 
-.btn-colapsar-patrones .icono-expandir {
-    display: none;
-}
-
-.btn-colapsar-patrones[aria-expanded="false"] .icono-colapsar {
+.btn-colapsar-patrones .icono-colapsar {
     display: none;
 }
 
 .btn-colapsar-patrones[aria-expanded="false"] .icono-expandir {
+    display: none;
+}
+
+.btn-colapsar-patrones[aria-expanded="false"] .icono-colapsar {
     display: block;
 }
 
@@ -906,7 +925,7 @@ main {
 /*  IA OUTPUT  */
 #salida-ia {
     font-size: var(--fs-ui);
-    color: var(--text-1);
+    color: var(--color-placeholder);
     line-height: 1.7;
     white-space: pre-wrap;
     background: var(--surface-2);
@@ -936,6 +955,31 @@ footer {
 
 #aviso strong {
     color: var(--text-3);
+}
+
+#creditos {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--fs-xs);
+    color: var(--color-placeholder);
+    white-space: nowrap;
+}
+
+#creditos svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+#creditos a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#creditos a:hover {
+    color: var(--text-accent);
 }
 
 .acciones-pie {
@@ -1044,6 +1088,11 @@ footer {
 .ia-text-input:focus {
     outline: 2px solid var(--accent);
     outline-offset: 1px;
+}
+
+#ia-ollama-url,
+#ia-ollama-model {
+    color: var(--color-placeholder);
 }
 
 .ia-model-input {
@@ -1465,15 +1514,15 @@ footer {
     fill: currentColor;
 }
 
-.btn-colapsar-flujo .icono-expandir {
-    display: none;
-}
-
-.panel-flujo.collapsed .btn-colapsar-flujo .icono-colapsar {
+.btn-colapsar-flujo .icono-colapsar {
     display: none;
 }
 
 .panel-flujo.collapsed .btn-colapsar-flujo .icono-expandir {
+    display: none;
+}
+
+.panel-flujo.collapsed .btn-colapsar-flujo .icono-colapsar {
     display: block;
 }
 
@@ -1484,7 +1533,7 @@ main {
 #panel-flujo::after {
     content: '';
     display: block;
-    height: 2rem;
+    height: 0.5rem;
     flex-shrink: 0;
 }
 
@@ -1493,7 +1542,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     padding: 0.3rem 20px;
     overflow: hidden;
 }
@@ -1508,11 +1557,11 @@ main {
 .pasos-flujo li {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 0.2rem;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 10px;
     padding: 0 12px;
     position: relative;
 }
@@ -1529,18 +1578,11 @@ main {
 }
 
 .num-paso {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--surface-1);
-    border: 1px solid var(--accent-dim);
-    color: var(--text-accent);
-    font-size: 0.6rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 28px;
+    height: 28px;
+    fill: var(--accent);
     flex-shrink: 0;
+    margin-top: 0.1rem;
 }
 
 .pasos-flujo strong {
@@ -1638,6 +1680,13 @@ main {
 .fila-paciente input:focus {
     border-color: var(--border-focus);
     box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+#pt-raza::placeholder,
+#pt-edad::placeholder,
+#mob-pt-raza::placeholder,
+#mob-pt-edad::placeholder {
+    color: var(--header-text-muted);
 }
 
 .fila-paciente-edad {
@@ -1947,11 +1996,11 @@ main {
     .num-paso {
         width: 1.5rem;
         height: 1.5rem;
-        font-size: var(--fs-xs);
         flex-shrink: 0;
         margin-top: 0.1rem;
     }
 
+    .pasos-flujo strong,
     .pasos-flujo p {
         font-size: var(--fs-sm);
     }
