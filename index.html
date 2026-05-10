@@ -824,6 +824,13 @@
                 <label for="reg-password2">Confirmar contraseña</label>
                 <input id="reg-password2" name="password2" type="password" autocomplete="new-password" placeholder="Repite la contraseña" required>
             </div>
+            <div class="modal-campo modal-campo--aviso">
+                <p class="aviso-legal-texto">Soy Veterinario y sé que la información obtenida en esta web es orientativa y complementaria al proceso diagnóstico y no debe tratarse como única fuente.</p>
+                <div class="aviso-legal-aceptar">
+                    <label for="reg-aviso-legal">Acepto</label>
+                    <input id="reg-aviso-legal" name="aviso-legal" type="checkbox" required>
+                </div>
+            </div>
             <p id="auth-error-registro" class="modal-error" aria-live="polite"></p>
             <button class="boton boton-primario modal-submit" type="submit">Crear cuenta</button>
         </form>

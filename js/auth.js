@@ -187,6 +187,13 @@ formRegistro.addEventListener('submit', async e => {
     const password = formRegistro.querySelector('[name="password"]').value;
     const password2 = formRegistro.querySelector('[name="password2"]').value;
 
+    if (!formRegistro.querySelector('[name="aviso-legal"]').checked) {
+        errorRegistro.textContent = 'Debes aceptar el aviso antes de crear una cuenta.';
+        btn.disabled = false;
+        btn.textContent = 'Crear cuenta';
+        return;
+    }
+
     if (password !== password2) {
         errorRegistro.textContent = 'Las contraseñas no coinciden.';
         btn.disabled = false;
