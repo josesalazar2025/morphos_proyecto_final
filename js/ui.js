@@ -4,17 +4,18 @@ const tabs = document.querySelectorAll('.tab-nav');
 const paneles = document.querySelectorAll('main > .panel, .col3-wrapper > .panel');
 const examenesSubtabsBar = document.getElementById('examenes-subtabs-bar');
 
-const EXAMENES_SUBTAB_PANELS = new Set(['panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo']);
+const EXAMENES_SUBTAB_PANELS = new Set(['panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo', 'panel-coag', 'panel-gas']);
 let panelExamenActivo = 'panel-hema';
 let panelActivo = 'panel-flujo';
 
-const SWIPE_ORDER = ['panel-flujo', 'panel-paciente', 'panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo', 'panel-imagenes', 'panel-resultados'];
+const SWIPE_ORDER = ['panel-flujo', 'panel-paciente', 'panel-hema', 'panel-bioquim', 'panel-uri', 'panel-endo', 'panel-coag', 'panel-gas', 'panel-imagenes', 'panel-resultados'];
 
 export function activarTab(targetId) {
     const esSubpanelExamenes = EXAMENES_SUBTAB_PANELS.has(targetId);
     const esTabExamenes = targetId === 'examenes';
     const mostrarExamenes = esTabExamenes || esSubpanelExamenes;
 
+    // Si se clickea la tab generica "Examenes", muestra el ultimo subtab activo; si es un subtab, lo guarda
     let idPanelActual;
     if (esTabExamenes) {
         idPanelActual = panelExamenActivo;
@@ -70,6 +71,7 @@ document.querySelector('main').addEventListener('touchstart', e => {
 document.querySelector('main').addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - inicioSwipeX;
     const dy = e.changedTouches[0].clientY - inicioSwipeY;
+    // Ignora gestos cortos o verticales para no interferir con scroll
     if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
     const indice = SWIPE_ORDER.indexOf(panelActivo);
     const siguiente = dx < 0 ? SWIPE_ORDER[indice + 1] : SWIPE_ORDER[indice - 1];
@@ -120,22 +122,23 @@ const esGridEscritorio = () => window.innerWidth > 1100;
 
 function inicializarFilasGrid() {
     if (!esGridEscritorio()) return;
-    mainEl.style.gridTemplateRows = '1fr auto auto';
+    mainEl.style.gridTemplateRows = '1fr auto auto auto';
 
+    // Mide el panel de flujo expandido y colapsado para animar grid-template-rows con precision
     const alturaPanel = panelFlujo.getBoundingClientRect().height;
     const alturaEncabezado = panelFlujo.querySelector('.panel-cabecera').getBoundingClientRect().height;
     if (alturaPanel > 0) filaExpandida = `${alturaPanel}px`;
     if (alturaEncabezado > 0) filaColapsada = `${alturaEncabezado}px`;
 
-    mainEl.style.gridTemplateRows = `1fr auto ${filaExpandida || 'auto'}`;
+    mainEl.style.gridTemplateRows = `1fr auto auto ${filaExpandida || 'auto'}`;
 }
 
 function establecerFilasGrid(colapsado, animar) {
     if (!esGridEscritorio()) return;
     if (!animar) mainEl.style.transition = 'none';
     mainEl.style.gridTemplateRows = colapsado
-        ? `1fr auto ${filaColapsada}`
-        : `1fr auto ${filaExpandida}`;
+        ? `1fr auto auto ${filaColapsada}`
+        : `1fr auto auto ${filaExpandida}`;
     if (!animar) {
         mainEl.offsetHeight;
         mainEl.style.transition = '';
@@ -157,7 +160,7 @@ btnColapsar.addEventListener('click', () => {
     establecerFilasGrid(colapsado, true);
     localStorage.setItem('mx-flujo-collapsed', colapsado ? '1' : '0');
     if (!colapsado) {
-        ['panel-endo', 'panel-uri'].forEach(id => {
+        ['panel-endo', 'panel-uri', 'panel-coag', 'panel-gas'].forEach(id => {
             const sp = document.getElementById(id);
             if (sp) establecerSubpanelColapsado(sp, true);
         });
@@ -188,6 +191,7 @@ function establecerSubpanelColapsado(subpanel, debeColapsar) {
     if (debeColapsar === subpanel.classList.contains('collapsed')) return;
     subpanel.classList.toggle('collapsed', debeColapsar);
     if (btn) btn.setAttribute('aria-expanded', String(!debeColapsar));
+    // Forzar reflujo antes de cambiar height permite que CSS transition anime correctamente
     if (debeColapsar) {
         animEl.style.height = `${animEl.offsetHeight}px`;
         animEl.offsetHeight;
@@ -205,7 +209,10 @@ function establecerSubpanelColapsado(subpanel, debeColapsar) {
 
 const GRUPOS_VINCULADOS = [
     ['panel-endo', 'panel-uri'],
+    ['panel-coag', 'panel-gas'],
 ];
+
+const PANELES_COLAPSADOS_POR_DEFECTO = new Set(['panel-uri', 'panel-endo', 'panel-coag', 'panel-gas']);
 
 document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
     const subpanel = btn.closest('.subpanel');
@@ -219,7 +226,12 @@ document.querySelectorAll('.btn-colapsar-subpanel').forEach(btn => {
             animEl.style.height = `${animEl.scrollHeight}px`;
         }
 
-        if (localStorage.getItem(claveAlmacenamiento) === '1') {
+        const valorGuardado = localStorage.getItem(claveAlmacenamiento);
+        const debeColapsar = valorGuardado !== null
+            ? valorGuardado === '1'
+            : PANELES_COLAPSADOS_POR_DEFECTO.has(subpanel.id);
+
+        if (debeColapsar) {
             subpanel.classList.add('collapsed');
             btn.setAttribute('aria-expanded', 'false');
             if (esRelleno) animEl.style.transition = 'none';
@@ -315,12 +327,24 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = ev => {
-            imagenesDataUrl[indice] = ev.target.result;
-            vistaPrevia.src = ev.target.result;
-            vistaPrevia.hidden = false;
-            btnQuitar.hidden = false;
-            vacia.hidden = true;
-            zona.classList.add('con-imagen');
+            const img = new Image();
+            img.onload = () => {
+                // Reduce la imagen a max 1024px en su lado mayor para no saturar la memoria ni la API
+                const MAX_PIXELES = 1024;
+                const scale = Math.min(MAX_PIXELES / img.width, MAX_PIXELES / img.height, 1);
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                imagenesDataUrl[indice] = dataUrl;
+                vistaPrevia.src = dataUrl;
+                vistaPrevia.hidden = false;
+                btnQuitar.hidden = false;
+                vacia.hidden = true;
+                zona.classList.add('con-imagen');
+            };
+            img.src = ev.target.result;
         };
         reader.readAsDataURL(file);
     });
@@ -402,6 +426,7 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
 
     async function abrirCamara() {
         try {
+            // Preferencia por camara trasera (microscopio o movil apuntando a la muestra)
             stream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 } }
             });
@@ -411,7 +436,7 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
             controles.hidden = false;
             actualizarInsignia();
         } catch {
-            // Permiso denegado o cámara no disponible — no se requiere fallback
+            // Permiso denegado o camara no disponible; no se requiere fallback
         }
     }
 
@@ -429,6 +454,7 @@ document.querySelectorAll('.zona-imagen').forEach(zona => {
         e.stopPropagation();
         if (capturasMicroscopio.length >= MAX_CAPTURAS_MICRO) return;
         const canvas = document.createElement('canvas');
+        // Escala el fotograma de video para mantener un tamano razonable antes de enviarlo al modelo
         const MAX_PIXELES = 1024;
         const scale = Math.min(MAX_PIXELES / video.videoWidth, MAX_PIXELES / video.videoHeight, 1);
         canvas.width = Math.round(video.videoWidth * scale);

@@ -328,10 +328,11 @@ textarea::placeholder {
 main {
     display: grid;
     grid-template-columns: 1fr 1fr 40rem 30rem;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: 1fr auto auto auto;
     grid-template-areas:
         "hema    bioquim  col3 resultados"
         "endo    uri      col3 resultados"
+        "coag    gas      col3 resultados"
         "flujo   flujo    col3 resultados";
     gap: 1px;
     background: var(--border-1);
@@ -344,6 +345,8 @@ main {
 #panel-bioquim    { grid-area: bioquim; }
 #panel-endo       { grid-area: endo; }
 #panel-uri        { grid-area: uri; }
+#panel-coag       { grid-area: coag; }
+#panel-gas        { grid-area: gas; }
 #panel-resultados { grid-area: resultados; }
 .panel-flujo      { grid-area: flujo; }
 
@@ -408,6 +411,15 @@ main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+.panel-titulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
 }
 
 .panel-cabecera {
@@ -1895,14 +1907,34 @@ main {
     }
 
     #panel-hema .fila-campo input,
-    #panel-bioquim .fila-campo input {
+    #panel-bioquim .fila-campo input,
+    #panel-uri .fila-campo input,
+    #panel-endo .fila-campo input {
         padding: 3px 0.4rem;
-        width: calc(4.5rem + 1.5rem);
+        width: 3.5rem;
+        flex-shrink: 0;
     }
 
     #panel-hema .fila-campo .unidad,
-    #panel-bioquim .fila-campo .unidad {
+    #panel-bioquim .fila-campo .unidad,
+    #panel-uri .fila-campo .unidad,
+    #panel-endo .fila-campo .unidad {
         min-width: 3rem;
+    }
+
+    #panel-hema .fila-campo .estado-campo,
+    #panel-bioquim .fila-campo .estado-campo,
+    #panel-uri .fila-campo .estado-campo,
+    #panel-endo .fila-campo .estado-campo {
+        width: 5.5rem;
+        min-width: 5.5rem;
+        flex-shrink: 0;
+        text-align: right;
+    }
+
+    #panel-uri .fila-campo,
+    #panel-endo .fila-campo {
+        gap: 0.4rem;
     }
 
     #panel-bioquim .grupo-campo {
@@ -2170,7 +2202,6 @@ main {
 }
 
 /* Modal*/
-
 .modal-auth {
     position: fixed;
     top: 50%;
@@ -2276,6 +2307,8 @@ main {
 }
 
 .modal-campo input {
+    width: 100%;
+    box-sizing: border-box;
     padding: 8px 10px;
     border: 1px solid var(--border-1);
     border-radius: var(--radius-sm);
@@ -2604,4 +2637,15 @@ main {
 .papers-pag-btn:disabled {
     opacity: 0.35;
     cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+    .modal-papers {
+        top: var(--space-3);
+        max-height: calc(100svh - var(--space-6));
+        transform: translateX(-50%);
+    }
+    .modal-papers.visible {
+        transform: translateX(-50%);
+    }
 }
