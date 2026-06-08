@@ -32,6 +32,25 @@ Sistema de autenticación con registro e inicio de sesión
 
 ---
 
+## Capturas de pantalla
+
+**Tema oscuro**
+![Vista escritorio tema oscuro](docs/screenshots/full-app-desktop-dark-theme.png)
+
+**Tema claro**
+![Vista escritorio tema claro](docs/screenshots/full-app-desktop-light-theme.png)
+
+**Vista móvil**
+
+| | | | | |
+|---|---|---|---|---|
+| ![Tab 1](docs/screenshots/mobile-1st-tab.png) | ![Tab 2](docs/screenshots/mobile-2nd-tab.png) | ![Tab 3](docs/screenshots/mobile-3rd-tab.png) | ![Tab 4](docs/screenshots/mobile-4th-tab.png) | ![Tab 5](docs/screenshots/mobile-5th-tab.png) |
+
+**Modal de literatura científica**
+![Papers modal](docs/screenshots/papers-modal.png)
+
+---
+
 ## Objetivo del proyecto
 
 Integrar los conocimientos del curso en una aplicación web completa que además sea útil y
@@ -90,6 +109,9 @@ Conceptos aplicados:
 
 index.html           → SPA principal
 .htaccess            → compresión, caché y protección de archivos sensibles
+
+/docs
+    /screenshots     → capturas de pantalla de la interfaz
 ```
 
 ---
